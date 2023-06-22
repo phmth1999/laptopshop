@@ -1,0 +1,101 @@
+.product-detail {
+	padding: 20px 0;
+}
+
+.product-detail img {
+	width: 100%;
+	height: 400px;
+	object-fit: cover;
+	object-position: center;
+	border: 1px solid #c0c0c0;
+}
+.product-detail .quantity a button{
+	width: 300px;
+	height: 46px;
+	border: none;
+	border-radius: 10px;
+}
+.product-detail .quantity button:hover {
+	background: #1c1c50;
+	color: white;
+}
+.product-detail .quantity {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	margin-bottom: 33px;
+}
+
+.product-detail .quantity .pro-qty {
+	width: 123px;
+	height: 46px;
+	border: 2px solid #ebebeb;
+	padding: 0 15px;
+	float: left;
+	margin-right: 14px;
+}
+.product-detail .quantity .pro-qty- {
+	width: 123px;
+	height: 46px;
+	border: 2px solid #ebebeb;
+	padding: 0 15px;
+	float: left;
+	margin-right: 14px;
+}
+
+.product-detail .quantity .pro-qty .qtybtn {
+	font-size: 24px;
+	color: #b2b2b2;
+	float: left;
+	line-height: 38px;
+	cursor: pointer;
+	width: 18px;
+}
+.product-detail .quantity .pro-qty- .qtybtn {
+	font-size: 24px;
+	color: #b2b2b2;
+	float: left;
+	line-height: 38px;
+	cursor: pointer;
+	width: 18px;
+}
+
+.product-detail .quantity .pro-qty .qtybtn.dec {
+	font-size: 30px;
+}
+.product-detail .quantity .pro-qty- .qtybtn.dec {
+	font-size: 30px;
+}
+
+.product-detail .quantity .pro-qty input {
+	text-align: center;
+	width: 52px;
+	font-size: 14px;
+	font-weight: 700;
+	border: none;
+	color: #4c4c4c;
+	line-height: 40px;
+	float: left;
+}
+.product-detail .quantity .pro-qty- input {
+	text-align: center;
+	width: 52px;
+	font-size: 14px;
+	font-weight: 700;
+	border: none;
+	color: #4c4c4c;
+	line-height: 40px;
+	float: left;
+}
+.product-detail .quantity{
+	margin-top: 30px;
+}
+@media only screen and (max-width: 1024px) {
+    /*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+	.product-detail .quantity a button{
+	width: 150px;
+}
+}

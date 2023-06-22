@@ -1,0 +1,116 @@
+@charset "UTF-8";
+
+.product-cards {
+	font-family: 'Roboto Slab', serif;
+	margin-top: 50px;
+	padding-bottom: 50px;
+}
+
+.product-cards .product-owl-carousel {
+	margin-top: 30px;
+}
+.product-owl-carousel:hover .owl-nav button[type=button]{
+	display: block;
+}
+.product-owl-carousel .owl-nav button[type=button] {
+	position: absolute;
+	top: 40%;
+	color: #252525;
+	display: none;
+}
+
+.product-owl-carousel .owl-nav button[type=button]:hover {
+	color: #dfad51;
+}
+
+.product-owl-carousel .owl-nav button[type=button].owl-prev {
+	right: auto;
+	left: 10px;
+	font-size: 50px;
+}
+
+.product-owl-carousel .owl-nav button[type=button].owl-next {
+	left: auto;
+	right: 10px;
+	font-size: 50px;
+}
+
+.product-cards .card {
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.product-cards h1 {
+	margin-top: 30px;
+	color: #1c1c50;
+	text-shadow: 1px 1px 1px black;
+}
+
+.product-cards h3 {
+	letter-spacing: 3px;
+	color: #1c1c50;
+	text-shadow: 0px 1px 1px black;
+	font-weight: bold;
+}
+
+.product-cards h5 span {
+	float: right;
+	color: #1c1c50;
+	cursor: pointer;
+}
+
+.product-cards h5 span a {
+	color: #1c1c50;
+}
+
+.checked {
+	color: rgb(255, 187, 0);
+}
+
+/* #viewmorebtn {
+	display: flex;
+	justify-content: center;
+	margin: auto;
+	text-decoration: none;
+	margin-top: 30px;
+	width: 200px;
+	height: 32px;
+	color: #1c1c50;
+	letter-spacing: 5px;
+	font-weight: bold;
+	background: transparent;
+	border: 2px solid #1c1c50;
+	transition: 0.5s ease;
+}
+
+#viewmorebtn:hover {
+	background-color: #1c1c50;
+	color: white;
+} */
+@media only screen and (max-width: 1024px) {
+	/*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+	.product-cards {
+		margin-top: 20px;
+		padding-bottom: 10px;
+	}
+	.product-owl-carousel .owl-nav button[type=button] {
+		top: 40%;
+	}
+	.product-owl-carousel .owl-nav button[type=button].owl-prev {
+		font-size: 20px;
+	}
+	.product-owl-carousel .owl-nav button[type=button].owl-next {
+		font-size: 20px;
+	}
+	.product-cards h3 {
+		font-size: 16px;
+	}
+	.product-cards p {
+		font-size: 12px;
+	}
+	.product-cards h5 span {
+		font-size: 16px;
+	}
+}

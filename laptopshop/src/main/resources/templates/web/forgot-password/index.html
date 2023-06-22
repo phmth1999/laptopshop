@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/web/layout">
+<head>
+<title>Forgot Password Page</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<section class="container login">
+			<div class="row">
+				<div class="breadcrumbs d-flex flex-row align-items-center col-12">
+					<ul>
+						<li><a th:href="@{/home}">Home</a></li>
+						<li class="active"><a href="#">
+						<i class="fa fa-angle-right" aria-hidden="true"></i>Forgot password</a></li>
+					</ul>
+				</div>
+				<div class="col-md-4 col-12 p-0" id="side1">
+					<div>
+						<h3>Welcome Back!!</h3>
+						<p>Login Account</p>
+						<a th:href="@{/auth/sign-in}"><button id="btn">Sign in</button></a>
+					</div>
+				</div>
+				<div class="col-md-8 col-12 p-0" id="side2">
+					<div class="form-login">
+						<h3>Forgot Password</h3>
+						<div th:if="${error}">
+							<div class="alert alert-danger">[[${error}]]</div>
+						</div>
+						<div th:if="${success}">
+							<div class="alert alert-success">[[${success}]]</div>
+						</div>
+						<form th:unless="${success}"  th:action="@{/auth/forgot-password}" method="post">
+							<p>We will be sending a reset password link to your email.</p>
+							<div class="inp">
+								<input type="email" placeholder="Enter your e-mail" name="email" required>
+							</div>
+							<div id="login">
+								<button type="submit">Send</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</div>
+
+	<th:block layout:fragment="script">
+		<script>
+			
+		</script>
+	</th:block>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<footer id="footer">
+	<div class="footer-top">
+	 	<div class="footer-wrapper-1 py-2">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-4 my-3">
+                <div class="footer-top-data d-flex gap-30 align-items-center">
+                  <h2 class='mb-0 text-white'>Sign Up for Newsletter</h2>
+                </div>
+              </div>
+              <div class="col-lg-8 my-3">
+                <div class="input-group">
+                  <input 
+                  type="text"
+                  class="form-control py-1"
+                  placeholder="Your Email Address"
+                  aria-label="Your Email Address"
+                  aria-describedby="basic-addon2"
+                  />
+                  <span class="input-group-text py-2" id="basic-addon2">
+                    Subscribe
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+	</div>
+	<hr>
+	<div class="container py-4 ">
+		<div class="copyright">
+			&copy; Copyright <strong th:text="${#dates.year(#dates.createNow())}"></strong> <strong>PMT</strong>.All Rights Reserved
+		</div>
+	</div>
+</footer>
+
+</html>

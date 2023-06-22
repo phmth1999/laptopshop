@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/web/layout">
+<head>
+	<title>Login Page</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+	
+       <section class="container login">
+			<div class="row">
+				<div class="breadcrumbs d-flex flex-row align-items-center col-12">
+					<ul>
+						<li><a th:href="@{/home}">Home</a></li>
+						<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Sign in</a></li>
+					</ul>
+				</div>
+				<div class="col-md-4 col-12 p-0" id="side1">
+					<div>
+						<h3>Hello Friend!</h3>
+						<p>Create New Account</p>
+						<a th:href="@{/auth/sign-up}"><button id="btn">Sign up</button></a>
+					</div>
+				</div>
+				<div class="col-md-8 col-12 p-0" id="side2">
+					<form class="form-login" th:method="post" th:action="@{/j_spring_security_check}">
+						<div th:if="${param.error}">
+			                <div class="alert alert-danger">Invalid Email or Password</div>
+			            </div>
+			            <div th:if="${param.logout}">
+			                <div class="alert alert-success"> You have been logged out.</div>
+			            </div>
+			            <div th:if="${param.accessDenied}">
+			                <div class="alert alert-danger"> You not authorize</div>
+			            </div>
+						<h3>Login Account</h3>
+						<div class="inp">
+							<input type="text" name="username" id="username" placeholder="User Name" required> 
+							<input type="password" name="password" id="password" placeholder="Password" required>
+						</div>
+						<div class="pt-4"><input type="checkbox" /> Remember me</div>
+						<p><a th:href="@{/auth/forgot-password}">Forgot Your Password</a></p>
+						<div id="login">
+							<a th:href="@{/oauth2/authorization/google}"><button  type="button"><i class="fa-brands fa-google"></i> &ensp; Sign in by Gmail</button></a>
+						</div>
+						<div id="login">
+							<button type="submit">Sign in</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+		
+	</div>
+	
+	<th:block layout:fragment="script">
+    	<script>
+    	</script>
+	</th:block>
+	
+</body>
+</html>

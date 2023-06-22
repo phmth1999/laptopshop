@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE"></title>
+    
+    <style th:replace="/admin/shared/style"></style>
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+    	 <div th:replace="/admin/shared/header"></div>
+       
+         <div th:replace="/admin/shared/menu"></div>
+		
+        <div class="content-wrapper">
+           	<div layout:fragment="content"></div>
+        </div>
+        
+        <div th:replace="/admin/shared/back-to-top"></div>
+      
+      	 <div th:replace="/admin/shared/footer"></div>
+    </div>
+
+    <div th:replace="/admin/shared/script"></div>
+    
+    <div layout:fragment="script"> </div>
+</body>
+</html>

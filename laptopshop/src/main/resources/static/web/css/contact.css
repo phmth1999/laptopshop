@@ -1,0 +1,119 @@
+@charset "UTF-8";
+
+.map-inner {
+	position: relative;
+}
+
+.map-inner iframe {
+	width: 100%;
+	height: 60vh;
+}
+
+.map-inner .icon {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-14px, -21px);
+	-ms-transform: translate(-14px, -21px);
+	transform: translate(-14px, -21px);
+}
+
+.map-inner .icon i {
+	font-size: 48px;
+	color: #e7ab3c;
+}
+
+/*---------------------
+  Contact Section
+-----------------------*/
+
+.contact-section {
+	padding-top: 20px;
+	margin-bottom: 20px;
+}
+
+.contact-title {
+	margin-bottom: 30px;
+}
+
+.contact-title h4 {
+	color: #252525;
+	font-weight: 700;
+	margin-bottom: 16px;
+}
+
+.contact-widget .cw-item {
+	background: #ffffff;
+	margin-bottom: 11px;
+	-webkit-box-shadow: 0px 8px 35px 10px #E8E8E8;
+	box-shadow: 0px 8px 35px 10px #E8E8E8;
+	padding-left: 25px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-radius: 10px;
+}
+
+.contact-widget .cw-item .ci-icon {
+	float: left;
+	margin-top: 12px;
+}
+
+.contact-widget .cw-item .ci-icon i {
+	font-size: 30px;
+	color: #b2b2b2;
+}
+
+.contact-widget .cw-item .ci-text {
+	display: table;
+	padding-left: 30px;
+}
+
+.contact-widget .cw-item .ci-text span {
+	color: #b2b2b2;
+	font-size: 16px;
+}
+
+.contact-widget .cw-item .ci-text p {
+	font-size: 18px;
+	color: #252525;
+	margin-bottom: 0;
+}
+
+.contact-form .leave-comment h4 {
+	color: #292f3b;
+	font-weight: 700;
+	margin-bottom: 20px;
+}
+
+.contact-form .leave-comment p {
+	margin-bottom: 38px;
+}
+
+.contact-form .leave-comment .comment-form input {
+	width: 100%;
+	font-size: 16px;
+	color: #636363;
+	height: 50px;
+	border: 1px solid #ebebeb;
+	border-radius: 5px;
+	padding-left: 20px;
+	margin-bottom: 30px;
+}
+
+.contact-form .leave-comment .comment-form textarea {
+	width: 100%;
+	resize: none;
+	font-size: 16px;
+	color: #636363;
+	height: 150px;
+	border: 1px solid #ebebeb;
+	border-radius: 5px;
+	padding-left: 20px;
+	padding-top: 10px;
+	margin-bottom: 15px;
+}
+
+.contact-form .leave-comment .comment-form .site-btn {
+	padding: 13px 35px 11px;
+	border: none;
+}

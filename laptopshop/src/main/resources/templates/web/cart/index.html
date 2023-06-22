@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/web/layout">
+<head>
+	<title>Trang giỏ hàng</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+	
+		<div class="breadcrumbs d-flex flex-row align-items-center col-12 container  mt-2">
+			<ul class="m-0">
+				<li><a th:href="@{/home}">Trang chủ</a></li>
+				<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Giỏ hàng</a></li>
+			</ul>
+		</div>
+		
+    	<section class="shopping-cart ">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="cart-table">
+							<div th:if="${param.err}">
+			                	<div class="alert alert-danger">[[${param.err}]] products left in stock</div>
+			            	</div>
+							<table>
+								<thead>
+									<tr>
+										<th>Ảnh</th>
+										<th>Tên sản phẩm</th>
+										<th>Giá</th>
+										<th>Số lượng</th>
+										<th>Giảm giá</th>
+										<th>Tổng giá</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<th:block th:if="${listCart}" th:each="item : ${listCart}">
+										<tr>
+											<td class="cart-pic first-row"><img th:src='@{/images/product/{img}(img=${item.thumbnail})}' alt=""></td>
+											<td class="cart-title first-row"><h5>[[${item.name}]]</h5></td>
+											<td class="p-price first-row"><h5>[[${#numbers.formatInteger(item.price,3,'POINT')}]]đ</h5></td>
+											<td class="qua-col first-row">
+												<div class="quantity">
+													<div class="pro-qty">
+														<a th:href="@{/cart/edit-cart/{id}/-1(id=${item.productId})}"><span  class="dec qtybtn">-</span> </a>
+														<input class="id-1" type="text" th:value="${item.numProduct}" readonly="readonly"> 
+														<a th:href="@{/cart/edit-cart/{id}/1(id=${item.productId})}"><span  class="inc qtybtn">+</span></a>
+													</div>
+												</div>
+											</td>
+											<td class="discount first-row"><h5>[[${item.discount}]]%</h5></td>
+											<td class="total-price first-row"><h5>[[${#numbers.formatInteger(item.totalPrice,3,'POINT')}]]đ</h5></td>
+											<td class="close-td first-row"><a th:href="@{/cart/delete-cart/{id}(id=${item.productId})}"><i class="ti-close fa-sharp fa-solid fa-circle-xmark"></i></a></td>
+										</tr>
+									</th:block>
+									<th:block th:unless="${listCart}">
+										<tr>
+											<td colspan="12"><h5 class="text-start p-4">Không có bản ghi nào!!!</h5></td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<div class="col-lg-4"></div>
+							<div class="col-lg-4 offset-lg-4">
+								<div class="proceed-checkout">
+									<a th:href='@{/cart/clear-all-cart}' class="proceed-btn mb-3">Clear All</a>
+									<ul>
+										<li class="subtotal">Tổng số lượng <span th:if="${listCart}">[[${subCart}]]</span></li>
+										<li class="cart-total">Tổng tiền <span th:if="${listCart}">[[${#numbers.formatInteger(totalMoney,3,'POINT')}]]đ</span></li>
+									</ul>
+									<a th:href='@{/order}' class="proceed-btn">PROCEED TO ORDER</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+	</div>
+	
+	<th:block layout:fragment="script">
+    	<script>
+    	</script>
+	</th:block>
+	
+</body>
+</html>

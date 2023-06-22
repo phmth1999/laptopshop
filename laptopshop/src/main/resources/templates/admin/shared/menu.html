@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+		<aside class="main-sidebar sidebar-dark-primary elevation-4">
+			<a th:href="@{/admin/home}" class="brand-link"> 
+				<img th:src='@{/logo.svg}' alt="" class="brand-image img-circle elevation-3" style="opacity: .8">
+				<span class="brand-text font-weight-light">Laptopshop</span>
+			</a>
+			<div class="sidebar">
+				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+					<div class="image">
+						<img th:src='@{/logo.svg}' class="img-circle elevation-2" alt="User Image">
+					</div>
+					<div class="info">
+						<a th:href="@{/admin/home}" class="d-block" sec:authentication="principal.name"></a>
+					</div>
+				</div>
+		
+				<nav class="mt-2">
+					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+						<!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+						<li class="nav-item">
+							<a th:href='@{/admin/category}' class="nav-link">
+								<i class="nav-icon fa-solid fa-bars"></i>
+								Category
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href='@{/admin/brand}' class="nav-link">
+								<i class="nav-icon fa-solid fa-bars"></i>
+								Brand
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href='@{/admin/product}' class="nav-link">
+								<i class="nav-icon fa-solid fa-bars"></i>
+								Product
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href='@{/admin/order}' class="nav-link">
+								<i class="nav-icon fa-solid fa-bars"></i>
+								Order
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href='@{/admin/feedback}' class="nav-link">
+								<i class="nav-icon fa-solid fa-bars"></i>
+								Feedback
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href='@{/admin/user}' class="nav-link">
+								<i class="nav-icon fa-solid fa-bars"></i>
+								User
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href='@{/admin/new}' class="nav-link">
+								<i class="nav-icon fa-solid fa-bars"></i>
+								News
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</aside>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/web/layout">
+<head>
+	<title>Store Page</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+	
+       <section class="store">
+			<div class="container">
+				<div class="row">
+					<div>
+						<div class="breadcrumbs d-flex flex-row align-items-center col-12">
+							<ul>
+								<li><a th:href="@{/home}">Home</a></li>
+								<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Store</a></li>
+							</ul>
+						</div>
+						<form method="post" th:action="@{/store}" th:object="${formFilterProduct}" id="formStore">
+							<div th:if="${param.err}">
+			                	<div th:unless="${param.cart}" class="alert alert-danger">[[${param.err}]] products left in stock</div>
+			                	<div th:if="${param.cart}" class="alert alert-danger">There are [[${param.cart}]] products in cart / [[${param.err}]] products left in stock</div>
+			            	</div>
+							<div class="product-show-option">
+								<div class="row">
+									<div class="col-md-3 col-6 p-1">
+										<div class="select-option">
+											<p>Sort: </p>
+											<select class="sort" onchange="SubmitForm()" th:field="*{sort}">
+												<option value='low-high'>Low to High Price</option>
+												<option value='high-low'>High to Low Price</option>
+												<option value='a-z'>Name: A - Z</option>
+												<option value='z-a'>Name: Z - A</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-3 col-6 p-1">
+										<div class="select-option">
+											<p>Category: </p>
+											<select class="category"  onchange="SubmitForm()" th:field="*{cateogryId}">
+												<option value='0'>ALL</option>
+												<option value='1'>Laptop</option>
+												<option value='2'>keyboard</option>
+												<option value='3'>Mouse</option>
+												<option value='4'>USB</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-3 col-6 p-1">
+										<div class="select-option">
+											<p>Brand: </p>
+											<select class="brand" onchange="SubmitForm()" th:field="*{brandId}">
+												<option value='0'>ALL</option>
+												<option value='1'>ASUS</option>
+												<option value='2'>DELL</option>
+												<option value='3'>HP</option>
+												<option value='4'>Logitech</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-3 col-6 p-1">
+										<div class="select-option">
+											<p>Price: </p>
+											<select class="price" onchange="SubmitForm()" th:field="*{price}">
+												<option value='all'>ALL</option>
+												<option value='1-5'>1 - 5 million</option>
+												<option value='5-10'>5 - 10 million</option>
+												<option value='10-100'>10 - 100 million</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="product-list">
+								<div class="row">
+									<th:block th:if="${!listProduct.isEmpty()}" th:each="item : ${listProduct}">
+										<div class="col-lg-3 col-sm-6 col-6">
+											<div class="product-item">
+												<div class="pi-pic">
+													<img th:src="@{/images/product/{img}(img=${item.thumbnail})}" alt="">
+													<ul>
+														<li class="w-icon active">
+															<a th:href="@{/cart/add-cart/{id}(id=${item.id})}"><i class="fa-solid fa-cart-shopping"></i></a>
+														</li>
+														<li class="quick-view"><a th:href="@{/store/{id}(id=${item.id})}">+ Quick View</a></li>
+													</ul>
+												</div>
+												<div class="pi-text">
+													<h5 th:text="${item.name}"></h5>
+													<div class="product-price">
+														[[${#numbers.formatInteger(item.price-(item.price*item.discount/100),3,'POINT')}]]đ
+														<del th:if="${item.discount>0}">[[${#numbers.formatInteger(item.price,3,'POINT')}]]đ</del>
+													</div>
+												</div>
+											</div>
+										</div>
+									</th:block>
+									<th:block th:if="${listProduct.isEmpty()}">
+										<div class="col-lg-3 col-sm-6 col-6">
+											Not found products
+										</div>
+									</th:block>
+									<th:block th:if="${!listProduct.isEmpty()}">
+										<ul class="pagination mt-4" id="pagination"></ul>
+										<input hidden="" id="page"  name="page" th:value="${currentPage}"/>
+										<input hidden="" id="totalPage" name="totalPage" th:value="${totalPage}"/>
+									</th:block>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+	</div>
+	
+	<th:block layout:fragment="script">
+    	<script th:inline="javascript">
+	    	var currentPage  = /*[[${currentPage}]]*/ "";
+			var totalPages = /*[[${totalPage}]]*/ "";
+			$(function () {
+				$('#pagination').twbsPagination({
+					totalPages: totalPages,
+					visiblePages: 3,
+					startPage: currentPage,
+					onPageClick: function (event, page) {
+						if (currentPage != page) {
+							$('#page').val(page);
+							$('#formStore').submit();
+						}
+					} 
+				});
+			});
+	    	function SubmitForm(){
+	    		$('#page').val(1);
+				$('#formStore').submit();
+			}
+    	</script>
+	</th:block>
+	
+</body>
+</html>

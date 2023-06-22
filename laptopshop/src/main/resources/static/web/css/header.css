@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+.top-navbar {
+	width: 100%;
+	height: 7vh;
+	background-color: #a9a9a926;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	justify-content: space-between;
+}
+
+.top-icons {
+	margin-left: 45px;
+}
+
+.top-icons i {
+	font-size: 20px;
+	color: #1c1c50;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.other-links {
+	margin-right: 33px;
+}
+
+.other-links i {
+	color: #1c1c50;
+	font-size: 20px;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+#btn-login {
+	width: 100px;
+	border: 2px solid #1c1c50;
+	color: #1c1c50;
+	font-weight: bold;
+	border-radius: 5px;
+	height: 5vh;
+	transition: 0.5s ease;
+	cursor: pointer;
+}
+
+#btn-login a {
+	text-decoration: none;
+	color: #1c1c50;
+	transition: 0.5s ease;
+}
+
+#btn-login a:hover {
+	background-color: #1c1c50;
+	color: white;
+}
+
+#btn-login:hover {
+	background-color: #1c1c50;
+	color: white;
+}
+
+#btn-signup {
+	width: 100px;
+	border: 2px solid #1c1c50;
+	color: #1c1c50;
+	font-weight: bold;
+	border-radius: 5px;
+	height: 5vh;
+	transition: 0.5s ease;
+	cursor: pointer;
+}
+
+#btn-signup a {
+	text-decoration: none;
+	color: #1c1c50;
+	transition: 0.5s ease;
+}
+
+#btn-signup a:hover {
+	background-color: #1c1c50;
+	color: white;
+}
+
+#btn-signup:hover {
+	background-color: #1c1c50;
+	color: white;
+}
+@media only screen and (max-width: 1024px) {
+	/*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+	.top-icons {
+		margin-left: 30px;
+	}
+	.top-icons i {
+		font-size: 15px;
+	}
+	.other-links i {
+		font-size: 15px;
+	}
+	#btn-login {
+		width: 50px;
+		height: 3vh;
+		font-size: 10px;
+	}
+	#btn-signup {
+		width: 50px;
+		height: 3vh;
+		font-size: 10px;
+	}
+}

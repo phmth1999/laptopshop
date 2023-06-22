@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/web/layout">
+<head>
+	<title>Home Page</title>
+</head>
+<body>
+	<div layout:fragment="content">
+	
+		<div th:replace="/web/home/slider-owl-carousel"></div>
+		
+		<div th:replace="/web/home/banner-product"></div>
+		
+		<div th:replace="/web/home/banner-sale"></div>
+		
+		<div th:replace="/web/home/product-laptop-owl-carousel"></div>
+		
+		<div th:replace="/web/home/product-keyboard-owl-carousel"></div>
+		
+		<div th:replace="/web/home/product-mouse-owl-carousel"></div>
+
+	</div>
+	
+	<th:block layout:fragment="script">
+    	<script>
+    	</script>
+	</th:block>
+	
+</body>
+</html>

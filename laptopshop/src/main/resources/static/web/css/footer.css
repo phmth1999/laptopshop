@@ -1,0 +1,121 @@
+@charset "UTF-8";
+
+.btn-subscribe{
+	color: white;
+    border: 1px solid white;
+}
+.btn-subscribe:hover{
+	background-color: #1c1c50;
+	border: 1px solid white; 
+}
+#footer {
+	padding: 0 0 30px 0;
+	color: #d0d0d0;
+	font-size: 14px;
+	background: #1c1c50;
+	font-family: 'Roboto Slab', serif;
+}
+
+#footer .footer-top {
+	padding: 60px 0 30px;
+	background: #1c1c50;
+	color: white;
+}
+
+#footer .footer-top .footer-contact h3 {
+	color: white;
+	text-shadow: 1px 1px 1px black;
+}
+
+#footer .footer-top .footer-contact h4 {
+	font-size: 22px;
+	margin: 0 0 300px 0;
+	padding: 2px 0 2px 0;
+	line-height: 1;
+	font-weight: 700;
+}
+
+#footer .footer-top .footer-contact p {
+	font-size: 14px;
+	margin: 0;
+	color: white;
+	line-height: 1;
+	font-weight: 700;
+}
+
+#footer .footer-top h4 {
+	font-size: 16px;
+	font-weight: bold;
+	position: relative;
+	padding-bottom: 12px;
+}
+
+#footer .footer-top .footer-links {
+	margin-bottom: 30px;
+}
+
+#footer .footer-top .footer-links ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#footer .footer-top .footer-links ul li {
+	padding-right: 10px 0;
+	display: flex;
+	align-items: center;
+}
+
+#footer .footer-top .footer-links ul li:first-child {
+	padding: 0;
+}
+
+#footer .footer-top .footer-links ul li a {
+	color: white;
+	line-height: 2;
+}
+
+#footer .footer-top .socail-links a {
+	font-size: 18px;
+	display: inline-block;
+	color: white;
+	line-height: 1;
+	padding-right: 4px;
+	border-radius: 50px;
+	text-align: center;
+	width: 36px;
+	height: 36px;
+	transition: 0.5s ease;
+}
+
+#footer .copyright {
+	text-align: center;
+}
+
+#footer .credits {
+	float: right;
+	text-align: center;
+}
+@media only screen and (max-width: 1024px) {
+	/*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+	#footer .footer-top {
+    padding: 10px !important;
+}
+#footer .footer-top .footer-links {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+	.py-4{
+		padding: 0 !important;
+		padding: 0 10px !important;
+	}
+	.copyright, .credits{
+		font-size: 12px;
+	}
+	#footer .footer-top h4 {
+    padding-bottom: 0;
+}
+}

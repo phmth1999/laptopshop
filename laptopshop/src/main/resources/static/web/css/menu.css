@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+#navbar {
+	background-color: #1c1c50;
+	font-size: 16px;
+	font-family: 'Roboto Slab', serif;
+}
+#navbar .nav-link {
+	color: white;
+	font-weight: bold;
+	margin-left: 5px;
+	transition: 0.5s ease;
+}
+
+#navbar .nav-link:hover {
+	color: white;
+	border-radius: 5px;
+}
+
+.dropdown li a {
+	color: white;
+}
+.form-search{
+	width: 65%;
+}
+#search-btn {
+	color: white;
+	border: 1px solid white;
+}
+
+#search-btn:hover {
+	background-color: #1c1c50;
+}
+.product-search{
+	position: fixed;
+	top: 60px;
+	width: 60%;
+	height: 500px;
+	background: gray;
+}

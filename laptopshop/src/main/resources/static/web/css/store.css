@@ -1,0 +1,159 @@
+@charset "UTF-8";
+
+.store {
+	padding-top: 20px;
+	margin-bottom: 20px;
+}
+.product-sidebar-filter{
+	background-color: #a9a9a926;
+}
+
+.product-show-option {
+	margin-bottom: 30px;
+	background-color: #a9a9a926;
+	padding: 10px;
+}
+
+.product-show-option .select-option {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+}
+.product-show-option .select-option p{
+	margin: auto 0;
+	padding-right: 10px;
+}
+
+.select-option select  {
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 0.5em 2em 0.5em 0.5em;
+	border: 1px solid #eee;
+	font: inherit;
+	line-height: inherit;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	background-repeat: no-repeat;
+	background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),linear-gradient(135deg, currentColor 50%, transparent 50%);
+	background-position: right 15px top 1em, right 10px top 1em;
+	background-size: 5px 5px, 5px 5px;
+	width: 100%;
+	outline: none;
+	cursor: pointer;
+}
+.product-item {
+	margin-bottom: 10px;
+}
+
+.product-item:hover .pi-pic ul {
+	bottom: -1rem;
+}
+
+.product-item .pi-pic {
+	overflow: hidden;
+	position: relative;
+}
+
+.product-item .pi-pic img {
+	width: 100%;
+	height: 280px;
+	object-fit: cover;
+	object-position: center;
+	border: 1px solid #c0c0c0;
+}
+
+.product-item .pi-pic ul {
+	position: absolute;
+	left: 0;
+	bottom: -70xp;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
+	width: 100%;
+	display: flex;
+	border: 1px solid #c0c0c0;
+	padding: 0;
+	height: 50px;
+}
+.product-item .pi-pic ul li {
+	list-style: none;
+	display: inline-block;
+	background: #ffffff;
+}
+
+.product-item .pi-pic ul li.w-icon.active a {
+	background: #e7ab3c;
+	color: #ffffff;
+	height: 100%;
+}
+.product-item .pi-pic ul .w-icon{
+	width: 25%;
+}
+.product-item .pi-pic ul .quick-view{
+	width: 75%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.product-item .pi-pic ul .w-icon a{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.product-item .pi-pic ul .quick-view a{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.product-item .pi-pic ul li a {
+	font-size: 16px;
+	font-weight: 700;
+	color: #252525;
+	display: block;
+	padding: 5px;
+}
+
+.product-item .pi-text {
+	text-align: center;
+	padding-top: 10px;
+}
+
+.product-item .pi-text h5 {
+	color: #b2b2b2;
+	font-weight: 700;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.product-item .pi-text .product-price {
+	color: #e7ab3c;
+	font-size: 20px;
+	font-weight: 700;
+}
+@media only screen and (max-width: 1024px) {
+    /*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+.select-option select {
+	height: 30px;
+	font-size: 12px;
+}
+.product-show-option .select-option p{
+	padding-right: 0;
+	width: 60px;
+	font-size: 10px;
+}
+.product-show-option .select-option option{
+	color: red;
+	height: 10px;
+}
+.product-item .pi-pic img {
+	height: 220px;
+}
+}

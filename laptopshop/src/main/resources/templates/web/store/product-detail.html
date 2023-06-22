@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/web/layout">
+<head>
+	<title>Product Detail Page</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+	
+       <section class="product-detail">
+			<div class="container">
+				<div class="row">
+					<div class="breadcrumbs d-flex flex-row align-items-center col-12">
+						<ul>
+							<li><a th:href="@{/home}">Home</a></li>
+							<li><a th:href="@{/store}"><i class="fa fa-angle-right" aria-hidden="true"></i>Store</a></li>
+							<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Product</a></li>
+						</ul>
+					</div>
+					<div class="col-md-5 order-2 order-md-1">
+						<img th:src="@{/images/product/{img}(img=${product.thumbnail})}" alt="">
+					</div>
+					<div class="col-md-7 order-1 order-md-2">
+						<h1>[[${product.name}]]</h1>
+						<div class="pd-rating mb-2">
+							<i class="fa fa-star"></i> 
+							<i class="fa fa-star"></i> 
+							<i class="fa fa-star"></i> 
+							<i class="fa fa-star"></i> 
+							<i class="fa fa-star-o"></i>
+						</div>
+						<th:block th:each="item : ${product.description.split(',') }">
+							<p>[[${item}]]</p>
+						</th:block>
+						<h3>
+							[[${#numbers.formatInteger(product.price-(product.price*product.discount/100),3,'POINT')}]]đ
+							<del th:if="${product.discount>0}">[[${#numbers.formatInteger(product.price,3,'POINT')}]]đ</del>
+						</h3>
+						<form th:action="@{/cart/add-cart}" th:method="post">
+							<input name="productId" th:value="${product.id}" hidden=""/>
+							<div class="quantity">
+								<div class="pro-qty">
+									<span onclick="decFunction(1)" class="dec qtybtn ">-</span> 
+									<input th:unless="${param.num}" class="id-1" id="quanty" type="text" value="1" name="numProduct"> 
+									<input th:if="${param.num}" class="id-1" id="quanty" type="text" th:value="${param.num}" name="numProduct"> 
+									<span onclick="incFunction(1)" class="inc qtybtn ">+</span>
+								</div>
+								<a><button class="primary-btn pd-cart" type="submit">Add To Cart</button></a>
+							</div>
+							<div th:if="${param.err}">
+			                	<div th:unless="${param.cart}" class="alert alert-danger">[[${param.err}]] products left in stock</div>
+			                	<div th:if="${param.cart}" class="alert alert-danger">There are [[${param.cart}]] products in cart / [[${param.err}]] products left in stock</div>
+			            	</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+	</div>
+	
+	<th:block layout:fragment="script">
+    	<script>
+    	</script>
+	</th:block>
+	
+</body>
+</html>

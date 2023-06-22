@@ -1,0 +1,133 @@
+@charset "UTF-8";
+
+.order {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.order-form  h4 {
+	color: #252525;
+	font-weight: 700;
+	padding: 10px 0;
+}
+.order-form .information-detail .info-user{
+	background: #ebebeb;
+}
+.order-form .information-detail .info-order{
+	background: #ebebeb;
+}
+.order-form .information-detail .info-user input{
+	background: #ebebeb;
+}
+.order-form .information-detail label {
+	color: #252525;
+	font-size: 16px;
+	margin-bottom: 5px;
+	font-weight: 500;
+	width: 200px;
+}
+
+.order-form .information-detail label span {
+	color: #d85d5c;
+}
+
+.order-form .information-detail input {
+	width: 100%;
+	height: 46px;
+	border: 2px solid #ebebeb;
+	padding: 0 15px;
+	font-size: 16px;
+}
+
+.order-form .information-detail .payment{
+	display: none;
+}
+.order-form .information-detail .payment input {
+	width: 11px;
+	height: 11px;
+	padding: 0;
+}
+.order-form .information-detail .payment p{
+	margin: 0;
+	font-size: 14px;
+	font-weight: 500;
+}
+.order-form .information-detail .payment label{
+	font-size: 14px;
+	font-weight: 300;
+	    width: 300px;
+}
+.order-form .information-detail textarea {
+	width: 100%;
+	border: 2px solid #ebebeb;
+	padding: 0 15px;
+	font-size: 16px;
+}
+
+.order-form .place-order .order-total {
+	border: 1px solid #dee2e6;
+	padding: 20px;
+	background: #ebebeb;
+}
+
+.order-form .place-order .order-total .order-table {
+	margin-bottom: 20px;
+}
+
+.order-form .place-order .order-total .order-table li {
+	list-style: none;
+	color: #252525;
+	font-size: 14px;
+	font-weight: 700;
+	border-bottom: 1px solid gray;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 0;
+}
+.order-form .place-order .order-total .order-table li span{
+	width: 33%;
+	text-align: center;
+}
+
+.order-form .place-order .order-total .order-table li:first-child {
+	border-bottom: 1px solid gray;
+	padding-bottom: 20px;
+	padding-top: 0;
+}
+
+.order-form .place-order .order-total .order-table li.fw-normal {
+	font-weight: 400;
+	text-transform: capitalize;
+}
+
+.order-form .place-order .order-total .order-table li.fw-normal span
+	{
+	font-weight: 700;
+}
+
+.order-form .place-order .order-total .order-table li.total-price p
+	{
+	color: #e7ab3c;
+}
+
+.order-form .place-order .order-total .payment-check {
+	margin-bottom: 20px;
+}
+
+
+.order-form .place-order .order-total .order-btn {
+	text-align: center;
+}
+
+.order-form .place-order .order-total .order-btn .place-btn {
+	width: 100%;
+	height: 50px;
+	background: #1c1c50;
+	border: none;
+	color: white;
+}
+.order-form .place-order .order-total .order-btn .place-btn:hover {
+	background: gray;
+	color: #111;
+}

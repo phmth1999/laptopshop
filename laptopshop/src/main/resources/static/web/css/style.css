@@ -1,0 +1,97 @@
+@charset "UTF-8";
+#ui-id-1{
+	max-height: 320px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+*{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+}
+html{
+    scroll-behavior: smooth;
+}
+a{
+	text-decoration: none;
+	cursor: pointer;
+}
+ul{
+	padding: 0;
+}
+.form-control:focus {
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.backtop {
+	width: 50px;
+	height: 50px;
+	color: #000000;
+	background: #c0c0c0;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	border: 1px solid #b9b9b9;
+	z-index: 100;
+	display: none;
+}
+.backtop i{
+	font-size: 26px;
+}
+.backtop:hover{
+	background-color: #555;
+}
+
+@media only screen and (max-width: 1024px) {
+	/*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+	.backtop {
+	width: 26px;
+	height: 26px;
+}
+.backtop i{
+	font-size: 14px;
+}
+}
+.modal-dialog{
+	max-width: 90%;
+}
+
+.box-news{
+	padding: 0;
+	margin: 0;
+	font-size: 16px;
+	width: 100%;
+	height: auto;
+}
+.box-new-item{
+	width: 97%;
+	height: 200px;
+	margin: auto;
+}
+.box-new-item img{
+	width: 250px;
+	height: 190px;
+	margin: 5px;
+}
+.new-content{
+	width: 100%;
+	height: 200px;
+	background-color: white;
+	overflow: hidden;
+	margin: 5px;
+	padding: 5px 10px;
+}
+.new-content h5{
+	border-bottom: 1px dotted gray;
+	cursor: pointer;
+	color: blue;
+}
+.new-content p{
+	text-align: justify;
+	margin-top: 20px;
+}

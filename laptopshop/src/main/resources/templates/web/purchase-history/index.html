@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/web/layout">
+<head>
+<title>Trang lịch sử mua hàng</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+	
+		<section class="breadcrumbs d-flex flex-row align-items-center col-12 container p-0 mt-2">
+			<ul class="m-0">
+				<li><a th:href="@{/home}">Trang chủ</a></li>
+				<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Lịch sử mua hàng</a></li>
+			</ul>
+		</section>
+		
+		<section class="purchase-history p-0">
+			<div class="container">
+				<div class="row">
+					<h3 class="text-center mb-4">Danh sách đơn hàng</h3>
+				</div>
+				<div class="row">
+					<table>
+						<thead>
+							<tr>
+								<th>No.</th>
+								<th>Tên người đặt</th>
+								<th>Ngày đặt</th>
+								<th>Tổng tiền</th>
+								<th>Hình thức thanh toán</th>
+								<th>Thanh toán</th>
+								<th>Trạng thái</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<th:block th:if="${order}" th:each="item : ${order}">
+								<tr th:id="trow_+${item.id}">
+									<td class="td1" th:text="${itemStat.count}"></td>
+									<td class="td2"><h6>[[${item.name}]]</h6></td>
+									<td class="td3"><h6>[[${#dates.format(item.created_at,'dd-MM-yyyy')}]]</h6></td>
+									<td class="td4"><h6>[[${#numbers.formatInteger(item.total_money,3,'POINT')}]]đ</h6></td>
+									<td class="td5"><h6>[[${item.payment}]]</h6></td>
+									<td class="td6"><h6>[[${item.stateCheckout}]]</h6></td>
+									<td class="td7"><h6>[[${item.stateOrder}]]</h6></td>
+									<td class="td8 text-primary"><h6 data-bs-toggle="modal" th:attr="data-bs-target='#myModal'+*{item.id}">See details</h6></td>
+								</tr>
+								<div class="modal" th:id="*{'myModal'+{item.id}}">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title">Chi tiết đơn hàng</h4>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+											</div>
+											<div class="modal-body p-0">
+												<section class="order p-0">
+													<div class="container">
+														<div class="order-form">
+															<div class="row">
+																<div class="col-lg-6">
+																	<div class="information-detail">
+																		<h4>Thông tin đơn hàng</h4>
+																		<div class="col-12 mb-2 border info-user p-3">
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>Mã đơn hàng: </label><label>#[[${item.codeOrder}]]</label>
+																			</div>
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>Họ và tên : </label><label>[[${item.name}]]</label>
+																			</div>
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>Email : </label><label>[[${item.email}]]</label>
+																			</div>
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>SĐT : </label><label>[[${item.phone}]]</label>
+																			</div>
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>Địa chỉ nhận hàng : </label><label>[[${item.address_delivery}]]</label>
+																			</div>
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>Ngày đặt: </label><label>[[${#dates.format(item.created_at,'dd-MM-yyyy')}]]</label>
+																			</div>
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>Số lượng : </label><label>[[${item.num}]]</label>
+																			</div>
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>Tổng tiền : </label><label>[[${#numbers.formatInteger(item.total_money,3,'POINT')}]]đ</label>
+																			</div>
+																			<div class="col-lg-12 d-flex align-items-center">
+																				<label>Hình thức thanh toán : </label><label>[[${item.payment}]]</label>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-lg-6">
+																	<div class="place-order">
+																		<h4>Thông tin sản phẩm</h4>
+																		<div class="order-total">
+																			<ul class="order-table p-0">
+																				<li><span>Sản phẩm</span><span>Số lượng</span><span>Giá</span></li>
+																				<th:block th:each="items : *{item.getOrderdetail().iterator()}">
+																					<li class="fw-normal"><span><img th:src="@{/images/product/{img}(img=${items.product.thumbnail})}" width="50px" height="50px" /> - [[${items.product.name}]]</span> <span>[[*{items.num}]]</span><span>[[${#numbers.formatInteger(items.totalPrice,3,'POINT')}]]đ</span></li>
+																				</th:block>
+																				<li class="total-price">Tổng số lượng <p>[[${item.num}]]</p></li>
+																				<li class="total-price">Tổng giá <p>[[${#numbers.formatInteger(item.total_money,3,'POINT')}]]đ</p></li>
+																			</ul>
+																			<div th:id="cancelOrderBtn_+${item.id}" th:if="${item.stateOrder != 'CANCELLED' || item.stateOrder != 'RECEIVED'}"  class="order-btn"><a th:onclick="'clickCancelOrder('+${item.id}+')'"><button type="button" class="site-btn place-btn">Hủy đơn hàng</button></a></div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</section>
+											</div>
+											<!-- Modal footer -->
+											<div class="modal-footer">
+												<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</th:block>
+							<th:block th:unless="${order}">
+								<tr>
+									<td colspan="12"><h5 class="text-start p-4">Không có bản ghi nào!!!</h5></td>
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+	</div>
+
+	<th:block layout:fragment="script">
+		<script>
+				toastr.options = {
+				   "closeButton": false,
+				   "debug": false,
+				   "newestOnTop": false,
+				   "progressBar": false,
+				   "positionClass": "toast-top-right",
+				   "preventDuplicates": false,
+				   "onclick": null,
+				   "showDuration": "300",
+				   "hideDuration": "1000",
+				   "timeOut": "5000",
+				   "extendedTimeOut": "1000",
+				   "showEasing": "swing",
+				   "hideEasing": "linear",
+				   "showMethod": "fadeIn",
+				   "hideMethod": "fadeOut"
+				 }
+			function clickCancelOrder(id){
+				const firstPath = location.pathname.split('/')[1];
+				$.ajax({
+					url: '/'+firstPath+'/'+"user/purchase-history/delete",
+					async: false,  
+					type: "post",
+					data: { id: id },
+					success:function(res){
+						if(res.data){
+	                        $('#trow_' + id + ' .td7').empty();
+	                        $('#cancelOrderBtn_' + id).empty();
+	                        $('#trow_' + id + ' .td7').append(`<h6>${res.data.stateOrder}</h6>`);
+							 $('.modal').modal('hide');
+							 Command: toastr["success"](res.message, "Cancel Order")
+						}else{
+							 Command: toastr["error"](res.message, "Cancel Order")
+						}
+					}
+				});
+			}
+		</script>
+	</th:block>
+
+</body>
+</html>

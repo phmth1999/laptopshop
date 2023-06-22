@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.utraq.net.nz/thymeleaf/layout">
+<head>
+
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+   	<title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE"></title>
+   	
+ 	<style th:replace="/web/shared/style"></style>
+ 	
+</head>
+<body>
+
+	<div id="wrapper">
+	
+		<div th:replace="/web/shared/header"></div>
+
+		<div th:replace="/web/shared/menu"></div>
+
+		<div layout:fragment="content"></div>
+
+		<div th:replace="/web/shared/back-to-top"></div>
+	
+		<div th:replace="/web/shared/footer"></div>
+		
+	</div>
+
+	<div th:replace="/web/shared/script"></div>
+	
+	<div layout:fragment="script"> </div>
+	
+</body>
+</html>

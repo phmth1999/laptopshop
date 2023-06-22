@@ -1,0 +1,132 @@
+@charset "UTF-8";
+
+.slider-owl-carousel {
+	width: 100%;
+	height: 83vh;
+	background-color: #a9a9a926;
+}
+.slider-owl-carousel:hover .owl-nav button[type=button]{
+	display: block;
+}
+.slider-owl-carousel .owl-nav button[type=button] {
+	position: absolute;
+	top: 40%;
+	color: #252525;
+	display: none;
+}
+
+.slider-owl-carousel .owl-nav button[type=button]:hover {
+	color: #dfad51;
+}
+
+.slider-owl-carousel .owl-nav button[type=button].owl-prev {
+	right: auto;
+	left: 10px;
+	font-size: 50px;
+}
+
+.slider-owl-carousel .owl-nav button[type=button].owl-next {
+	left: auto;
+	right: 10px;
+	font-size: 50px;
+}
+
+.slider-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	position: relative;
+	z-index: 0;
+	font-family: 'Roboto Slab', serif;
+}
+
+.slider-item .img {
+	width: 50%;
+}
+
+.slider-item .img img {
+	width: 100%;
+	height: 83vh;
+	object-fit: contain;
+	object-position: center;
+}
+
+.slider-item .content {
+	width: 50%;
+	margin-bottom: 100px;
+}
+
+.content h3 {
+	margin-left: 70px;
+	font-size: 50px;
+	text-shadow: 1px 1px 1px black;
+	color: #1c1c50;
+	font-weight: bold;
+}
+
+.content h3 span {
+	font-size: 40px;
+}
+
+.content p {
+	margin-left: 70px;
+	color: #1c1c50;
+}
+
+.content #shopnow {
+	margin-left: 70px;
+	width: 200px;
+	height: 38px;
+	border: 2px solid #1c1c50;
+	font-weight: bold;
+	transition: 0.5s ease;
+	cursor: pointer;
+}
+
+.content #shopnow:hover {
+	background-color: #1c1c50;
+	color: white;
+}
+
+@media only screen and (max-width: 1024px) {
+	/*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+	.slider-owl-carousel {
+		height: 300px;
+	}
+	.slider-item .img img {
+		height: 300px;
+	}
+	.slider-item .content {
+		margin-bottom: 10px;
+	}
+	.content h3 {
+		margin-left: 40px;
+		font-size: 16px;
+	}
+	.content h3 span {
+		font-size: 16px;
+	}
+	.content p {
+		margin-left: 40px;
+		font-size: 12px;
+	}
+	.content #shopnow {
+		margin-left: 40px;
+		width: 100px;
+		height: 30px;
+		font-size: 16px;
+	}
+	.slider-owl-carousel .owl-nav button[type=button] {
+		top: 40%;
+	}
+	.slider-owl-carousel .owl-nav button[type=button].owl-prev {
+		font-size: 20px;
+	}
+	.slider-owl-carousel .owl-nav button[type=button].owl-next {
+		font-size: 20px;
+	}
+}

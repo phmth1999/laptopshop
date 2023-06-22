@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/web/layout">
+<head>
+	<title>About Page</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+	
+       <section class="container p-0" id="about">
+			<div class="breadcrumbs d-flex flex-row align-items-center col-12 mb-3">
+				<ul>
+					<li><a th:href="@{/home}">Home</a></li>
+					<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>About</a></li>
+				</ul>
+			</div>
+			<h1>ABOUT US</h1>
+			<div class="row" style="margin-top: 50px;">
+				<div class="col-md-6 py-3 py-md-0">
+					<div class="card">
+						<img th:src="@{/images/user/No-Image-Found.png}" alt="">
+					</div>
+				</div>
+				<div class="col-md-6 py-3 py-md-0">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+						Maiores, vitae numquam aspernatur repellendus autem sint beatae,
+						facilis quas deserunt iure natus minus ab deleniti eveniet neque
+						quasi ullam id in alias consectetur quia nesciunt. Exercitationem
+						vitae atque commodi architecto tenetur! Fugit necessitatibus
+						nesciunt, eligendi tempora reprehenderit suscipit doloribus animi
+						mollitia maiores? Numquam, est laborum dicta aperiam nobis deserunt
+						libero non dolorem cum dolorum distinctio commodi iure, tenetur
+						animi? Nam similique culpa consequuntur itaque quasi ipsa placeat ea
+						perferendis est quo, ut eaque quis dolorem, aliquam iste
+						reprehenderit provident neque magnam voluptatibus. Eaque provident
+						omnis reiciendis ducimus, magni qui voluptatem quibusdam.</p>
+				</div>
+			</div>
+		</section>
+		
+	</div>
+	
+	<th:block layout:fragment="script">
+    	<script>
+    	</script>
+	</th:block>
+	
+</body>
+</html>

@@ -1,0 +1,69 @@
+@charset "UTF-8";
+
+.banner-sale {
+	width: 100%;
+	height: 50vh;
+	background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+		url(/laptopshop/images/banner/banner.jpg);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.banner-sale .timer li{
+	width: 60px;
+	height: 60px;
+	border: 1px solid white;
+	border-radius: 50%;
+	
+}
+.banner-sale .content {
+	text-align: center;
+}
+
+.banner-sale .content h1 {
+	color: white;
+	text-shadow: 1px 1px 1px black;
+	letter-spacing: 3px;
+}
+
+.banner-sale .content p {
+	color: white;
+	text-shadow: 1px 1px 1px black;
+	letter-spacing: 3px;
+}
+
+#bannerbtn button {
+	width: 150px;
+	height: 38px;
+	background: transparent;
+	color: white;
+	border: 2px solid white;
+	transition: 0.5s ease;
+	cursor: pointer;
+}
+
+#bannerbtn button:hover {
+	background-color: #1c1c50;
+	border: none;
+}
+
+@media only screen and (max-width: 1024px) {
+	/*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+	.banner-sale {
+		height: 20vh;
+	}
+	.banner-sale .content h1 {
+		font-size: 16px;
+	}
+	.banner-sale .content>p {
+		font-size: 12px;
+	}
+	#bannerbtn button {
+		width: 120px;
+		height: 30px;
+		font-size: 12px;
+	}
+}

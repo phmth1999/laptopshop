@@ -1,0 +1,53 @@
+@charset "UTF-8";
+
+.banner-brand {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	font-family: 'Roboto Slab', serif;
+}
+
+.banner-brand .card {
+	background-color: #a9a9a926;
+}
+
+.banner-brand .card img {
+	height: 60vh;
+	width: 100%;
+	object-fit: contain;
+	object-position: center;
+}
+
+.banner-brand h5 {
+	color: #1c1c50;
+	font-weight: bold;
+}
+
+.banner-brand button {
+	width: 150px;
+	height: 33px;
+	font-weight: bold;
+	letter-spacing: 3px;
+	background: transparent;
+	color: #1c1c50;
+	border: 2px solid #1c1c50;
+	transition: 0.5s ease;
+	cursor: pointer;
+}
+
+.banner-brand button:hover {
+	background-color: #1c1c50;
+	color: white;
+}
+
+@media only screen and (max-width: 1024px) {
+    /*-- Code cho màn hình vừa (Table) viết ở đây --*/
+}
+
+@media only screen and (max-width: 640px) {
+	.banner-brand {
+	margin-top: 0;
+}
+   .banner-brand .card img {
+		height: 150px;
+	}
+}

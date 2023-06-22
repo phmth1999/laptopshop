@@ -1,0 +1,383 @@
+@charset "ISO-8859-1";
+
+.backtop {
+	width: 50px;
+	height: 50px;
+	color: #000000;
+	background: #c0c0c0;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	border: 1px solid #b9b9b9;
+	z-index: 100;
+	display: none;
+}
+.backtop i{
+	font-size: 26px;
+}
+.backtop:hover{
+	background-color: #555;
+}
+
+.product-table .td1{
+	width: 5%;
+	word-break: break-word;
+}
+.product-table .td2{
+	width: 5%;
+	word-break: break-word;
+}
+.product-table .td3{
+	width: 10%;
+	word-break: break-word;
+}
+.product-table .td4{
+	width: 10%;
+	word-break: break-word;
+}
+.product-table .td5{
+	width: 10%;
+	word-break: break-word;
+}
+.product-table .td6{
+	width: 10%;
+	word-break: break-word;
+}
+.product-table .td7{
+	width: 7%;
+	word-break: break-word;
+}
+.product-table .td8{
+	width: 7%;
+	word-break: break-word;
+}
+.product-table .td9{
+	width: 24%;
+	word-break: break-word;
+}
+.product-table .td10{
+	width: 12%;
+	word-break: break-word;
+}
+.product-table  {
+	width: 100%;
+	min-width: 480px;
+	border: 1px solid #ebebeb;
+}
+
+.product-table  img {
+	width: 50px;
+	height: 50px;
+}
+
+.product-table  tr th {
+	font-size: 12px;
+	color: #252525;
+	font-weight: 700;
+	border-bottom: 1px solid #ebebeb;
+	text-align: center;
+	padding: 18px 0 19px;
+	text-transform: uppercase;
+}
+.product-table tr td h6{
+	font-size: 12px;
+}
+.product-table  thead tr  {
+	background: #c0c0c0;
+}
+.product-table  tr:hover  {
+	background: #c0c0c0;
+}
+
+/* .order-table .td1{
+	width: 4%;
+	word-break: break-word;
+}
+.order-table .td2{
+	width: 10%;
+	word-break: break-word;
+}
+.order-table .td3{
+	width: 10%;
+	word-break: break-word;
+}
+.order-table .td4{
+	width: 12%;
+	word-break: break-word;
+}
+.order-table .td5{
+	width: 10%;
+	word-break: break-word;
+}
+.order-table .td6{
+	width: 10%;
+	word-break: break-word;
+}
+.order-table .td7{
+	width: 12%;
+	word-break: break-word;
+}
+.order-table .td8{
+	width: 12%;
+	word-break: break-word;
+}
+.order-table .td9{
+	width: 10%;
+	word-break: break-word;
+} */
+.order-table  {
+	width: 100%;
+	min-width: 480px;
+	border: 1px solid #ebebeb;
+}
+
+.order-table  img {
+	width: 100px;
+	height: 100px;
+}
+
+.order-table  tr th {
+	font-size: 16px;
+	color: #252525;
+	font-weight: 700;
+	border-bottom: 1px solid #ebebeb;
+	text-align: center;
+	padding: 18px 0 19px;
+	text-transform: uppercase;
+}
+
+.order-table  tr td {
+	padding: 20px 0;
+}
+
+.order-table  thead tr  {
+	background: #c0c0c0;
+}
+.order-table  tr:hover  {
+	background: #c0c0c0;
+}
+
+.see-order .modal-dialog{
+	max-width: 90%;
+}
+.add-new .modal-dialog{
+	max-width: 90%;
+}
+
+.order {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.order-form  h4 {
+	color: #252525;
+	font-weight: 700;
+	padding: 10px 0;
+}
+.order-form .information-detail .info-user{
+	background: #ebebeb;
+}
+.order-form .information-detail .info-order{
+	background: #ebebeb;
+}
+.order-form .information-detail .info-user input{
+	background: #ebebeb;
+}
+.order-form .information-detail label {
+	color: #252525;
+	font-size: 16px;
+	margin-bottom: 5px;
+	width: 200px;
+
+}
+
+.order-form .information-detail label span {
+	color: #d85d5c;
+}
+
+.order-form .information-detail input {
+	width: 100%;
+	height: 46px;
+	border: 2px solid #ebebeb;
+	padding: 0 15px;
+	font-size: 16px;
+}
+.order-form .information-detail textarea {
+	width: 100%;
+	border: 2px solid #ebebeb;
+	padding: 0 15px;
+	font-size: 16px;
+}
+
+.order-form .place-order .order-total {
+	border: 1px solid #dee2e6;
+	padding: 20px;
+	background: #ebebeb;
+}
+
+.order-form .place-order .order-total .order-table {
+	margin-bottom: 20px;
+}
+
+.order-form .place-order .order-total .order-table li {
+	list-style: none;
+	color: #252525;
+	font-size: 14px;
+	font-weight: 700;
+	border-bottom: 1px solid gray;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 0;
+}
+.order-form .place-order .order-total .order-table li span{
+	width: 25%;
+	text-align: center;
+}
+
+.order-form .place-order .order-total .order-table li:first-child {
+	border-bottom: 1px solid gray;
+	padding-bottom: 20px;
+	padding-top: 0;
+}
+
+.order-form .place-order .order-total .order-table li.fw-normal {
+	font-weight: 400;
+	text-transform: capitalize;
+}
+
+.order-form .place-order .order-total .order-table li.fw-normal span
+	{
+	font-weight: 700;
+}
+
+.order-form .place-order .order-total .order-table li.total-price p
+	{
+	color: #e7ab3c;
+}
+
+.order-form .place-order .order-total .payment-check {
+	margin-bottom: 20px;
+}
+
+
+.order-form .place-order .order-total .order-btn {
+	text-align: center;
+}
+
+.order-form .place-order .order-total .order-btn .place-btn {
+	width: 100%;
+	height: 50px;
+	background: #1c1c50;
+	border: none;
+	color: white;
+}
+.order-form .place-order .order-total .order-btn .place-btn:hover {
+	background: gray;
+	color: #111;
+}
+
+.search .left input, .search .left select {
+	width: 80%;
+	
+}
+.search .left label {
+	width: 20%;
+	
+}
+.search .right input, .search .right select{
+	width: 80%;
+	
+}
+.search .right label {
+	width: 20%;
+	
+}
+.search .status select {
+	width: 40%;
+}
+.search .status label {
+	width: 6%;
+}
+
+/* .user-table .td1{
+	width: 5%;
+	word-break: break-word;
+}
+.user-table .td2{
+	width: 5%;
+	word-break: break-word;
+}
+.user-table .td3{
+	width: 10%;
+	word-break: break-word;
+}
+.user-table .td4{
+	width: 15%;
+	word-break: break-word;
+}
+.user-table .td5{
+	width: 5%;
+	word-break: break-word;
+}
+.user-table .td6{
+	width: 10%;
+	word-break: break-word;
+}
+.user-table .td7{
+	width: 14%;
+	word-break: break-word;
+}
+.user-table .td8{
+	width: 6%;
+	word-break: break-word;
+}
+.user-table .td9{
+	width: 7%;
+	word-break: break-word;
+}
+.user-table .td10{
+	width: 8%;
+	word-break: break-word;
+}
+.user-table .td11{
+	width: 15%;
+	word-break: break-word;
+} */
+.user-table  {
+	width: 100%;
+	min-width: 480px;
+	border: 1px solid #ebebeb;
+}
+
+.user-table  img {
+	width: 50px;
+	height: 50px;
+}
+
+.user-table  tr th {
+	font-size: 12px;
+	color: #252525;
+	font-weight: 700;
+	border-bottom: 1px solid #ebebeb;
+	text-align: center;
+	padding: 18px 0 19px;
+	text-transform: uppercase;
+}
+
+.user-table  tr td {
+	padding: 20px 0;
+}
+.user-table  tr td h6{
+	font-size: 10px;
+}
+.user-table  tr td a{
+	font-size: 10px;
+}
+
+.user-table  thead tr  {
+	background: #c0c0c0;
+}
+.user-table  tr:hover  {
+	background: #c0c0c0;
+}

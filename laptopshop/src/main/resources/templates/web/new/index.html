@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="/web/layout">
+<head>
+<title>Trang tin tức</title>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		<section>
+			<div class="container">
+				<div class="row">
+					<div class="breadcrumbs d-flex flex-row align-items-center col-12 mt-3 mx-3">
+						<ul>
+							<li><a th:href="@{/home}">Trang chủ</a></li>
+							<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Tin tức</a></li>
+						</ul>
+					</div>
+					<div class="col-12">
+						<div class="box-news">
+							<th:block th:if="${!news.isEmpty()}" th:each="item : ${news}">
+							<div class="box-new-item">
+								<div class="row">
+									<div class="col-3">
+										<img alt="" th:src="${item.thumbnail}">
+									</div>
+									<div class="col-9">
+										<div class="new-content">
+											<h5><a th:onclick="'submitFormNewDetail('+${item.id}+')'">[[${item.title}]]</a></h5>
+											<p>[[${item.shortDescription}]]</p>
+										</div>
+									</div>
+									<form th:id="formNewDetail+${item.id}" th:action="@{/new/detail}" method="post">
+										<input hidden="" id="page"  name="page" th:value="${currentPage}"/>
+										<input hidden="" id="id"  name="id" th:value="${item.id}"/>
+									</form>
+								</div>
+							</div>
+							</th:block>
+						</div>
+					</div>
+				</div>
+				<th:block th:if="${!news.isEmpty()}">
+					<form class="mx-3" id="formNew" th:action="@{/new}" method="post">
+						<ul class="pagination mt-4" id="pagination"></ul>
+						<input hidden="" id="page"  name="page" th:value="${currentPage}"/>
+						<input hidden="" id="totalPage" name="totalPage" th:value="${totalPage}"/>
+					</form>
+				</th:block>
+			</div>
+		</section>
+
+	</div>
+
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+		var currentPage  = /*[[${currentPage}]]*/ "";
+		var totalPages = /*[[${totalPage}]]*/ "";
+		$(function () {
+			$('#pagination').twbsPagination({
+				totalPages: totalPages,
+				visiblePages: 3,
+				startPage: currentPage,
+				onPageClick: function (event, page) {
+					if (currentPage != page) {
+						$('#page').val(page);
+						$('#formNew').submit();
+					}
+				} 
+			});
+		});
+		function submitFormNewDetail(id){
+			$("#formNewDetail"+id).submit();
+		}
+		</script>
+	</th:block>
+
+</body>
+</html>
