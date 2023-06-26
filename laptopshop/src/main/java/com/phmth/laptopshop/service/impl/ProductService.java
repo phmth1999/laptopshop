@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,13 +16,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phmth.laptopshop.dto.FormFilterProduct;
-import com.phmth.laptopshop.dto.FormSearchProduct;
 import com.phmth.laptopshop.dto.ProductDto;
+import com.phmth.laptopshop.dto.request.FilterProductRequest;
+import com.phmth.laptopshop.dto.request.SearchProductRequest;
 import com.phmth.laptopshop.entity.BrandEntity;
 import com.phmth.laptopshop.entity.CategoryEntity;
 import com.phmth.laptopshop.entity.ProductEntity;
 import com.phmth.laptopshop.exception.ProductException;
+import com.phmth.laptopshop.mapper.ProductMapper;
 import com.phmth.laptopshop.repository.IBrandRepository;
 import com.phmth.laptopshop.repository.ICategoryRepository;
 import com.phmth.laptopshop.repository.IProductRepository;
@@ -35,6 +38,8 @@ import jakarta.persistence.criteria.Root;
 @Transactional
 public class ProductService implements IProductService {
 
+//	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
+	
 	@Autowired
 	private IProductRepository productRepository;
 
@@ -43,13 +48,27 @@ public class ProductService implements IProductService {
 
 	@Autowired
 	private IBrandRepository brandRepository;
+	
+	private ProductMapper productMapper = new ProductMapper();
 
 	@Override
-	public Page<ProductEntity> findAll(int page, int limit) {
+	public Page<ProductDto> findAll(int page, int limit) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
 		
-		return productRepository.findAll(pageable);
+		Page<ProductEntity> listProductEntity = productRepository.findAll(pageable);
+		if(listProductEntity.isEmpty()) {
+			return null;
+		}
+		
+		Page<ProductDto> listProductDto = listProductEntity.map(new Function<ProductEntity, ProductDto>(){
+			@Override
+			public ProductDto apply(ProductEntity productEntity) {
+				return productMapper.entityToDto(productEntity);
+			}
+		});
+		
+		return listProductDto;
 	}
 
 	private Sort checkSortBy(String nameSort) {
@@ -69,7 +88,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public Page<ProductEntity> findAll(FormFilterProduct formFilterProduct, int page, int limit) {
+	public Page<ProductDto> findAll(FilterProductRequest formFilterProduct, int page, int limit) {
 
 		Sort sort = checkSortBy(formFilterProduct.getSort());
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
@@ -81,13 +100,13 @@ public class ProductService implements IProductService {
 
 				List<Predicate> predicates = new ArrayList<>();
 
-				if (formFilterProduct.getCateogryId() != null && formFilterProduct.getCateogryId().longValue() > 0) {
-					CategoryEntity categoryEntity = categoryRepository.findById(formFilterProduct.getCateogryId()).get();
+				if (!formFilterProduct.getCateogryName().equals("all")) {
+					CategoryEntity categoryEntity = categoryRepository.findByName(formFilterProduct.getCateogryName()).get();
 					predicates.add(criteriaBuilder.equal(root.get("category"), categoryEntity));
 				}
 
-				if (formFilterProduct.getBrandId() != null && formFilterProduct.getBrandId().longValue() > 0) {
-					BrandEntity brandEntity = brandRepository.findById(formFilterProduct.getBrandId()).get();
+				if (!formFilterProduct.getBrandName().equals("all")) {
+					BrandEntity brandEntity = brandRepository.findByName(formFilterProduct.getBrandName()).get();
 					predicates.add(criteriaBuilder.equal(root.get("brand"), brandEntity));
 				}
 
@@ -112,11 +131,23 @@ public class ProductService implements IProductService {
 
 		};
 
-		return productRepository.findAll(specification, pageable);
+		Page<ProductEntity> listProductEntity = productRepository.findAll(specification, pageable);
+		if(listProductEntity.isEmpty()) {
+			return null;
+		}
+		
+		Page<ProductDto> listProductDto = listProductEntity.map(new Function<ProductEntity, ProductDto>(){
+			@Override
+			public ProductDto apply(ProductEntity productEntity) {
+				return productMapper.entityToDto(productEntity);
+			}
+		});
+		
+		return listProductDto;
 	}
 
 	@Override
-	public Page<ProductEntity> findAll(int page, int limit, FormSearchProduct formSearchProduct) {
+	public Page<ProductDto> findAll(int page, int limit, SearchProductRequest formSearchProduct) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
 		
@@ -131,13 +162,13 @@ public class ProductService implements IProductService {
 					predicates.add(criteriaBuilder.like(root.get("name"), "%" + formSearchProduct.getName() + "%"));
 				}
 				
-				if (formSearchProduct.getCategory() != null && formSearchProduct.getCategory().longValue() > 0) {
+				if (formSearchProduct.getCategoryName() != null && !formSearchProduct.getCategoryName().isEmpty()) {
 					predicates.add(criteriaBuilder.equal(root.get("category"),
-							categoryRepository.findById(formSearchProduct.getCategory()).get()));
+							categoryRepository.findByName(formSearchProduct.getCategoryName()).get()));
 				}
 				
-				if (formSearchProduct.getBrand() != null && formSearchProduct.getBrand().longValue() > 0) {
-					predicates.add(criteriaBuilder.equal(root.get("brand"),brandRepository.findById(formSearchProduct.getBrand()).get()));
+				if (formSearchProduct.getBrandName() != null && !formSearchProduct.getBrandName().isEmpty()) {
+					predicates.add(criteriaBuilder.equal(root.get("brand"),brandRepository.findByName(formSearchProduct.getBrandName()).get()));
 				}
 				
 				if (!formSearchProduct.getPrice().isBlank()) {
@@ -156,22 +187,56 @@ public class ProductService implements IProductService {
 			}
 		};
 		
-		return productRepository.findAll(specification, pageable);
+		Page<ProductEntity> listProductEntity = productRepository.findAll(specification, pageable);
+		if(listProductEntity.isEmpty()) {
+			return null;
+		}
+		
+		Page<ProductDto> listProductDto = listProductEntity.map(new Function<ProductEntity, ProductDto>(){
+			@Override
+			public ProductDto apply(ProductEntity productEntity) {
+				return productMapper.entityToDto(productEntity);
+			}
+		});
+		
+		return listProductDto;
 	}
 
 	@Override
-	public List<ProductEntity> findByNameSearch(String term) {
-		return productRepository.findByNameStartsWith(term);
+	public List<ProductDto> findByNameSearch(String term) {
+		List<ProductEntity> listProductEntity = productRepository.findByNameStartsWith(term);
+		if(listProductEntity.isEmpty()) {
+			return null;
+		}
+		
+		List<ProductDto> listProductDto = new ArrayList<>();
+		for (ProductEntity productEntity : listProductEntity) {
+			listProductDto.add(productMapper.entityToDto(productEntity));
+		}
+		
+		return listProductDto;
 	}
 
 	@Override
-	public Optional<ProductEntity> findOne(long id) {
-		return productRepository.findById(id);
+	public Optional<ProductDto> findById(long id) {
+		Optional<ProductEntity> productEntity = productRepository.findById(id);
+		if(productEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<ProductDto> productDto = productEntity.map(new Function<ProductEntity, ProductDto>(){
+			@Override
+			public ProductDto apply(ProductEntity productEntity) {
+				return productMapper.entityToDto(productEntity);
+			}
+		});
+		
+		return productDto;
 	}
 
 
 	@Override
-	public ProductEntity insert(ProductDto productDto) {
+	public ProductDto insert(ProductDto productDto) {
 		// If the input is null, throw exception
 		if (productDto == null) {
 			throw new ProductException("The input is null!");
@@ -188,24 +253,28 @@ public class ProductService implements IProductService {
 		}
 
 		// If insert data failed, return null
+//		ProductEntity productEntity = productMapper.dtoToEntity(productDto);
 		ProductEntity productEntity = new ProductEntity();
-		CategoryEntity categoryEntity = categoryRepository.findById(productDto.getCategoryId()).get();
-		productEntity.setCategory(categoryEntity);
-		BrandEntity brandEntity = brandRepository.findById(productDto.getBrandId()).get();
-		productEntity.setBrand(brandEntity);
+		
+		productEntity.setId(productDto.getId());
+		Optional<CategoryEntity> categoryEntity = categoryRepository.findByName(productDto.getCategoryName());
+		productEntity.setCategory(categoryEntity.get());
+		Optional<BrandEntity> brandEntity = brandRepository.findByName(productDto.getBrandName());
+		productEntity.setBrand(brandEntity.get());
 		productEntity.setName(productDto.getName());
 		productEntity.setPrice(productDto.getPrice());
 		productEntity.setDiscount(productDto.getDiscount());
-		productEntity.setThumbnail(productDto.getThumbnail());
 		productEntity.setQuantity_in_stock(productDto.getQuantity_in_stock());
+		productEntity.setThumbnail(productDto.getThumbnail());
 		productEntity.setDescription(productDto.getDescription());
 		productEntity.setCreated_at(new Date());
+		
 		ProductEntity productSave = productRepository.save(productEntity);
-		if (productSave == null) {
+		if (!productRepository.existsById(productSave.getId())) {
 			return null;
 		}
-
-		return productSave;
+		
+		return productMapper.entityToDto(productSave);
 	}
 
 	@Override
@@ -221,31 +290,32 @@ public class ProductService implements IProductService {
 		}
 
 		// If the data to be modified is not found, throw exception
-		Optional<ProductEntity> productEntity = productRepository.findById(productDto.getId());
-		if (productEntity.isEmpty()) {
+		Optional<ProductEntity> oldProductEntity = productRepository.findById(productDto.getId());
+		if (oldProductEntity.isEmpty()) {
 			throw new ProductException("The data to be modified is not found!");
 		}
 
 		// If the new product name is different from the old product name and the new
 		// product name already exists, throw exception
-		if (!productEntity.get().getName().equals(productDto.getName())
-				&& productRepository.existsByName(productDto.getName())) {
+		if (!oldProductEntity.get().getName().equals(productDto.getName()) && productRepository.existsByName(productDto.getName())) {
 			throw new ProductException("The product name already exists!");
 		}
 
 		// If saving modification fail, return false
-		CategoryEntity categoryEntity = categoryRepository.findById(productDto.getCategoryId()).get();
-		productEntity.get().setCategory(categoryEntity);
-		BrandEntity brandEntity = brandRepository.findById(productDto.getBrandId()).get();
-		productEntity.get().setBrand(brandEntity);
-		productEntity.get().setName(productDto.getName());
-		productEntity.get().setPrice(productDto.getPrice());
-		productEntity.get().setDiscount(productDto.getDiscount());
-		productEntity.get().setThumbnail(productDto.getThumbnail());
-		productEntity.get().setQuantity_in_stock(productDto.getQuantity_in_stock());
-		productEntity.get().setDescription(productDto.getDescription());
-		productEntity.get().setUpdate_at(new Date());
-		if (productRepository.save(productEntity.get()) == null) {
+		CategoryEntity categoryEntity = categoryRepository.findByName(productDto.getCategoryName()).get();
+		oldProductEntity.get().setCategory(categoryEntity);
+		BrandEntity brandEntity = brandRepository.findByName(productDto.getBrandName()).get();
+		oldProductEntity.get().setBrand(brandEntity);
+		oldProductEntity.get().setName(productDto.getName());
+		oldProductEntity.get().setPrice(productDto.getPrice());
+		oldProductEntity.get().setDiscount(productDto.getDiscount());
+		oldProductEntity.get().setThumbnail(productDto.getThumbnail());
+		oldProductEntity.get().setQuantity_in_stock(productDto.getQuantity_in_stock());
+		oldProductEntity.get().setDescription(productDto.getDescription());
+		oldProductEntity.get().setUpdate_at(new Date());
+		
+		ProductEntity productSave = productRepository.save(oldProductEntity.get());
+		if (productSave == null) {
 			return false;
 		}
 
@@ -270,6 +340,23 @@ public class ProductService implements IProductService {
 		}
 
 		return true;
+	}
+	
+	@Override
+	public List<ProductDto> findByCategoryId(long id) {
+		Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
+		if(categoryEntity.isEmpty()) {
+			return null;
+		}
+		
+		Set<ProductEntity> listProductEntity = categoryEntity.get().getProducts();
+		List<ProductDto> listProductDto = new ArrayList<>();
+		
+		for (ProductEntity productEntity : listProductEntity) {
+			listProductDto.add(productMapper.entityToDto(productEntity));
+		}
+		
+		return listProductDto;
 	}
 
 }

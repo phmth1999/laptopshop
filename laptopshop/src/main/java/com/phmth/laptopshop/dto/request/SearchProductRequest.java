@@ -1,9 +1,6 @@
-package com.phmth.laptopshop.dto;
+package com.phmth.laptopshop.dto.request;
 
 import java.lang.reflect.Field;
-
-import com.phmth.laptopshop.enums.AuthenticationType;
-import com.phmth.laptopshop.enums.StateUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,19 +11,16 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormSearchUser {
+public class SearchProductRequest {
 
-	private String fullname;
-	private String sex;
-	private String birthday;
-	private String address;
-	private String email;
-	private StateUser stateUser;
-	private AuthenticationType authType;
-	private Long role;
+	private String name;
+	private String price;
+	private String quantity;
+	private String discount;
+	private String categoryName;
+	private String brandName;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

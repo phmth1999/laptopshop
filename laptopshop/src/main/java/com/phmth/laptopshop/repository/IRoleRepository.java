@@ -8,4 +8,6 @@ import com.phmth.laptopshop.entity.RoleEntity;
 @Repository
 public interface IRoleRepository extends JpaRepository<RoleEntity, Long>{
 
+	RoleEntity findByName(String role);
+
 }

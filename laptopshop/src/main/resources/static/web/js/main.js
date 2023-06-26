@@ -24,7 +24,7 @@ $(function () {
 		    	return $('<li>').append(
 									`<a href="/${firstPath}/store/${item.id}" style="display:flex;justify-content: left;align-items: center;">
 					        		 	<div style="width:33%">
-					        		  		<img style="height: 100px;width: 100px;" class="icon" src="/${firstPath}/web/images/product/${item.thumbnail}" />
+					        		  		<img style="height: 100px;width: 100px;" class="icon" src="/${firstPath}/images/product/${item.thumbnail}" />
 					        		  	</div>
 					        		  	<div style="margin-left: 20px;font-size: 16px;width:33%">
 					        		  		${item.name}

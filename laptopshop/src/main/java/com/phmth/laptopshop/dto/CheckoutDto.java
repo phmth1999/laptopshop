@@ -9,17 +9,27 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class FormFilterProduct {
+@NoArgsConstructor
+public class CheckoutDto {
 	
-	private String sort = "low-high";
-	private Long cateogryId = (long) 0;
-	private Long brandId = (long) 0;
-	private String price = "all";
-	
-	public boolean isEmpty()  {
+	private Long id;
+	private Long order;
+	private Long user;
+	private Integer amount;
+	private String bankCode;
+	private String bankTranNo;
+	private String cardType;
+	private String orderInfo;
+	private String payDate;
+	private String responseCode;
+	private String tmnCode;
+	private String transactionNo;
+	private String transactionStatus;
+	private String txnRef;
+	private String secureHash;
 
+	public boolean isEmpty()  {
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);
@@ -32,5 +42,4 @@ public class FormFilterProduct {
 	    }
 	    return true;
 	}
-	
 }

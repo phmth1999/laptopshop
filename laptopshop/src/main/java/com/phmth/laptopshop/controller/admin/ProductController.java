@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.FormSearchProduct;
 import com.phmth.laptopshop.dto.ProductDto;
-import com.phmth.laptopshop.dto.ResponseMessage;
-import com.phmth.laptopshop.entity.ProductEntity;
+import com.phmth.laptopshop.dto.reponse.MessageResponse;
+import com.phmth.laptopshop.dto.request.SearchProductRequest;
 import com.phmth.laptopshop.exception.ProductException;
 import com.phmth.laptopshop.service.IBrandService;
 import com.phmth.laptopshop.service.ICategoryService;
@@ -51,52 +50,62 @@ public class ProductController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@GetMapping
-	public ModelAndView productPage(@RequestParam(name = "page", defaultValue = "1") int page) {
-		
-		ModelAndView mav = new ModelAndView("admin/product/index"); 
+	public ModelAndView showProductPage(@RequestParam(name = "page", defaultValue = "1") int page) {
 		
 		int limit = 5;
-		Page<ProductEntity> listPageProduct = productService.findAll(page, limit);
-		List<ProductEntity> listProduct = listPageProduct.getContent();
 		
-		mav.addObject("formSearchProduct", new FormSearchProduct());
+		ModelAndView mav = new ModelAndView("admin/product/index"); 
+		mav.addObject("formSearchProduct", new SearchProductRequest());
 		mav.addObject("productDto", new ProductDto());
 		
-		mav.addObject("category", categoryService.findAll());
-		mav.addObject("brand", brandService.findAll());
-		
-		mav.addObject("product", listProduct);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageProduct.getTotalPages());
+		try {
+			mav.addObject("category", categoryService.findAll());
+			mav.addObject("brand", brandService.findAll());
+			
+			Page<ProductDto> listPageProduct = productService.findAll(page, limit);
+			if(listPageProduct != null) {
+				List<ProductDto> listProduct = listPageProduct.getContent();
+				mav.addObject("product", listProduct);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageProduct.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 		
 		return mav;
 	}
 	@PostMapping
-	public ModelAndView product(
-					@ModelAttribute("formSearchProduct") FormSearchProduct formSearchProduct,
+	public ModelAndView processProductPage(
+					@ModelAttribute("formSearchProduct") SearchProductRequest formSearchProduct,
 					@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		ModelAndView mav = new ModelAndView("admin/product/index"); 
-		
 		int limit = 5;
-		Page<ProductEntity> listPageProduct = productService.findAll(page, limit, formSearchProduct);
-		List<ProductEntity> listProduct = listPageProduct.getContent();
 		
+		ModelAndView mav = new ModelAndView("admin/product/index"); 
 		mav.addObject("formSearchProduct", formSearchProduct);
 		mav.addObject("productDto", new ProductDto());
 		
-		mav.addObject("category", categoryService.findAll());
-		mav.addObject("brand", brandService.findAll());
-		
-		mav.addObject("product", listProduct);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageProduct.getTotalPages());
+		try {
+			mav.addObject("category", categoryService.findAll());
+			mav.addObject("brand", brandService.findAll());
+			
+			Page<ProductDto> listPageProduct = productService.findAll(page, limit, formSearchProduct);
+			if(listPageProduct != null) {
+				List<ProductDto> listProduct = listPageProduct.getContent();
+				mav.addObject("product", listProduct);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageProduct.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 		
 		return mav;
 	}
 	
 	@PostMapping("/add")
-	public ModelAndView addProduct(
+	public ModelAndView handleCreate(
 					@RequestParam(value = "fileImage") MultipartFile fileImage,
 					@ModelAttribute("product") ProductDto productDto,
 					HttpServletRequest request) throws IOException {
@@ -112,7 +121,9 @@ public class ProductController {
 				UploadFileUtil.saveFile(realPath, nameImage, fileImage);
 			}
 			
-			if(productService.insert(productDto) != null) {
+			ProductDto productReponse = productService.insert(productDto);
+			
+			if(productReponse != null) {
 				mav = new ModelAndView("redirect:/admin/product?add=success");
 			}else {
 				mav = new ModelAndView("redirect:/admin/product?add=fail");
@@ -120,26 +131,28 @@ public class ProductController {
 		} catch (ProductException e) {
 			mav = new ModelAndView("redirect:/admin/product?add=exist");
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
 		
 		return mav;
 	}
 	
 	@GetMapping("/edit/{id}")
-	public ProductEntity editProduct1(@PathVariable("id") long id) {
-		
-		return productService.findOne(id).get();
+	public ProductDto productApi(@PathVariable("id") long id) {
+		return productService.findById(id).get();
 	}
 	
 	@PostMapping("/edit")
-	public ResponseMessage editProduct(
+	public MessageResponse handleUpdate(
 					@RequestParam(value = "fileImage", required = false) MultipartFile fileImage,
 					@ModelAttribute("product") ProductDto productDto,
 					HttpServletRequest request) throws IOException {
 		
 		String nameImage = "";
 		String message = "";
-		ProductEntity data = null;
+		ProductDto data = null;
+		
 		try {
 			if(fileImage != null && !fileImage.isEmpty()) {
 				nameImage = StringUtils.cleanPath(fileImage.getOriginalFilename());
@@ -147,28 +160,34 @@ public class ProductController {
 				String realPath = request.getServletContext().getRealPath(pathUploadImageProduct);
 				UploadFileUtil.saveFile(realPath, nameImage, fileImage);
 			}
-			boolean productUpdate = productService.update(productDto);
+			
+			boolean productReponse = productService.update(productDto);
 
-			if (productUpdate) {
+			if (productReponse) {
 				message = "Update product successfully!";
-				data = productService.findOne(productDto.getId()).get();
+				data = productService.findById(productDto.getId()).get();
 			}else {
 				message = "Update product failed!";
 			}
 		} catch (ProductException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
-		return new ResponseMessage(message, data);
+		
+		return new MessageResponse(message, data);
 	}
 	
 	@PostMapping("/delete")
-	public ResponseMessage deleteProduct(@RequestParam("id") long id) {
+	public MessageResponse handleRemove(@RequestParam("id") long id) {
 		
 		String message = "";
 		boolean data = false;
+		
 		try {
 			data = productService.remove(id);
+			
 			if(data) {
 				message = "Remove product successfully!";
 			}else {
@@ -177,7 +196,10 @@ public class ProductController {
 		} catch (ProductException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
-		return new ResponseMessage(message, data);
+		
+		return new MessageResponse(message, data);
 	}
 }

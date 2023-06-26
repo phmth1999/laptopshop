@@ -19,7 +19,7 @@
 					</div>
 					<div class="col-12">
 						<div class="box-news">
-							<th:block th:if="${!news.isEmpty()}" th:each="item : ${news}">
+							<th:block th:if="${news}" th:each="item : ${news}">
 							<div class="box-new-item">
 								<div class="row">
 									<div class="col-3">
@@ -41,7 +41,7 @@
 						</div>
 					</div>
 				</div>
-				<th:block th:if="${!news.isEmpty()}">
+				<th:block th:if="${news}">
 					<form class="mx-3" id="formNew" th:action="@{/new}" method="post">
 						<ul class="pagination mt-4" id="pagination"></ul>
 						<input hidden="" id="page"  name="page" th:value="${currentPage}"/>

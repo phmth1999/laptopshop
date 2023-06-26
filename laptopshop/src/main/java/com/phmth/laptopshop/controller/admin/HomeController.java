@@ -15,7 +15,7 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@GetMapping({"/","/home"})
-	public ModelAndView homePage() {
+	public ModelAndView showHomePage() {
 		return new ModelAndView("admin/home/index");
 	}
 }

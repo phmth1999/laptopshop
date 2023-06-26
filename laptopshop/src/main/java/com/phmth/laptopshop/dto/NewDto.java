@@ -14,14 +14,13 @@ import lombok.Setter;
 public class NewDto {
 	
 	private Long id;
-	private Long category;
+	private String categoryName;
 	private String title;
 	private String thumbnail;
 	private String shortDescription;
 	private String content;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

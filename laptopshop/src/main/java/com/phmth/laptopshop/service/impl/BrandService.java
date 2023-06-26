@@ -3,6 +3,7 @@ package com.phmth.laptopshop.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,10 +14,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phmth.laptopshop.dto.FormAddBrand;
-import com.phmth.laptopshop.dto.FormEditBrand;
+import com.phmth.laptopshop.dto.BrandDto;
 import com.phmth.laptopshop.entity.BrandEntity;
 import com.phmth.laptopshop.exception.BrandException;
+import com.phmth.laptopshop.mapper.BrandMapper;
 import com.phmth.laptopshop.repository.IBrandRepository;
 import com.phmth.laptopshop.service.IBrandService;
 
@@ -31,22 +32,50 @@ public class BrandService implements IBrandService {
 	
 	@Autowired
 	private IBrandRepository brandRepository;
+	
+	private BrandMapper brandMapper = new BrandMapper();
 
 	@Override
-	public Iterable<BrandEntity> findAll() {
-		return brandRepository.findAll();
+	public List<BrandDto> findAll() {
+		List<BrandEntity> listBrandEntity = brandRepository.findAll();
+		
+		if(listBrandEntity.isEmpty()) {
+			return null;
+		}
+		
+		List<BrandDto> listBrandDto = new ArrayList<>();
+		for (BrandEntity brandEntity : listBrandEntity) {
+			listBrandDto.add(brandMapper.entityToDto(brandEntity));
+		}
+		
+		return listBrandDto;
 	}
 
 	@Override
-	public Page<BrandEntity> findAll(int page, int limit) {
+	public Page<BrandDto> findAll(int page, int limit) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
+		
+		Page<BrandEntity> pageBrandEntity = brandRepository.findAll(pageable);
+		
+		if(pageBrandEntity.isEmpty()) {
+			return null;
+		}
+		
+		Page<BrandDto> pageBrandDto = pageBrandEntity.map(new Function<BrandEntity, BrandDto> (){
 
-		return brandRepository.findAll(pageable);
+			@Override
+			public BrandDto apply(BrandEntity brandEntity) {
+				return brandMapper.entityToDto(brandEntity);
+			}
+			
+		});
+
+		return pageBrandDto;
 	}
 
 	@Override
-	public Page<BrandEntity> findAll(int page, int limit, String name) {
+	public Page<BrandDto> findAll(int page, int limit, String name) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
 
@@ -65,133 +94,117 @@ public class BrandService implements IBrandService {
 				return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 			}
 		};
-		return brandRepository.findAll(specification, pageable);
-	}
-
-	@Override
-	public Optional<BrandEntity> findOne(long id) {
-		return brandRepository.findById(id);
-	}
-
-	@Override
-	public Optional<BrandEntity> findOne(String name) {
-		return brandRepository.findByName(name);
-	}
-
-	@Override
-	public BrandEntity insert(BrandEntity brandEntity) {
-		// If the input is null, throw exception
-		if (brandEntity == null) {
-			throw new BrandException("The input is null!");
-		}
 		
-		// If the input is empty, throw exception
-		if (brandEntity.isEmpty()) {
-			throw new BrandException("The input is empty!");
-		}
-
-		// If the brand name already exists, throw exception
-		if (brandRepository.existsByName(brandEntity.getName())) {
-			throw new BrandException("The brand name already exists!");
-		}
-
-		// If insert data failed, return null
-		BrandEntity brandSave = brandRepository.save(brandEntity);
-		if (brandSave == null) {
+		Page<BrandEntity> pageBrandEntity = brandRepository.findAll(specification, pageable);
+		
+		if(pageBrandEntity.isEmpty()) {
 			return null;
 		}
-
-		return brandSave;
+		
+		Page<BrandDto> pageBrandDto = pageBrandEntity.map(new Function<BrandEntity, BrandDto>(){
+			@Override
+			public BrandDto apply(BrandEntity brandEntity) {
+				return brandMapper.entityToDto(brandEntity);
+			}
+		});
+		
+		return pageBrandDto;
 	}
-	
+
 	@Override
-	public BrandEntity insert(FormAddBrand formAddBrand) {
+	public Optional<BrandDto> findById(long id) {
+		Optional<BrandEntity> brandEntity = brandRepository.findById(id);
+		
+		if(brandEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<BrandDto> brandDto = brandEntity.map(new Function<BrandEntity, BrandDto>(){
+			@Override
+			public BrandDto apply(BrandEntity brandEntity) {
+				return brandMapper.entityToDto(brandEntity);
+			}
+		});
+		
+		return brandDto;
+	}
+
+	@Override
+	public Optional<BrandDto> findByName(String name) {
+		Optional<BrandEntity> brandEntity = brandRepository.findByName(name);
+		
+		if(brandEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<BrandDto> brandDto = brandEntity.map(new Function<BrandEntity, BrandDto>(){
+			@Override
+			public BrandDto apply(BrandEntity brandEntity) {
+				return brandMapper.entityToDto(brandEntity);
+			}
+		});
+		
+		return brandDto;
+	}
+
+	@Override
+	public BrandDto insert(BrandDto brandDto) {
 		// If the input is null, throw exception
-		if (formAddBrand == null) {
+		if (brandDto == null) {
 			throw new BrandException("The input is null!");
 		}
 		
 		// If the input is empty, throw exception
-		if (formAddBrand.isEmpty()) {
+		if (brandDto.isEmpty()) {
 			throw new BrandException("The input is empty!");
 		}
 
 		// If the brand name already exists, throw exception
-		if (brandRepository.existsByName(formAddBrand.getName())) {
+		if (brandRepository.existsByName(brandDto.getName())) {
 			throw new BrandException("The brand name already exists!");
 		}
 
-		// If insert data failed, return null
 		BrandEntity brandEntity = new BrandEntity();
-		brandEntity.setName(formAddBrand.getName());
+		brandEntity.setName(brandDto.getName());
 		BrandEntity brandSave = brandRepository.save(brandEntity);
-		if (brandSave == null) {
+		
+		if (!brandRepository.existsById(brandSave.getId())) {
 			return null;
 		}
-
-		return brandSave;
+		
+		return brandMapper.entityToDto(brandSave);
 	}
 	
 	@Override
-	public boolean update(BrandEntity brandEntity) {
+	public boolean update(BrandDto brandDto) {
 		// If the input is null, throw exception
-		if (brandEntity == null) {
+		if (brandDto == null) {
 			throw new BrandException("The input is null!");
 		}
 		
 		// If the input is empty, throw exception
-		if (brandEntity.isEmpty()) {
+		if (brandDto.isEmpty()) {
 			throw new BrandException("The input is empty!");
 		}
 
 		// If the data to be modified is not found, throw exception
-		Optional<BrandEntity> brandFind = brandRepository.findById(brandEntity.getId());
-		if (brandFind.isEmpty()) {
+		Optional<BrandEntity> oldBrandEntity = brandRepository.findById(brandDto.getId());
+		if (oldBrandEntity.isEmpty()) {
 			throw new BrandException("The data to be modified is not found!");
 		}
 		
 		// If the new brand name is different from the old brand name and the new brand name already exists, throw exception
-		if(!brandFind.get().getName().equals(brandEntity.getName()) && brandRepository.existsByName(brandEntity.getName())) {
+		if(!oldBrandEntity.get().getName().equals(brandDto.getName()) && brandRepository.existsByName(brandDto.getName())) {
 			throw new BrandException("The brand name already exists!");
 		}
 		
-		// If saving modification fail, return false
-		if (brandRepository.save(brandEntity) == null) {
+		oldBrandEntity.get().setName(brandDto.getName());
+		BrandEntity brandSave = brandRepository.save(oldBrandEntity.get());
+		
+		if (brandSave == null) {
 			return false;
 		}
-
-		return true;
-	}
-
-	@Override
-	public boolean update(FormEditBrand formEditBrand) {
-		// If the input is null, throw exception
-		if (formEditBrand == null) {
-			throw new BrandException("The input is null!");
-		}
 		
-		// If the input is empty, throw exception
-		if (formEditBrand.isEmpty()) {
-			throw new BrandException("The input is empty!");
-		}
-
-		// If the data to be modified is not found, throw exception
-		Optional<BrandEntity> brandUpdate = brandRepository.findById(formEditBrand.getId());
-		if (brandUpdate.isEmpty()) {
-			throw new BrandException("The data to be modified is not found!");
-		}
-		
-		// If the new brand name is different from the old brand name and the new brand name already exists, throw exception
-		if(!brandUpdate.get().getName().equals(formEditBrand.getName()) && brandRepository.existsByName(formEditBrand.getName()) ) {
-			throw new BrandException("The brand name already exists!");
-		}
-
-		// If saving modification fail, return false
-		brandUpdate.get().setName(formEditBrand.getName());
-		if (brandRepository.save(brandUpdate.get()) == null) {
-			return false;
-		}
-
 		return true;
 	}
 
@@ -212,16 +225,6 @@ public class BrandService implements IBrandService {
 		}
 
 		return true;
-	}
-
-	@Override
-	public boolean existsById(long id) {
-		return brandRepository.existsById(id);
-	}
-
-	@Override
-	public boolean existsByName(String name) {
-		return brandRepository.existsByName(name);
 	}
 
 }

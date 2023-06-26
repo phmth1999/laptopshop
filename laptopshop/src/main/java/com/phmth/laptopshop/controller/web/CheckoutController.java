@@ -21,11 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.entity.CheckoutEntity;
-import com.phmth.laptopshop.entity.OrderEntity;
+import com.phmth.laptopshop.dto.CheckoutDto;
+import com.phmth.laptopshop.dto.OrderDto;
 import com.phmth.laptopshop.enums.StateCheckout;
 import com.phmth.laptopshop.service.ICheckoutService;
-import com.phmth.laptopshop.service.IOrderDetailService;
 import com.phmth.laptopshop.service.IOrderService;
 import com.phmth.laptopshop.utils.ConfigVNPAY;
 
@@ -45,9 +44,6 @@ public class CheckoutController {
 	@Autowired
 	private IOrderService orderService;
 	
-	@Autowired
-	private IOrderDetailService orderDetailService;
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping("/vnpay")
 	public ModelAndView PaymentVNPAY(
@@ -56,7 +52,7 @@ public class CheckoutController {
 					HttpServletRequest req, 
 					HttpServletResponse resp) throws ServletException, IOException {
 		
-		OrderEntity orderEntity = orderService.findByCodeOrder(codeOrder).get();
+		OrderDto orderEntity = orderService.findByCodeOrder(codeOrder).get();
 		String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         long amount = (long) (orderEntity.getTotal_money()*100);
@@ -134,28 +130,28 @@ public class CheckoutController {
 		
 		ModelAndView mav= new ModelAndView("/web/checkout/bill");
 		
-		OrderEntity orderEntity = orderService.findByCodeOrder(vnp_TxnRef).get();
+		OrderDto orderEntity = orderService.findByCodeOrder(vnp_TxnRef).get();
 		
 		if("00".equals(vnp_ResponseCode)) {
-			CheckoutEntity checkoutEntity = new CheckoutEntity();
+			CheckoutDto checkoutDto = new CheckoutDto();
 			//Accounts and Orders Paid
-			checkoutEntity.setOrder(orderEntity);
-			checkoutEntity.setUser(orderEntity.getUser());
+			checkoutDto.setOrder(orderEntity.getId());
+			checkoutDto.setUser(orderEntity.getUser());
 			//Save information from vnpay returned
-			checkoutEntity.setAmount(Integer.parseInt(vnp_Amount));
-			checkoutEntity.setBankCode(vnp_BankCode);
-			checkoutEntity.setBankTranNo(vnp_BankTranNo);
-			checkoutEntity.setCardType(vnp_CardType);
-			checkoutEntity.setOrderInfo(vnp_OrderInfo);
-			checkoutEntity.setPayDate(vnp_PayDate);
-			checkoutEntity.setResponseCode(vnp_ResponseCode);
-			checkoutEntity.setTmnCode(vnp_TmnCode);
-			checkoutEntity.setTransactionNo(vnp_TransactionNo);
-			checkoutEntity.setTransactionStatus(vnp_TransactionStatus);
-			checkoutEntity.setTxnRef(vnp_TxnRef);
-			checkoutEntity.setSecureHash(vnp_SecureHash);
+			checkoutDto.setAmount(Integer.parseInt(vnp_Amount));
+			checkoutDto.setBankCode(vnp_BankCode);
+			checkoutDto.setBankTranNo(vnp_BankTranNo);
+			checkoutDto.setCardType(vnp_CardType);
+			checkoutDto.setOrderInfo(vnp_OrderInfo);
+			checkoutDto.setPayDate(vnp_PayDate);
+			checkoutDto.setResponseCode(vnp_ResponseCode);
+			checkoutDto.setTmnCode(vnp_TmnCode);
+			checkoutDto.setTransactionNo(vnp_TransactionNo);
+			checkoutDto.setTransactionStatus(vnp_TransactionStatus);
+			checkoutDto.setTxnRef(vnp_TxnRef);
+			checkoutDto.setSecureHash(vnp_SecureHash);
 			//Save Data
-			checkoutService.save(checkoutEntity);
+			checkoutService.insert(checkoutDto);
 			//Change order status is successful payment
 			orderService.updateStateCheckout(orderEntity.getId(), StateCheckout.PAID);
 			
@@ -180,7 +176,7 @@ public class CheckoutController {
 		mav.addObject("vnp_SecureHash", vnp_SecureHash);
 		
 		mav.addObject("order", orderEntity);
-		mav.addObject("orderdetail", orderDetailService.findByOrder(orderEntity.getId()));
+		mav.addObject("orderdetail", orderService.findByCodeOrder(vnp_TxnRef).get());
 		
 		return mav;
 	}

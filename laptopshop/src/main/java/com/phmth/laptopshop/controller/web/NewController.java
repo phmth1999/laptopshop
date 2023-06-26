@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.entity.NewEntity;
+import com.phmth.laptopshop.dto.NewDto;
 import com.phmth.laptopshop.service.INewService;
 
 @RestController
@@ -30,8 +30,8 @@ public class NewController {
 		ModelAndView mav = new ModelAndView("/web/new/index");
 		int limit = 4;
 		
-		Page<NewEntity> listPageNew = newService.findAll(page, limit);
-		List<NewEntity> listNew = listPageNew.getContent();
+		Page<NewDto> listPageNew = newService.findAll(page, limit);
+		List<NewDto> listNew = listPageNew.getContent();
 		
 		mav.addObject("news", listNew);
 		mav.addObject("currentPage", page);
@@ -43,8 +43,8 @@ public class NewController {
 		ModelAndView mav = new ModelAndView("/web/new/index");
 		int limit = 4;
 		
-		Page<NewEntity> listPageNew = newService.findAll(page, limit);
-		List<NewEntity> listNew = listPageNew.getContent();
+		Page<NewDto> listPageNew = newService.findAll(page, limit);
+		List<NewDto> listNew = listPageNew.getContent();
 		
 		mav.addObject("news", listNew);
 		mav.addObject("currentPage", page);
@@ -56,7 +56,7 @@ public class NewController {
 	public ModelAndView contactDetail(@RequestParam("id") long id, @RequestParam(name = "page", defaultValue = "1") int page) {
 		ModelAndView mav = new ModelAndView("/web/new/detail");
 		mav.addObject("currentPage", page);
-		mav.addObject("newItem", newService.findOne(id).get());
+		mav.addObject("newItem", newService.findById(id).get());
 		return mav;
 	}
 }

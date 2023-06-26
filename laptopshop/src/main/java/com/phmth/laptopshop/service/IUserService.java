@@ -4,31 +4,27 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.phmth.laptopshop.dto.FormAddUser;
-import com.phmth.laptopshop.dto.FormEditUser;
-import com.phmth.laptopshop.dto.FormProfile;
-import com.phmth.laptopshop.dto.FormSearchUser;
-import com.phmth.laptopshop.dto.FormSignup;
-import com.phmth.laptopshop.entity.UserEntity;
-import com.phmth.laptopshop.enums.AuthenticationType;
-import com.phmth.laptopshop.enums.StateUser;
+import com.phmth.laptopshop.dto.UserDto;
+import com.phmth.laptopshop.dto.request.AddUserRequest;
+import com.phmth.laptopshop.dto.request.EditProfileRequest;
+import com.phmth.laptopshop.dto.request.EditUserRequest;
+import com.phmth.laptopshop.dto.request.SearchUserRequest;
+import com.phmth.laptopshop.dto.request.SignupRequest;
 
 public interface IUserService {
 
-	Page<UserEntity> findAll(int page, int limit);
-	Page<UserEntity> findAll(int page, int limit, FormSearchUser formSearchUser);
+	Page<UserDto> findAll(int page, int limit);
+	Page<UserDto> findAll(int page, int limit, SearchUserRequest formSearchUser);
 	
-	Optional<UserEntity> findById(long id);
-	Optional<UserEntity> findByEmailAndStateUserAndAuthType(String email, StateUser actived, AuthenticationType database);
-	Optional<UserEntity> findByResetPasswordToken(String token);
+	Optional<UserDto> findById(long id);
+	Optional<UserDto> findByResetPasswordToken(String token);
 
-	UserEntity insert(FormAddUser formAddUser);
-	UserEntity register(FormSignup formSignup);
-	UserEntity update(FormProfile formProfile);
-
-	boolean update(FormEditUser formEditUser);
-	void updateResetPasswordToken(String email, String token, long tokenExpireAt);
-	void updatePassword(UserEntity userEntity, String newPassword);
+	UserDto insert(AddUserRequest formAddUser);
+	UserDto register(SignupRequest formSignup, String token, long tokenExpireAt);
+	boolean update(EditProfileRequest formProfile);
+	boolean update(EditUserRequest formEditUser);
+	boolean updateResetPasswordToken(String email, String token, long tokenExpireAt);
+	boolean updatePassword(long id, String newPassword);
 
 	boolean clockUser(long id);
 	boolean unClockUser(long id);

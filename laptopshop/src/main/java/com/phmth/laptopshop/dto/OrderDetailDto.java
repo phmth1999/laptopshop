@@ -9,14 +9,19 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class FormAddCategory {
-
-	private String name;
+@NoArgsConstructor
+public class OrderDetailDto {
 	
-	public boolean isEmpty()  {
+	private Long id;
+	private Long order;
+	private ProductDto product;
+	private Integer price;
+	private Integer discount;
+	private Integer num;
+	private Integer totalPrice;
 
+	public boolean isEmpty()  {
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);
@@ -29,5 +34,4 @@ public class FormAddCategory {
 	    }
 	    return true;
 	}
-
 }

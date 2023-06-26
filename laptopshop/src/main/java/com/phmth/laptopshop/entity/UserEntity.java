@@ -2,7 +2,7 @@ package com.phmth.laptopshop.entity;
 
 import java.lang.reflect.Field;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.phmth.laptopshop.enums.AuthenticationType;
@@ -36,7 +36,7 @@ public class UserEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id;	
 
 	@ManyToOne
 	@JoinColumn(name = "role_id", nullable = false)
@@ -102,18 +102,17 @@ public class UserEntity {
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<CommentEntity> comments;
+	private List<CommentEntity> comments;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<OrderEntity> orders;
+	private List<OrderEntity> orders;
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<CheckoutEntity> checkouts;
+	private List<CheckoutEntity> checkouts;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

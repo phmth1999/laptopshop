@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 public class ImageUploadController {
 	
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ImageUploadController.class);
 
 	@Value("${upload.path.image.product}")
@@ -51,7 +52,6 @@ public class ImageUploadController {
 					realPath = request.getServletContext().getRealPath(pathUploadImageBanner);
 				}
 			
-				logger.error(realPath);
 				Path path = Paths.get(realPath, photo);
 				byte[] buffer = Files.readAllBytes(path);
 				ByteArrayResource byteArrayResource = new ByteArrayResource(buffer);

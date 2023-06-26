@@ -22,9 +22,7 @@ public class CartItem {
 	private Integer numProduct;
 	private Integer totalPrice;
 
-
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

@@ -5,22 +5,23 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.phmth.laptopshop.dto.FormFilterProduct;
-import com.phmth.laptopshop.dto.FormSearchProduct;
 import com.phmth.laptopshop.dto.ProductDto;
-import com.phmth.laptopshop.entity.ProductEntity;
+import com.phmth.laptopshop.dto.request.FilterProductRequest;
+import com.phmth.laptopshop.dto.request.SearchProductRequest;
 
 public interface IProductService{
 
-	Page<ProductEntity> findAll(int page, int limit);
-	Page<ProductEntity> findAll(FormFilterProduct formFilterProduct, int page, int limit);
-	Page<ProductEntity> findAll(int page, int limit, FormSearchProduct formSearchProduct);
-
-	List<ProductEntity> findByNameSearch(String term);
-
-	Optional<ProductEntity> findOne(long id);
+	Page<ProductDto> findAll(int page, int limit);
+	Page<ProductDto> findAll(FilterProductRequest formFilterProduct, int page, int limit);
+	Page<ProductDto> findAll(int page, int limit, SearchProductRequest formSearchProduct);
 	
-	ProductEntity insert(ProductDto productDto);
+	List<ProductDto> findByCategoryId(long id);
+	
+	List<ProductDto> findByNameSearch(String term);
+	
+	Optional<ProductDto> findById(long id);
+	
+	ProductDto insert(ProductDto productDto);
 	
 	boolean update(ProductDto productDto);
 

@@ -42,7 +42,6 @@ public class CommentEntity {
 	private Date created_at;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

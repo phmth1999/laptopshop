@@ -1,4 +1,4 @@
-package com.phmth.laptopshop.dto;
+package com.phmth.laptopshop.dto.request;
 
 import java.lang.reflect.Field;
 
@@ -11,17 +11,14 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormProfile {
-	private Long id;
-	private String fullname;
-	private String address;
-	private String img;
-	private String sex;
-	private String birthday;
-	private String email;
-
+public class FilterProductRequest {
+	
+	private String sort;
+	private String cateogryName;
+	private String brandName;
+	private String price;
+	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);
@@ -34,4 +31,5 @@ public class FormProfile {
 	    }
 	    return true;
 	}
+	
 }

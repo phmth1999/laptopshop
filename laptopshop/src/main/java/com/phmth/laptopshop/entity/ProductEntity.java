@@ -2,7 +2,7 @@ package com.phmth.laptopshop.entity;
 
 import java.lang.reflect.Field;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -68,18 +68,17 @@ public class ProductEntity {
 
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<GalleryEntity> galleries;
+	private List<GalleryEntity> galleries;
 
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<CommentEntity> comments;
+	private List<CommentEntity> comments;
 
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<OrderDetailEntity> order_details;
+	private List<OrderDetailEntity> order_details;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

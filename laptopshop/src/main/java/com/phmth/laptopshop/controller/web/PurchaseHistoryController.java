@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.ResponseMessage;
-import com.phmth.laptopshop.entity.OrderEntity;
+import com.phmth.laptopshop.dto.OrderDto;
+import com.phmth.laptopshop.dto.reponse.MessageResponse;
 import com.phmth.laptopshop.exception.OrderException;
 import com.phmth.laptopshop.service.IOrderService;
 import com.phmth.laptopshop.utils.IdLogged;
@@ -32,7 +32,7 @@ public class PurchaseHistoryController {
 		
 		ModelAndView mav = new ModelAndView("/web/purchase-history/index");
 		
-		List<OrderEntity> orderEntity = orderService.findByUser(IdLogged.getId());
+		List<OrderDto> orderEntity = orderService.findByUser(IdLogged.getId());
 		
 		mav.addObject("order", orderEntity);
 		
@@ -40,15 +40,15 @@ public class PurchaseHistoryController {
 	}
 	
 	@PostMapping("purchase-history/delete")
-	public ResponseMessage deleteHistoryDetailPage(@RequestParam("id") long id) {
+	public MessageResponse deleteHistoryDetailPage(@RequestParam("id") long id) {
 		
 		String message = "";
-		OrderEntity data = null;
+		OrderDto data = null;
 		try {
 			boolean updateStatus = orderService.cancelOrder(id);
 			if(updateStatus) {
 				message = "Cancel order successfully!";
-				data = orderService.findOne(id).get();
+				data = orderService.findById(id).get();
 			}else {
 				message = "Cancel order failed!";
 			}
@@ -57,7 +57,7 @@ public class PurchaseHistoryController {
 			logger.error(e.getMessage());
 		}
 		
-		return new ResponseMessage(message, data);
+		return new MessageResponse(message, data);
 	}
 	
 }

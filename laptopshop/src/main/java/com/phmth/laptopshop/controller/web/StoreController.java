@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.FormFilterProduct;
-import com.phmth.laptopshop.entity.ProductEntity;
+import com.phmth.laptopshop.dto.ProductDto;
+import com.phmth.laptopshop.dto.request.FilterProductRequest;
+import com.phmth.laptopshop.service.IBrandService;
+import com.phmth.laptopshop.service.ICategoryService;
 import com.phmth.laptopshop.service.IProductService;
 
 @RestController
@@ -28,25 +30,40 @@ public class StoreController {
 	@Autowired
 	private IProductService productService;
 	
+	@Autowired
+	private ICategoryService categoryService;
 	
+	@Autowired
+	private IBrandService brandService;
 	
 	@GetMapping
 	public ModelAndView showStore(
-				@ModelAttribute("formFilterProduct") FormFilterProduct formFilterProduct, 
+				@ModelAttribute("formFilterProduct") FilterProductRequest formFilterProduct, 
 				@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		ModelAndView mav = new ModelAndView("/web/store/index");
 		int limit = 4;
 		
+		ModelAndView mav = new ModelAndView("/web/store/index");
+		
 		try {
-			Page<ProductEntity> listPageProduct = productService.findAll(formFilterProduct, page, limit);
-			List<ProductEntity> listProduct = listPageProduct.getContent();
-			
 			mav.addObject("formFilterProduct", formFilterProduct);
-			mav.addObject("listProduct", listProduct);
+			mav.addObject("category", categoryService.findAll());
+			mav.addObject("brand", brandService.findAll());
 			
-			mav.addObject("currentPage", page);
-			mav.addObject("totalPage", listPageProduct.getTotalPages());
+			if(formFilterProduct.isEmpty()) {
+				formFilterProduct.setCateogryName("all");
+				formFilterProduct.setBrandName("all");
+				formFilterProduct.setPrice("all");
+				formFilterProduct.setSort("low-high");
+			}
+			
+			Page<ProductDto> listPageProduct = productService.findAll(formFilterProduct, page, limit);
+			if(listPageProduct != null) {
+				List<ProductDto> listProduct = listPageProduct.getContent();
+				mav.addObject("listProduct", listProduct);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageProduct.getTotalPages());
+			}
 			
 		} catch (Exception e) {
 			logger.error("Message: --> {} :", e);
@@ -57,21 +74,32 @@ public class StoreController {
 	
 	@PostMapping
 	public ModelAndView processStore(
-			@ModelAttribute("formFilterProduct") FormFilterProduct formFilterProduct, 
+			@ModelAttribute("formFilterProduct") FilterProductRequest formFilterProduct, 
 			@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		ModelAndView mav = new ModelAndView("/web/store/index");
 		int limit = 4;
 		
+		ModelAndView mav = new ModelAndView("/web/store/index");
+		
 		try {
-			Page<ProductEntity> listPageProduct = productService.findAll(formFilterProduct, page, limit);
-			List<ProductEntity> listProduct = listPageProduct.getContent();
-			
 			mav.addObject("formFilterProduct", formFilterProduct);
-			mav.addObject("listProduct", listProduct);
+			mav.addObject("category", categoryService.findAll());
+			mav.addObject("brand", brandService.findAll());
 			
-			mav.addObject("currentPage", page);
-			mav.addObject("totalPage", listPageProduct.getTotalPages());
+			if(formFilterProduct.isEmpty()) {
+				formFilterProduct.setCateogryName("all");
+				formFilterProduct.setBrandName("all");
+				formFilterProduct.setPrice("all");
+				formFilterProduct.setSort("low-high");
+			}
+			
+			Page<ProductDto> listPageProduct = productService.findAll(formFilterProduct, page, limit);
+			if(listPageProduct != null) {
+				List<ProductDto> listProduct = listPageProduct.getContent();
+				mav.addObject("listProduct", listProduct);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageProduct.getTotalPages());
+			}
 			
 		} catch (Exception e) {
 			logger.error("Message: --> {} :", e);
@@ -85,7 +113,7 @@ public class StoreController {
 		
 		ModelAndView mav = new ModelAndView("/web/store/product-detail");
 		
-		mav.addObject("product", productService.findOne(productId).get());
+		mav.addObject("product", productService.findById(productId).get());
 		
 		return mav;
 	}

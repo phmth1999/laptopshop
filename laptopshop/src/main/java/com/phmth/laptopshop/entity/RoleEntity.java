@@ -1,7 +1,7 @@
 package com.phmth.laptopshop.entity;
 
 import java.lang.reflect.Field;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,10 +34,9 @@ public class RoleEntity {
 
 	@OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<UserEntity> users;
+	private List<UserEntity> users;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

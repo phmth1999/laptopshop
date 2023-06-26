@@ -99,7 +99,7 @@
 																		<div class="order-total">
 																			<ul class="order-table p-0">
 																				<li><span>Sản phẩm</span><span>Số lượng</span><span>Giá</span></li>
-																				<th:block th:each="items : *{item.getOrderdetail().iterator()}">
+																				<th:block th:each="items : *{item.orderdetail}">
 																					<li class="fw-normal"><span><img th:src="@{/images/product/{img}(img=${items.product.thumbnail})}" width="50px" height="50px" /> - [[${items.product.name}]]</span> <span>[[*{items.num}]]</span><span>[[${#numbers.formatInteger(items.totalPrice,3,'POINT')}]]đ</span></li>
 																				</th:block>
 																				<li class="total-price">Tổng số lượng <p>[[${item.num}]]</p></li>

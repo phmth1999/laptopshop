@@ -48,7 +48,6 @@ public class OrderDetailEntity {
 
 
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

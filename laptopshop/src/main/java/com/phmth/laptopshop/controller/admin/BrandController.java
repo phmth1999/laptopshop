@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.FormAddBrand;
-import com.phmth.laptopshop.dto.FormEditBrand;
-import com.phmth.laptopshop.dto.ResponseMessage;
-import com.phmth.laptopshop.entity.BrandEntity;
+import com.phmth.laptopshop.dto.BrandDto;
+import com.phmth.laptopshop.dto.reponse.MessageResponse;
 import com.phmth.laptopshop.exception.BrandException;
 import com.phmth.laptopshop.service.IBrandService;
 
@@ -30,47 +28,64 @@ public class BrandController {
 	private IBrandService brandService;
 
 	@GetMapping
-	public ModelAndView brandPage(@RequestParam(name = "page", defaultValue = "1") int page) {
-
-		ModelAndView mav = new ModelAndView("admin/brand/index");
+	public ModelAndView showBrandPage(@RequestParam(name = "page", defaultValue = "1") int page) {
 
 		int limit = 3;
-		Page<BrandEntity> listPageBrand = brandService.findAll(page, limit);
-		List<BrandEntity> listBrand = listPageBrand.getContent();
-
-		mav.addObject("brand", listBrand);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageBrand.getTotalPages());
-
+		
+		ModelAndView mav = new ModelAndView("admin/brand/index");
+		
+		try {
+			Page<BrandDto> listPageBrand = brandService.findAll(page, limit);
+			if(listPageBrand != null) {
+				List<BrandDto> listBrand = listPageBrand.getContent();
+				mav.addObject("brand", listBrand);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageBrand.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
+		
 		return mav;
 	}
 
 	@PostMapping
-	public ModelAndView brand(@RequestParam("name") String name,
-			@RequestParam(name = "page", defaultValue = "1") int page) {
+	public ModelAndView processBrand(
+				@RequestParam("name") String name,
+				@RequestParam(name = "page", defaultValue = "1") int page) {
 
-		ModelAndView mav = new ModelAndView("admin/brand/index");
 		int limit = 3;
-		Page<BrandEntity> listPageBrand = brandService.findAll(page, limit, name);
-		List<BrandEntity> listBrand = listPageBrand.getContent();
-
+		
+		ModelAndView mav = new ModelAndView("admin/brand/index");
 		mav.addObject("name", name);
-
-		mav.addObject("brand", listBrand);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageBrand.getTotalPages());
+		
+		try {
+			Page<BrandDto> listPageBrand = brandService.findAll(page, limit, name);
+			if(listPageBrand != null) {
+				List<BrandDto> listBrand = listPageBrand.getContent();
+				mav.addObject("brand", listBrand);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageBrand.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 
 		return mav;
 	}
 
 	@PostMapping("/add")
-	public ModelAndView addBrand(@RequestParam("name") String name) {
+	public ModelAndView handleCreate(@RequestParam("name") String name) {
 
 		ModelAndView mav = new ModelAndView("redirect:/admin/brand");
 
 		try {
-			FormAddBrand formAddBrand = new FormAddBrand(name);
-			if(brandService.insert(formAddBrand) != null) {
+			BrandDto brandDto = new BrandDto();
+			brandDto.setName(name);
+			
+			BrandDto brandReponse = brandService.insert(brandDto);
+			
+			if(brandReponse != null) {
 				mav = new ModelAndView("redirect:/admin/brand?add=success");
 			}else {
 				mav = new ModelAndView("redirect:/admin/brand?add=fail");
@@ -78,37 +93,49 @@ public class BrandController {
 		} catch (BrandException e) {
 			mav = new ModelAndView("redirect:/admin/brand?add=exist");
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
 
 		return mav;
 	}
 
 	@PostMapping("/edit")
-	public ResponseMessage handleUpdate(@RequestParam("id") long id, @RequestParam("name") String name) {
+	public MessageResponse handleUpdate(
+					@RequestParam("id") long id, 
+					@RequestParam("name") String name) {
+		
 		String message = "";
-		BrandEntity data = null;
+		BrandDto data = null;
+		
 		try {
-			FormEditBrand formEditBrand = new FormEditBrand(id, name);
-			boolean brandUpdate = brandService.update(formEditBrand);
+			BrandDto brandDto = new BrandDto();
+			brandDto.setId(id);
+			brandDto.setName(name);
+			
+			boolean brandReponse = brandService.update(brandDto);
 
-			if (brandUpdate) {
+			if (brandReponse) {
 				message = "Update brand successfully!";
-				data = brandService.findOne(id).get();
+				data = brandService.findById(id).get();
 			}else {
 				message = "Update brand failed!";
 			}
 		} catch (BrandException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
 
-		return new ResponseMessage(message, data);
+		return new MessageResponse(message, data);
 	}
 
 	@PostMapping("/delete")
-	public ResponseMessage deleteCategory(@RequestParam("id") long id) {
+	public MessageResponse handleRemove(@RequestParam("id") long id) {
 		String message = "";
 		boolean data = false;
+		
 		try {
 			data = brandService.remove(id);
 			if(data) {
@@ -119,8 +146,11 @@ public class BrandController {
 		} catch (BrandException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
-		return new ResponseMessage(message, data);
+		
+		return new MessageResponse(message, data);
 	}
 
 }

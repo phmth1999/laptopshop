@@ -51,7 +51,6 @@ public class NewEntity {
 	private Date update_at;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

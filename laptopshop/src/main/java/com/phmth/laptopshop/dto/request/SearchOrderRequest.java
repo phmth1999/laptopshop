@@ -1,6 +1,8 @@
-package com.phmth.laptopshop.dto;
+package com.phmth.laptopshop.dto.request;
 
 import java.lang.reflect.Field;
+
+import com.phmth.laptopshop.enums.StateOrder;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,13 +13,17 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormEditBrand {
+public class SearchOrderRequest {
 
-	private Long id;
-	private String name;
+	private String nameOrder;
+	private String phone;
+	private String address;
+	private String totalMoney;
+	private String orderDate;
+	private String payment;
+	private StateOrder status;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);
@@ -30,5 +36,4 @@ public class FormEditBrand {
 	    }
 	    return true;
 	}
-
 }

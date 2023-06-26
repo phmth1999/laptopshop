@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.phmth.laptopshop.dto.CartItem;
-import com.phmth.laptopshop.dto.FormOrderInfo;
-import com.phmth.laptopshop.entity.OrderEntity;
-import com.phmth.laptopshop.service.IOrderService;
+import com.phmth.laptopshop.dto.OrderDto;
+import com.phmth.laptopshop.dto.request.OrderInfoRequest;
 import com.phmth.laptopshop.service.IOrderDetailService;
+import com.phmth.laptopshop.service.IOrderService;
 import com.phmth.laptopshop.service.IShoppingCartService;
 import com.phmth.laptopshop.service.IUserService;
 import com.phmth.laptopshop.utils.IdLogged;
@@ -36,13 +36,13 @@ public class OrderController {
 	private IShoppingCartService shoppingCartService;
 	
 	@Autowired
+	private IOrderDetailService orderDetailService;
+	
+	@Autowired
 	private IUserService userService;
 	
 	@Autowired
 	private IOrderService orderService;
-	
-	@Autowired
-	private IOrderDetailService orderDetailService;
 	
 	private void deleteCookieCart(HttpServletResponse response) {
 		try {
@@ -88,7 +88,7 @@ public class OrderController {
 					@RequestParam("typePayment") String typePayment,
 					@RequestParam("bankCode") String bankCode,
 					HttpServletResponse response, 
-					@ModelAttribute("formOrderInfo") FormOrderInfo formOrderInfo ) {
+					@ModelAttribute("formOrderInfo") OrderInfoRequest formOrderInfo ) {
 		ModelAndView mav = new ModelAndView("redirect:/order");
 		try {
 			
@@ -102,7 +102,7 @@ public class OrderController {
 			
 			Collection<CartItem> carts = shoppingCartService.getAllItems();
 			
-			OrderEntity orderEntity = orderService.Order(carts, formOrderInfo);
+			OrderDto orderEntity = orderService.Order(carts, formOrderInfo);
 			if(orderEntity != null) {
 				shoppingCartService.clear();
 				deleteCookieCart(response);
@@ -110,8 +110,9 @@ public class OrderController {
 				if(typePayment.equals("TRANSFER")) {
 					mav = new ModelAndView("redirect:/checkout/vnpay?codeOrder="+orderEntity.getCodeOrder()+"&bankCode="+bankCode);
 				}else if(typePayment.equals("COD")) {
+					logger.error(""+orderService.findById(orderEntity.getId()).get());
 					mav = new ModelAndView("/web/checkout/bill");
-					mav.addObject("order", orderService.findOne(orderEntity.getId()).get());
+					mav.addObject("order", orderService.findById(orderEntity.getId()).get());
 					mav.addObject("orderdetail", orderDetailService.findByOrder(orderEntity.getId()));
 				}
 			}

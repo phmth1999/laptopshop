@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.FormSearchOrder;
-import com.phmth.laptopshop.dto.ResponseMessage;
-import com.phmth.laptopshop.entity.OrderEntity;
+import com.phmth.laptopshop.dto.OrderDto;
+import com.phmth.laptopshop.dto.reponse.MessageResponse;
+import com.phmth.laptopshop.dto.request.SearchOrderRequest;
 import com.phmth.laptopshop.enums.StateOrder;
 import com.phmth.laptopshop.exception.OrderException;
 import com.phmth.laptopshop.service.IOrderService;
@@ -31,59 +31,78 @@ public class OrderController {
 	private IOrderService orderService;
 
 	@GetMapping
-	public ModelAndView historyPage(@RequestParam(name = "page", defaultValue = "1") int page) {
+	public ModelAndView showOrderPage(@RequestParam(name = "page", defaultValue = "1") int page) {
 
-		ModelAndView mav = new ModelAndView("/admin/order/index");
 		int limit = 3;
-		Page<OrderEntity> listPageOrder = orderService.findAll(page, limit);
-		List<OrderEntity> listOrder = listPageOrder.getContent();
-
-		mav.addObject("formSearchOrder", new FormSearchOrder());
-
-		mav.addObject("order", listOrder);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageOrder.getTotalPages());
+		
+		ModelAndView mav = new ModelAndView("/admin/order/index");
+		mav.addObject("formSearchOrder", new SearchOrderRequest());
+		
+		try {
+			Page<OrderDto> listPageOrder = orderService.findAll(page, limit);
+			if(listPageOrder != null) {
+				List<OrderDto> listOrder = listPageOrder.getContent();
+				mav.addObject("order", listOrder);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageOrder.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 
 		return mav;
 	}
 
 	@PostMapping
-	public ModelAndView history(@ModelAttribute("formSearchOrder") FormSearchOrder formSearchOrder,
-			@RequestParam(name = "page", defaultValue = "1") int page) {
+	public ModelAndView processOrderPage(
+					@ModelAttribute("formSearchOrder") SearchOrderRequest formSearchOrder,
+					@RequestParam(name = "page", defaultValue = "1") int page) {
 
-		ModelAndView mav = new ModelAndView("/admin/order/index");
 		int limit = 3;
-		Page<OrderEntity> listPageOrder = orderService.findAll(page, limit, formSearchOrder);
-		List<OrderEntity> listOrder = listPageOrder.getContent();
-
+		
+		ModelAndView mav = new ModelAndView("/admin/order/index");
 		mav.addObject("formSearchOrder", formSearchOrder);
-
-		mav.addObject("order", listOrder);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageOrder.getTotalPages());
+		
+		try {
+			Page<OrderDto> listPageOrder = orderService.findAll(page, limit, formSearchOrder);
+			if(listPageOrder != null) {
+				List<OrderDto> listOrder = listPageOrder.getContent();
+				mav.addObject("order", listOrder);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageOrder.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 
 		return mav;
 	}
 
 	@PostMapping("/verify")
-	public ResponseMessage deleteProduct(@RequestParam("id") long id, @RequestParam("status") StateOrder status) {
+	public MessageResponse deleteProduct(
+					@RequestParam("id") long id, 
+					@RequestParam("status") StateOrder status) {
 
 		String message = "";
-		OrderEntity data = null;
+		OrderDto data = null;
+		
 		try {
 			boolean verify = orderService.updateStateOrder(id, status);
+			
 			if (verify) {
 				message = "Verify successfully!";
-				data = orderService.findOne(id).get();
+				data = orderService.findById(id).get();
 			} else {
 				message = "Verify failed!";
 			}
 		} catch (OrderException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
 
-		return new ResponseMessage(message, data);
+		return new MessageResponse(message, data);
 	}
 
 }

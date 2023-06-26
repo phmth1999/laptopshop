@@ -13,11 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.FormAddCategory;
-import com.phmth.laptopshop.dto.FormEditCategory;
-import com.phmth.laptopshop.dto.ResponseMessage;
-import com.phmth.laptopshop.entity.CategoryEntity;
-import com.phmth.laptopshop.exception.BrandException;
+import com.phmth.laptopshop.dto.CategoryDto;
+import com.phmth.laptopshop.dto.reponse.MessageResponse;
 import com.phmth.laptopshop.exception.CategoryException;
 import com.phmth.laptopshop.service.ICategoryService;
 
@@ -32,46 +29,64 @@ public class CategoryController {
 	private ICategoryService categoryService;
 	
 	@GetMapping
-	public ModelAndView categoryPage(@RequestParam(name = "page", defaultValue = "1") int page) {
+	public ModelAndView showCategoryPage(@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		int limit = 3;
 		
 		ModelAndView mav = new ModelAndView("admin/category/index"); 
-		int limit = 3;
-		Page<CategoryEntity> listPageCategory = categoryService.findAll(page, limit);
-		List<CategoryEntity> listCategory = listPageCategory.getContent();
 		
-		mav.addObject("category", listCategory);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageCategory.getTotalPages());
+		try {
+			Page<CategoryDto> listPageCategory = categoryService.findAll(page, limit);
+			if(listPageCategory != null) {
+				List<CategoryDto> listCategory = listPageCategory.getContent();
+				mav.addObject("category", listCategory);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageCategory.getTotalPages());
+			}
+
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 		
 		return mav;
 	}
 	@PostMapping
-	public ModelAndView category(
+	public ModelAndView processCategoryPage(
 					@RequestParam("name") String name,
 					@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		ModelAndView mav = new ModelAndView("admin/category/index"); 
 		int limit = 3;
-		Page<CategoryEntity> listPageCategory = categoryService.findAll(page, limit, name);
-		List<CategoryEntity> listCategory = listPageCategory.getContent();
-		logger.error(name);
+		
+		ModelAndView mav = new ModelAndView("admin/category/index"); 
 		mav.addObject("name", name);
 		
-		mav.addObject("category", listCategory);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageCategory.getTotalPages());
+		try {
+			Page<CategoryDto> listPageCategory = categoryService.findAll(page, limit, name);
+			if(listPageCategory != null) {
+				List<CategoryDto> listCategory = listPageCategory.getContent();
+				mav.addObject("category", listCategory);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageCategory.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 		
 		return mav;
 	}
 	
 	@PostMapping("/add")
-	public ModelAndView addCategory(@RequestParam("name") String name) {
+	public ModelAndView handleCreate(@RequestParam("name") String name) {
 		
 		ModelAndView mav = new ModelAndView("redirect:/admin/category"); 
 		
 		try {
-			FormAddCategory formAddCategory = new FormAddCategory(name);
-			if(categoryService.insert(formAddCategory) != null) {
+			CategoryDto categoryDto = new CategoryDto();
+			categoryDto.setName(name);
+			
+			CategoryDto categoryReponse = categoryService.insert(categoryDto);
+			
+			if(categoryReponse != null) {
 				mav = new ModelAndView("redirect:/admin/category?add=success");
 			}else {
 				mav = new ModelAndView("redirect:/admin/category?add=fail");
@@ -79,52 +94,65 @@ public class CategoryController {
 		} catch (CategoryException e) {
 			mav = new ModelAndView("redirect:/admin/category?add=exist");
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
 		
 		return mav;
 	}
 	
 	@PostMapping("/edit")
-	public ResponseMessage editCategory(
+	public MessageResponse handleUpdate(
 						@RequestParam("id") long id, 
 						@RequestParam("name") String name) {
 		
 		String message = "";
-		CategoryEntity data = null;
+		CategoryDto data = null;
 		
 		try {
-			FormEditCategory formEditCategory = new FormEditCategory(id, name);
-			boolean categoryUpdate = categoryService.update(formEditCategory);
+			CategoryDto categoryDto = new CategoryDto();
+			categoryDto.setId(id);
+			categoryDto.setName(name);
+			
+			boolean categoryReponse = categoryService.update(categoryDto);
 
-			if (categoryUpdate) {
+			if (categoryReponse) {
 				message = "Update category successfully!";
-				data = categoryService.findOne(id).get();
+				data = categoryService.findById(id).get();
 			}else {
 				message = "Update category failed!";
 			}
-		} catch (Exception e) {
+		} catch (CategoryException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
 		
-		return new ResponseMessage(message, data);
+		return new MessageResponse(message, data);
 	}
 	
 	@PostMapping("/delete")
-	public ResponseMessage deleteCategory(@RequestParam("id") long id) {
+	public MessageResponse handleRemove(@RequestParam("id") long id) {
+		
 		String message = "";
 		boolean data = false;
+		
 		try {
 			data = categoryService.remove(id);
+			
 			if(data) {
 				message = "Remove category successfully!";
 			}else {
 				message = "Remove category failed!";
 			}
-		} catch (BrandException e) {
+		} catch (CategoryException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
-		return new ResponseMessage(message, data);
+		
+		return new MessageResponse(message, data);
 	}
 }

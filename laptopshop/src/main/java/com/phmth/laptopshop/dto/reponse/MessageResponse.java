@@ -1,4 +1,4 @@
-package com.phmth.laptopshop.dto;
+package com.phmth.laptopshop.dto.reponse;
 
 import java.lang.reflect.Field;
 
@@ -9,20 +9,14 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class FormAddUser {
+@NoArgsConstructor
+public class MessageResponse {
 	
-	private String fullname;
-
-	private String email;
-	
-	private String password;
-	
-	private Long role;
+	private String message;
+	private Object data;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);
@@ -35,5 +29,4 @@ public class FormAddUser {
 	    }
 	    return true;
 	}
-	
 }

@@ -34,7 +34,6 @@ public class GalleryEntity {
 	private String thumbnail;
 
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

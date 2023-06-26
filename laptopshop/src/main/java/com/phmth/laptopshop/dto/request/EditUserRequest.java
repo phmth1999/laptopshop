@@ -1,4 +1,4 @@
-package com.phmth.laptopshop.dto;
+package com.phmth.laptopshop.dto.request;
 
 import java.lang.reflect.Field;
 
@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormEditUser {
+public class EditUserRequest {
 
 	private Long id;
 	
@@ -35,7 +35,6 @@ public class FormEditUser {
 	private String img;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

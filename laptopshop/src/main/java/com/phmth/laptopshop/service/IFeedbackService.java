@@ -4,20 +4,16 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.phmth.laptopshop.entity.FeedbackEntity;
+import com.phmth.laptopshop.dto.FeedbackDto;
 
 public interface IFeedbackService{
 
-	Iterable<FeedbackEntity> findAll();
-	Page<FeedbackEntity> findAll(int page, int limit);
+	Page<FeedbackDto> findAll(int page, int limit);
 
-	Optional<FeedbackEntity> findOne(long id);
+	Optional<FeedbackDto> findById(long id);
 
-    FeedbackEntity insert(FeedbackEntity feedbackEntity);
-
-    boolean update(FeedbackEntity feedbackEntity);
+	FeedbackDto insert(FeedbackDto feedbackDto);
 
 	boolean remove(long id);
 	
-	boolean existsById(long id);
 }

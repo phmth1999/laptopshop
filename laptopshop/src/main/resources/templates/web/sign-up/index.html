@@ -33,7 +33,7 @@
 						<div th:if="${success}">
 			                <div class="alert alert-success">[[${success}]]</div>
 			            </div>
-			            <form th:unless="${success}" class="form-login" th:action="@{/auth/sign-up}" th:object="${formSignup}"  method="post">
+			            <form th:if="${success==null && error==null}" class="form-login" th:action="@{/auth/sign-up}" th:object="${formSignup}"  method="post">
 							<div class="inp">
 								<input 
 									th:field="*{fullname}" 

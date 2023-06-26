@@ -2,7 +2,7 @@ package com.phmth.laptopshop.entity;
 
 import java.lang.reflect.Field;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.phmth.laptopshop.enums.StateCheckout;
@@ -83,14 +83,13 @@ public class OrderEntity{
 
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<OrderDetailEntity> orderdetail;
+	private List<OrderDetailEntity> orderdetail;
 	
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<CheckoutEntity> checkouts;
+	private List<CheckoutEntity> checkouts;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

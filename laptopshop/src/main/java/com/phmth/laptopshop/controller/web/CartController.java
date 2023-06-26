@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.phmth.laptopshop.dto.CartItem;
-import com.phmth.laptopshop.entity.ProductEntity;
+import com.phmth.laptopshop.dto.ProductDto;
 import com.phmth.laptopshop.service.IProductService;
 import com.phmth.laptopshop.service.IShoppingCartService;
 
@@ -98,7 +98,7 @@ public class CartController {
 		try {
 			
 			/* add cartItem on shopping cart list */
-			ProductEntity productEntity = productService.findOne(productId).get();
+			ProductDto productEntity = productService.findById(productId).get();
 			if(productEntity != null) {
 				CartItem cartItem = new CartItem(
 						productId, 
@@ -154,7 +154,8 @@ public class CartController {
 		try {
 			
 			/* add cartItem on shopping cart list */
-			ProductEntity productEntity = productService.findOne(productId).get();
+			ProductDto productEntity = productService.findById(productId).get();
+			
 			if(productEntity != null) {
 				CartItem cartItem = new CartItem(
 						productId, 
@@ -220,7 +221,7 @@ public class CartController {
 					}
 				}
 				if(numProduct == 1) {
-					ProductEntity productEntity = productService.findOne(productId).get();
+					ProductDto productEntity = productService.findById(productId).get();
 					if(productEntity != null && productEntity.getQuantity_in_stock()-cartItem.getNumProduct()-1 >= 0) {
 						shoppingCartService.update(productId, cartItem.getNumProduct()+1);
 					}else {

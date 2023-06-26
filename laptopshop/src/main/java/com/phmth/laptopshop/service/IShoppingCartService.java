@@ -14,7 +14,7 @@ public interface IShoppingCartService {
 
 	void clear();
 
-	CartItem update(long productId, int numProduct);
+	boolean update(long productId, int numProduct);
 
 	void remove(long id);
 

@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.service.ICategoryService;
+import com.phmth.laptopshop.service.IProductService;
 
 @RestController("webHome")
 @RequestMapping({"/","/home"})
 public class HomeController {
 	
 	@Autowired
-	private ICategoryService categoryService;
+	private IProductService productService;
 	
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -25,9 +25,9 @@ public class HomeController {
 		
 		ModelAndView mav = new ModelAndView("web/home/index");
 		
-		mav.addObject("laptopCategory", categoryService.findOne((long) 1).get().getProducts().iterator());
-		mav.addObject("keyboardCategory", categoryService.findOne((long) 2).get().getProducts().iterator());
-		mav.addObject("mouseCategory", categoryService.findOne((long) 3).get().getProducts().iterator());
+		mav.addObject("laptopCategory", productService.findByCategoryId(1));
+		mav.addObject("keyboardCategory", productService.findByCategoryId(2));
+		mav.addObject("mouseCategory", productService.findByCategoryId(3));
 		
 		return mav;
 	}

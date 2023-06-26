@@ -1,7 +1,7 @@
 package com.phmth.laptopshop.service;
 
-import com.phmth.laptopshop.entity.CheckoutEntity;
+import com.phmth.laptopshop.dto.CheckoutDto;
 
 public interface ICheckoutService {
-	CheckoutEntity save(CheckoutEntity checkoutEntity);
+	CheckoutDto insert(CheckoutDto checkoutDto);
 }

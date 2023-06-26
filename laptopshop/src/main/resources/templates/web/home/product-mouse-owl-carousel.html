@@ -20,9 +20,9 @@
 						<h5>
 							[[${#numbers.formatInteger(item.price,3,'POINT')}]]đ
 							<span>
-								<a href="#"><i class="fa-solid fa-eye"></i></a>
+								<a th:href="@{/store/{id}(id=${item.id})}"><i class="fa-solid fa-eye"></i></a>
 								&emsp;
-								<a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+								<a th:href="@{/cart/add-cart/{id}(id=${item.id})}"><i class="fa-solid fa-cart-shopping"></i></a>
 							</span>
 						</h5>
 					</div>

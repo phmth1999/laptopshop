@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,16 +18,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phmth.laptopshop.dto.FormAddUser;
-import com.phmth.laptopshop.dto.FormEditUser;
-import com.phmth.laptopshop.dto.FormProfile;
-import com.phmth.laptopshop.dto.FormSearchUser;
-import com.phmth.laptopshop.dto.FormSignup;
+import com.phmth.laptopshop.dto.UserDto;
+import com.phmth.laptopshop.dto.request.AddUserRequest;
+import com.phmth.laptopshop.dto.request.EditProfileRequest;
+import com.phmth.laptopshop.dto.request.EditUserRequest;
+import com.phmth.laptopshop.dto.request.SearchUserRequest;
+import com.phmth.laptopshop.dto.request.SignupRequest;
 import com.phmth.laptopshop.entity.RoleEntity;
 import com.phmth.laptopshop.entity.UserEntity;
 import com.phmth.laptopshop.enums.AuthenticationType;
 import com.phmth.laptopshop.enums.StateUser;
 import com.phmth.laptopshop.exception.UserException;
+import com.phmth.laptopshop.mapper.UserMapper;
 import com.phmth.laptopshop.repository.IRoleRepository;
 import com.phmth.laptopshop.repository.IUserRepository;
 import com.phmth.laptopshop.service.IUserService;
@@ -53,17 +54,28 @@ public class UserService implements IUserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	private UserMapper userMapper = new UserMapper();
 
 	@Override
-	public Page<UserEntity> findAll(int page, int limit) {
+	public Page<UserDto> findAll(int page, int limit) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
+		
+		Page<UserEntity> listUserEntity = userRepository.findAll(pageable);
+		
+		Page<UserDto> listUserDto = listUserEntity.map(new Function<UserEntity, UserDto>(){
+			@Override
+			public UserDto apply(UserEntity userEntity) {
+				return userMapper.entityToDto(userEntity);
+			}
+		});
 
-		return userRepository.findAll(pageable);
+		return listUserDto;
 	}
 
 	@Override
-	public Page<UserEntity> findAll(int page, int limit, FormSearchUser formSearchUser) {
+	public Page<UserDto> findAll(int page, int limit, SearchUserRequest formSearchUser) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
 
@@ -114,26 +126,57 @@ public class UserService implements IUserService {
 			}
 
 		};
-		return userRepository.findAll(specification, pageable);
+		
+		Page<UserEntity> listUserEntity = userRepository.findAll(specification, pageable);
+		
+		Page<UserDto> listUserDto = listUserEntity.map(new Function<UserEntity, UserDto>(){
+			@Override
+			public UserDto apply(UserEntity userEntity) {
+				return userMapper.entityToDto(userEntity);
+			}
+		});
+
+		return listUserDto;
 	}
 
 	@Override
-	public Optional<UserEntity> findById(long id) {
-		return userRepository.findById(id);
+	public Optional<UserDto> findById(long id) {
+		Optional<UserEntity> userEntity = userRepository.findById(id);
+		
+		if(userEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<UserDto> userDto = userEntity.map(new Function<UserEntity, UserDto>(){
+			@Override
+			public UserDto apply(UserEntity userEntity) {
+				return userMapper.entityToDto(userEntity);
+			}
+		});
+		
+		return userDto;
 	}
 	
 	@Override
-	public Optional<UserEntity> findByEmailAndStateUserAndAuthType(String email, StateUser actived, AuthenticationType database) {
-		return userRepository.findByEmailAndStateUserAndAuthType(email, StateUser.ACTIVED, AuthenticationType.DATABASE);
-	}
-	
-	@Override
-	public Optional<UserEntity> findByResetPasswordToken(String token) {
-		return userRepository.findByResetPasswordToken(token);
+	public Optional<UserDto> findByResetPasswordToken(String token) {
+		Optional<UserEntity> userEntity = userRepository.findByResetPasswordToken(token);
+		
+		if(userEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<UserDto> userDto = userEntity.map(new Function<UserEntity, UserDto>(){
+			@Override
+			public UserDto apply(UserEntity userEntity) {
+				return userMapper.entityToDto(userEntity);
+			}
+		});
+		
+		return userDto;
 	}
 
 	@Override
-	public UserEntity update(FormProfile formProfile) {
+	public boolean update(EditProfileRequest formProfile) {
 		// If the input is null, throw exception
 		if (formProfile == null) {
 			throw new UserException("The input is null!");
@@ -145,29 +188,30 @@ public class UserService implements IUserService {
 		}
 		
 		// If the data to be modified is not found, throw exception
-		Optional<UserEntity> userEntity = userRepository.findById(formProfile.getId());
-		if (userEntity.isEmpty()) {
+		Optional<UserEntity> oldUserEntity = userRepository.findById(formProfile.getId());
+		if (oldUserEntity.isEmpty()) {
 			throw new UserException("The data to be modified is not found!");
 		}
 				
 		// If insert data failed, return null
-		userEntity.get().setId(formProfile.getId());
-		userEntity.get().setFullname(formProfile.getFullname());
-		userEntity.get().setAddress(formProfile.getAddress());
-		userEntity.get().setImg(formProfile.getImg());
-		userEntity.get().setSex(formProfile.getSex());
-		userEntity.get().setBirthday(formProfile.getBirthday());
-		userEntity.get().setUpdate_at(new Date());
-		UserEntity userSave = userRepository.save(userEntity.get());
+		oldUserEntity.get().setId(formProfile.getId());
+		oldUserEntity.get().setFullname(formProfile.getFullname());
+		oldUserEntity.get().setAddress(formProfile.getAddress());
+		oldUserEntity.get().setImg(formProfile.getImg());
+		oldUserEntity.get().setSex(formProfile.getSex());
+		oldUserEntity.get().setBirthday(formProfile.getBirthday());
+		oldUserEntity.get().setUpdate_at(new Date());
+		
+		UserEntity userSave = userRepository.save(oldUserEntity.get());
 		if (userSave == null) {
-			return null;
+			return false;
 		}
-
-		return userSave;
+		
+		return true;
 	}
 	
 	@Override
-	public UserEntity insert(FormAddUser formAddUser) {
+	public UserDto insert(AddUserRequest formAddUser) {
 		// If the input is null, throw exception
 		if (formAddUser == null) {
 			throw new UserException("The input is null!");
@@ -192,16 +236,17 @@ public class UserService implements IUserService {
 		userEntity.setAuthType(AuthenticationType.DATABASE);
 		userEntity.setRole(roleRepository.findById(formAddUser.getRole()).get());
 		userEntity.setCreated_at(new Date());
+		
 		UserEntity userSave = userRepository.save(userEntity);
-		if (userSave == null) {
+		if (!userRepository.existsById(userSave.getId())) {
 			return null;
 		}
 
-		return userSave;
+		return userMapper.entityToDto(userSave);
 	}
 	
 	@Override
-	public UserEntity register(FormSignup formSignup) {
+	public UserDto register(SignupRequest formSignup, String token, long tokenExpireAt) {
 		// If the input is null, throw exception
 		if (formSignup == null) {
 			throw new UserException("The input is null!");
@@ -219,7 +264,18 @@ public class UserService implements IUserService {
 		}
 		Optional<UserEntity> userPending = userRepository.findByEmailAndStateUserAndAuthType(formSignup.getEmail(), StateUser.PENDING, AuthenticationType.DATABASE);
 		if(!userPending.isEmpty()) {
-			return userPending.get();
+			UserDto userDto = new UserDto();
+			
+			userDto.setId(userPending.get().getId());
+			userDto.setEmail(userPending.get().getEmail());
+			userDto.setFullname(userPending.get().getFullname());
+			userDto.setSex(userPending.get().getSex());
+			userDto.setBirthday(userPending.get().getBirthday());
+			userDto.setImg(userPending.get().getImg());
+			userDto.setStateUser(userPending.get().getStateUser());
+			userDto.setRole(userPending.get().getRole().getName());
+			
+			return userDto;
 		}
 		
 		// If insert data failed, return false
@@ -232,16 +288,19 @@ public class UserService implements IUserService {
 		user.setCreated_at(new Date());
 		RoleEntity roleEntity = roleRepository.findById((long) 2).get();
 		user.setRole(roleEntity);
-		String token = UUID.randomUUID().toString();
 		user.setRegisterToken(token);
-		long tokenExpireAt = new Date().getTime() + TimeUnit.MINUTES.toMillis(5);
 		user.setRegisterTokenExpireAt(tokenExpireAt);
 		
-		return userRepository.save(user);
+		UserEntity userSave = userRepository.save(user);
+		if(!userRepository.existsById(userSave.getId())) {
+			return null;
+		}
+		
+		return userMapper.entityToDto(userSave);
 	}
 
 	@Override
-	public boolean update(FormEditUser formEditUser) {
+	public boolean update(EditUserRequest formEditUser) {
 		// If the input is null, throw exception
 		if (formEditUser == null) {
 			throw new UserException("The input is null!");
@@ -253,22 +312,24 @@ public class UserService implements IUserService {
 		}
 
 		// If the data to be modified is not found, throw exception
-		Optional<UserEntity> userEntity = userRepository.findById(formEditUser.getId());
-		if (userEntity.isEmpty()) {
+		Optional<UserEntity> oldUserEntity = userRepository.findById(formEditUser.getId());
+		if (oldUserEntity.isEmpty()) {
 			throw new UserException("The data to be modified is not found!");
 		}
 
 		// If saving modification fail, return false
-		userEntity.get().setFullname(formEditUser.getFullname());
-		userEntity.get().setSex(formEditUser.getSex());
-		userEntity.get().setBirthday(formEditUser.getBirthday());
-		userEntity.get().setAddress(formEditUser.getAddress());
-		userEntity.get().setStateUser(formEditUser.getStateUser());
-		userEntity.get().setAuthType(formEditUser.getAuthType());
-		userEntity.get().setRole(roleRepository.findById(formEditUser.getRole()).get());
-		userEntity.get().setImg(formEditUser.getImg());
-		userEntity.get().setUpdate_at(new Date());
-		if (userRepository.save(userEntity.get()) == null) {
+		oldUserEntity.get().setFullname(formEditUser.getFullname());
+		oldUserEntity.get().setSex(formEditUser.getSex());
+		oldUserEntity.get().setBirthday(formEditUser.getBirthday());
+		oldUserEntity.get().setAddress(formEditUser.getAddress());
+		oldUserEntity.get().setStateUser(formEditUser.getStateUser());
+		oldUserEntity.get().setAuthType(formEditUser.getAuthType());
+		oldUserEntity.get().setRole(roleRepository.findById(formEditUser.getRole()).get());
+		oldUserEntity.get().setImg(formEditUser.getImg());
+		oldUserEntity.get().setUpdate_at(new Date());
+		
+		UserEntity userSave = userRepository.save(oldUserEntity.get());
+		if (userSave == null) {
 			return false;
 		}
 
@@ -276,22 +337,37 @@ public class UserService implements IUserService {
 	}
 	
 	@Override
-	public void updateResetPasswordToken(String email, String token, long tokenExpireAt) {
-		Optional<UserEntity> userEntity = userRepository.findByEmailAndStateUserAndAuthType(email, StateUser.ACTIVED, AuthenticationType.DATABASE);
-		if(!userEntity.isEmpty()) {
-			userEntity.get().setResetPasswordToken(token);
-			userEntity.get().setResetPasswordTokenExpireAt(tokenExpireAt);
+	public boolean updateResetPasswordToken(String email, String token, long tokenExpireAt) {
+		Optional<UserEntity> oldUserEntity = userRepository.findByEmailAndStateUserAndAuthType(email, StateUser.ACTIVED, AuthenticationType.DATABASE);
+		if(!oldUserEntity.isEmpty()) {
+			oldUserEntity.get().setResetPasswordToken(token);
+			oldUserEntity.get().setResetPasswordTokenExpireAt(tokenExpireAt);
+			
+			UserEntity userSave = userRepository.save(oldUserEntity.get());
+			if(userSave == null) {
+				return false;
+			}
+			
+			return true;
 		}else {
 			throw new UserException("Could not find any account with the email " + email);
 		}
 	}
 
 	@Override
-	public void updatePassword(UserEntity userEntity, String newPassword) {
-		userEntity.setHash_password(passwordEncoder.encode(newPassword));
-		userEntity.setResetPasswordToken(null);
-		userEntity.setResetPasswordTokenExpireAt(null);
-		userRepository.save(userEntity);
+	public boolean updatePassword(long id, String newPassword) {
+		UserEntity oldUserEntity = userRepository.findById(id).get();
+		
+		oldUserEntity.setHash_password(passwordEncoder.encode(newPassword));
+		oldUserEntity.setResetPasswordToken(null);
+		oldUserEntity.setResetPasswordTokenExpireAt(null);
+		
+		UserEntity userSave = userRepository.save(oldUserEntity);
+		if(userSave == null) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 
@@ -351,19 +427,22 @@ public class UserService implements IUserService {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public boolean checkRegisterToken(String token) {
 		Optional<UserEntity> userEntity = userRepository.findByRegisterToken(token);
 		if(!userEntity.isEmpty()) {
 			long tokenExpiredAt = userEntity.get().getRegisterTokenExpireAt();
 			long currentTime = new Date().getTime();
+			
 			if(tokenExpiredAt - currentTime > 0) {
 				userEntity.get().setStateUser(StateUser.ACTIVED);
 				userRepository.save(userEntity.get());
 				return true;
 			}else {
-				userRepository.delete(userEntity.get());
+				if(userEntity.get().getStateUser().equals(StateUser.PENDING)) {
+					userRepository.delete(userEntity.get());
+				}
 				throw new UserException("Your link is expired!");
 			}
 		}

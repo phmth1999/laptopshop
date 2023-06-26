@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import com.phmth.laptopshop.service.IShoppingCartService;
 
 @Service
 public class ShoppingCartService implements IShoppingCartService {
+	@SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger(ShoppingCartService.class);
 
 	private Map<Long, CartItem> carts = new HashMap<>();
 
@@ -27,7 +31,7 @@ public class ShoppingCartService implements IShoppingCartService {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void add(CartItem item) {
 		CartItem cartItem = carts.get(item.getProductId());
@@ -50,11 +54,15 @@ public class ShoppingCartService implements IShoppingCartService {
 	}
 
 	@Override
-	public CartItem update(long productId, int numProduct) {
+	public boolean update(long productId, int numProduct) {
 		CartItem cartItem = carts.get(productId);
+		if(cartItem == null || cartItem.isEmpty()) {
+			return false;
+		}
 		cartItem.setNumProduct(numProduct);
+		cartItem.setTotalPrice(numProduct*(cartItem.getPrice()-(cartItem.getPrice()*cartItem.getDiscount())));
 		carts.put(productId, cartItem);
-		return cartItem;
+		return true;
 	}
 
 	@Override

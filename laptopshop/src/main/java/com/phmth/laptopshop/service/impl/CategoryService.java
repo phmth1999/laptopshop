@@ -3,6 +3,7 @@ package com.phmth.laptopshop.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,10 +14,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phmth.laptopshop.dto.FormAddCategory;
-import com.phmth.laptopshop.dto.FormEditCategory;
+import com.phmth.laptopshop.dto.CategoryDto;
 import com.phmth.laptopshop.entity.CategoryEntity;
 import com.phmth.laptopshop.exception.CategoryException;
+import com.phmth.laptopshop.mapper.CategoryMapper;
 import com.phmth.laptopshop.repository.ICategoryRepository;
 import com.phmth.laptopshop.service.ICategoryService;
 
@@ -31,21 +32,50 @@ public class CategoryService implements ICategoryService {
 
 	@Autowired
 	private ICategoryRepository categoryRepository;
+	
+	private CategoryMapper categoryMapper = new CategoryMapper();
 
 	@Override
-	public Iterable<CategoryEntity> findAll() {
-		return categoryRepository.findAll();
+	public List<CategoryDto> findAll() {
+		List<CategoryEntity> listCategoryEntity = categoryRepository.findAll();
+		
+		if(listCategoryEntity.isEmpty()) {
+			return null;
+		}
+		
+		List<CategoryDto> listCategoryDto = new ArrayList<>();
+		for (CategoryEntity categoryEntity : listCategoryEntity) {
+			listCategoryDto.add(categoryMapper.entityToDto(categoryEntity));
+		}
+		
+		return listCategoryDto;
 	}
 
 	@Override
-	public Page<CategoryEntity> findAll(int page, int limit) {
+	public Page<CategoryDto> findAll(int page, int limit) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
-		return categoryRepository.findAll(pageable);
+		
+		Page<CategoryEntity> pageCategoryEntity = categoryRepository.findAll(pageable);
+		
+		if(pageCategoryEntity.isEmpty()) {
+			return null;
+		}
+		
+		Page<CategoryDto> pageCategoryDto = pageCategoryEntity.map(new Function<CategoryEntity, CategoryDto> (){
+
+			@Override
+			public CategoryDto apply(CategoryEntity categoryEntity) {
+				return categoryMapper.entityToDto(categoryEntity);
+			}
+			
+		});
+
+		return pageCategoryDto;
 	}
 
 	@Override
-	public Page<CategoryEntity> findAll(int page, int limit, String name) {
+	public Page<CategoryDto> findAll(int page, int limit, String name) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
 		Specification<CategoryEntity> specification = new Specification<CategoryEntity>() {
@@ -61,128 +91,126 @@ public class CategoryService implements ICategoryService {
 				return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 			}
 		};
-		return categoryRepository.findAll(specification, pageable);
+		
+		Page<CategoryEntity> pageCategoryEntity = categoryRepository.findAll(specification, pageable);
+		
+		if(pageCategoryEntity.isEmpty()) {
+			return null;
+		}
+		
+		Page<CategoryDto> pageCategoryDto = pageCategoryEntity.map(new Function<CategoryEntity, CategoryDto> (){
+
+			@Override
+			public CategoryDto apply(CategoryEntity categoryEntity) {
+				return categoryMapper.entityToDto(categoryEntity);
+			}
+			
+		});
+
+		return pageCategoryDto;
 	}
 
 	@Override
-	public Optional<CategoryEntity> findOne(long id) {
-		return categoryRepository.findById(id);
+	public Optional<CategoryDto> findById(long id) {
+		Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
+		
+		if(categoryEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<CategoryDto> categoryDto = categoryEntity.map(new Function<CategoryEntity, CategoryDto>(){
+
+			@Override
+			public CategoryDto apply(CategoryEntity categoryEntity) {
+				return categoryMapper.entityToDto(categoryEntity);
+			}
+			
+		});
+		
+		return categoryDto;
 	}
 
 	@Override
-	public Optional<CategoryEntity> findOne(String name) {
-		return categoryRepository.findByName(name);
+	public Optional<CategoryDto> findByName(String name) {
+		Optional<CategoryEntity> categoryEntity = categoryRepository.findByName(name);
+		
+		if(categoryEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<CategoryDto> categoryDto = categoryEntity.map(new Function<CategoryEntity, CategoryDto>(){
+
+			@Override
+			public CategoryDto apply(CategoryEntity categoryEntity) {
+				return categoryMapper.entityToDto(categoryEntity);
+			}
+			
+		});
+		
+		return categoryDto;
 	}
 
 	@Override
-	public CategoryEntity insert(CategoryEntity categoryEntity) {
+	public CategoryDto insert(CategoryDto categoryDto) {
 		// If the input is null, throw exception
-		if (categoryEntity == null) {
+		if (categoryDto == null) {
 			throw new CategoryException("The input is null!");
 		}
 		
 		// If the input is empty, throw exception
-		if (categoryEntity.isEmpty()) {
-			throw new CategoryException("The input is empty!");
-		}
-		
-		// If the brand name already exists, throw exception
-		if (categoryRepository.existsByName(categoryEntity.getName())) {
-			throw new CategoryException("The category name already exists!");
-		}
-
-		return categoryRepository.save(categoryEntity);
-	}
-
-	@Override
-	public CategoryEntity insert(FormAddCategory formAddCategory) {
-		// If the input is null, throw exception
-		if (formAddCategory == null) {
-			throw new CategoryException("The input is null!");
-		}
-		
-		// If the input is empty, throw exception
-		if (formAddCategory.isEmpty()) {
+		if (categoryDto.isEmpty()) {
 			throw new CategoryException("The input is empty!");
 		}
 
 		// If the brand name already exists, throw exception
-		if (categoryRepository.existsByName(formAddCategory.getName())) {
+		if (categoryRepository.existsByName(categoryDto.getName())) {
 			throw new CategoryException("The category name already exists!");
 		}
 
 		// If insert data failed, return null
 		CategoryEntity categoryEntity = new CategoryEntity();
-		categoryEntity.setName(formAddCategory.getName());
+		categoryEntity.setName(categoryDto.getName());
 		CategoryEntity categorySave = categoryRepository.save(categoryEntity);
-		if (categorySave == null) {
+		
+		if (!categoryRepository.existsById(categorySave.getId())) {
 			return null;
 		}
-
-		return categorySave;
+		
+		return categoryMapper.entityToDto(categorySave);
 	}
 
 	@Override
-	public boolean update(CategoryEntity categoryEntity) {
+	public boolean update(CategoryDto categoryDto) {
 		// If the input is null, throw exception
-		if (categoryEntity == null) {
+		if (categoryDto == null) {
 			throw new CategoryException("The input is null!");
 		}
 		
 		// If the input is empty, throw exception
-		if (categoryEntity.isEmpty()) {
+		if (categoryDto.isEmpty()) {
 			throw new CategoryException("The input is empty!");
 		}
-		
+
 		// If the data to be modified is not found, throw exception
-		Optional<CategoryEntity> categoryUpdate = categoryRepository.findById(categoryEntity.getId());
-		if (categoryUpdate.isEmpty()) {
+		Optional<CategoryEntity> oldCategoryEntity = categoryRepository.findById(categoryDto.getId());
+		if (oldCategoryEntity.isEmpty()) {
 			throw new CategoryException("The data to be modified is not found!");
 		}
 
 		// If the new brand name is different from the old brand name and the new brand
 		// name already exists, throw exception
-		if (!categoryUpdate.get().getName().equals(categoryEntity.getName()) && categoryRepository.existsByName(categoryEntity.getName())) {
+		if (!oldCategoryEntity.get().getName().equals(categoryDto.getName()) && categoryRepository.existsByName(categoryDto.getName())) {
 			throw new CategoryException("The category name already exists!");
 		}
 
 		// If saving modification fail, return false
-		if (categoryRepository.save(categoryEntity) == null) {
+		oldCategoryEntity.get().setName(categoryDto.getName());
+		CategoryEntity categorySave = categoryRepository.save(oldCategoryEntity.get());
+		
+		if (categorySave == null) {
 			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean update(FormEditCategory formEditCategory) {
-		// If the input is null, throw exception
-		if (formEditCategory == null) {
-			throw new CategoryException("The input is null!");
 		}
 		
-		// If the input is empty, throw exception
-		if (formEditCategory.isEmpty()) {
-			throw new CategoryException("The input is empty!");
-		}
-
-		// If the data to be modified is not found, throw exception
-		Optional<CategoryEntity> categoryEntity = categoryRepository.findById(formEditCategory.getId());
-		if (categoryEntity.isEmpty()) {
-			throw new CategoryException("The data to be modified is not found!");
-		}
-
-		// If the new brand name is different from the old brand name and the new brand
-		// name already exists, throw exception
-		if (!categoryEntity.get().getName().equals(formEditCategory.getName()) && categoryRepository.existsByName(formEditCategory.getName())) {
-			throw new CategoryException("The category name already exists!");
-		}
-
-		// If saving modification fail, return false
-		categoryEntity.get().setName(formEditCategory.getName());
-		if (categoryRepository.save(categoryEntity.get()) == null) {
-			return false;
-		}
-
 		return true;
 	}
 
@@ -203,16 +231,6 @@ public class CategoryService implements ICategoryService {
 		}
 
 		return true;
-	}
-
-	@Override
-	public boolean existsById(long id) {
-		return categoryRepository.existsById(id);
-	}
-
-	@Override
-	public boolean existsByName(String name) {
-		return categoryRepository.existsByName(name);
 	}
 
 }

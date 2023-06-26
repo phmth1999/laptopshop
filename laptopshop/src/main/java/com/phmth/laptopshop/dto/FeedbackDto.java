@@ -9,14 +9,16 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class FormAddBrand {
-
+@NoArgsConstructor
+public class FeedbackDto {
+	
+	private Long id;
 	private String name;
+	private String email;
+	private String message;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

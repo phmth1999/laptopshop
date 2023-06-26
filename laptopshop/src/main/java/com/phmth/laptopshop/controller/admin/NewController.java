@@ -1,8 +1,9 @@
 package com.phmth.laptopshop.controller.admin;
 
-import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.phmth.laptopshop.dto.NewDto;
-import com.phmth.laptopshop.entity.NewEntity;
 import com.phmth.laptopshop.service.ICategoryService;
 import com.phmth.laptopshop.service.INewService;
 
 @RestController("adminNew")
 @RequestMapping("/admin/new")
 public class NewController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(NewController.class);
 
 	@Autowired
 	private INewService newService;
@@ -30,68 +32,96 @@ public class NewController {
 	private ICategoryService categoryService;
 	
 	@GetMapping
-	public ModelAndView showListNew(@RequestParam(name = "page", defaultValue = "1") int page) {
+	public ModelAndView showNewPage(@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		int limit = 3;
 		
 		ModelAndView mav = new ModelAndView("admin/new/index"); 
-		int limit = 3;
-		Page<NewEntity> listPageNew = newService.findAll(page, limit);
-		List<NewEntity> listNew = listPageNew.getContent();
-		
 		mav.addObject("newDto", new NewDto());
-		
-		mav.addObject("news", listNew);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageNew.getTotalPages());
+		try {
+			mav.addObject("category", categoryService.findAll());
+			
+			Page<NewDto> listPageNew = newService.findAll(page, limit);
+			if(listPageNew != null) {
+				List<NewDto> listNew = listPageNew.getContent();
+				mav.addObject("news", listNew);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageNew.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 		
 		return mav;
 	}
 	@PostMapping
-	public ModelAndView processListNew(
+	public ModelAndView processNewPage(
 					@ModelAttribute("newDto") NewDto newDto,
 					@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		ModelAndView mav = new ModelAndView("admin/new/index"); 
 		int limit = 3;
-		Page<NewEntity> listPageNew = newService.findAll(page, limit);
-		List<NewEntity> listNew = listPageNew.getContent();
 		
-		mav.addObject("newDto", newDto);
+		ModelAndView mav = new ModelAndView("admin/new/index"); 
+		mav.addObject("newDto", new NewDto());
 		
-		mav.addObject("news", listNew);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageNew.getTotalPages());
+		try {
+			mav.addObject("category", categoryService.findAll());
+			
+			Page<NewDto> listPageNew = newService.findAll(page, limit);
+			if(listPageNew != null) {
+				List<NewDto> listNew = listPageNew.getContent();
+				mav.addObject("news", listNew);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageNew.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 		
 		return mav;
 	}
 	@PostMapping("/add")
-	public ModelAndView processAdd(@ModelAttribute("newDto") NewDto newDto) {
+	public ModelAndView handleCreate(@ModelAttribute("newDto") NewDto newDto) {
 		
-		NewEntity newEntity = new NewEntity();
-		newEntity.setCategory(categoryService.findOne(newDto.getCategory()).get());
-		newEntity.setTitle(newDto.getTitle());
-		newEntity.setThumbnail(newDto.getThumbnail());
-		newEntity.setShortDescription(newDto.getShortDescription());
-		newEntity.setContent(newDto.getContent());
-		newEntity.setCreated_at(new Date());
-		newService.insert(newEntity);
 		ModelAndView mav = new ModelAndView("redirect:/admin/new"); 
+		
+		try {
+			NewDto newReponse = newService.insert(newDto);
+			
+			if(newReponse == null) {
+				mav = new ModelAndView("redirect:/admin/new?add=fail");
+			}else {
+				mav = new ModelAndView("redirect:/admin/new?add=success");
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
+	
 		return mav;
 	}
+	
 	@GetMapping("/edit/{id}")
-	public NewEntity showNew(@PathVariable("id") long id) {
-		
-		return newService.findOne(id).get();
+	public NewDto newApi(@PathVariable("id") long id) {
+		return newService.findById(id).get();
 	}
+	
 	@PostMapping("/edit")
-	public ModelAndView processNew(@ModelAttribute("newDto") NewDto newDto) {
-		NewEntity newEntity = newService.findOne(newDto.getId()).get();
-		newEntity.setCategory(categoryService.findOne(newDto.getCategory()).get());
-		newEntity.setTitle(newDto.getTitle());
-		newEntity.setThumbnail(newDto.getThumbnail());
-		newEntity.setShortDescription(newDto.getShortDescription());
-		newEntity.setContent(newDto.getContent());
-		newService.insert(newEntity);
+	public ModelAndView handleUpdate(@ModelAttribute("newDto") NewDto newDto) {
+		
 		ModelAndView mav = new ModelAndView("redirect:/admin/new"); 
+		
+		try {
+			boolean newReponse = newService.update(newDto);
+			
+			if(!newReponse) {
+				mav = new ModelAndView("redirect:/admin/new?add=fail");
+			}else {
+				mav = new ModelAndView("redirect:/admin/new?add=success");
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
+		
 		return mav;
 	}
 }

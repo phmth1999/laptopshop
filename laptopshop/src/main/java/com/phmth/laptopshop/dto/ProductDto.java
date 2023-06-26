@@ -14,16 +14,16 @@ import lombok.Setter;
 public class ProductDto {
 
 	private Long id;
-	private Long categoryId;
-	private Long brandId;
+	private String categoryName;
+	private String brandName;
 	private String name;
 	private Integer price;
 	private Integer discount;
 	private Integer quantity_in_stock;
 	private String thumbnail;
 	private String description;
+	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

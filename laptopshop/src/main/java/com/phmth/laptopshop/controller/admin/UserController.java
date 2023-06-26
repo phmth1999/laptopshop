@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.FormAddUser;
-import com.phmth.laptopshop.dto.FormEditUser;
-import com.phmth.laptopshop.dto.FormSearchUser;
-import com.phmth.laptopshop.dto.ResponseMessage;
-import com.phmth.laptopshop.entity.UserEntity;
-import com.phmth.laptopshop.exception.BrandException;
+import com.phmth.laptopshop.dto.UserDto;
+import com.phmth.laptopshop.dto.reponse.MessageResponse;
+import com.phmth.laptopshop.dto.request.AddUserRequest;
+import com.phmth.laptopshop.dto.request.EditUserRequest;
+import com.phmth.laptopshop.dto.request.SearchUserRequest;
 import com.phmth.laptopshop.exception.UserException;
 import com.phmth.laptopshop.service.IUserService;
 import com.phmth.laptopshop.utils.UploadFileUtil;
@@ -46,78 +45,92 @@ public class UserController {
 	@GetMapping
 	public ModelAndView showUserPage(@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		ModelAndView mav = new ModelAndView("/admin/user/index");
-		
 		int limit = 3;
-		Page<UserEntity> listPageUser = userService.findAll(page, limit);
-		List<UserEntity> listUser = listPageUser.getContent();
 		
-		mav.addObject("formSearchUser", new FormSearchUser());
-		mav.addObject("formAddUser", new FormAddUser());
-		mav.addObject("formEditUser", new FormEditUser());
+		ModelAndView mav = new ModelAndView("/admin/user/index");
+		mav.addObject("formSearchUser", new SearchUserRequest());
+		mav.addObject("formAddUser", new AddUserRequest());
+		mav.addObject("formEditUser", new EditUserRequest());
 		
-		mav.addObject("user", listUser);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageUser.getTotalPages());
+		try {
+			Page<UserDto> listPageUser = userService.findAll(page, limit);
+			if(listPageUser != null) {
+				List<UserDto> listUser = listPageUser.getContent();
+				mav.addObject("user", listUser);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageUser.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 		
 		return mav;
 	}
 	@PostMapping
 	public ModelAndView processUserPage(
-					@ModelAttribute("formSearchUser") FormSearchUser formSearchUser,
+					@ModelAttribute("formSearchUser") SearchUserRequest formSearchUser,
 					@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		ModelAndView mav = new ModelAndView("/admin/user/index");
-		logger.error(formSearchUser.getRole()+": role");
 		int limit = 3;
-		Page<UserEntity> listPageUser = userService.findAll(page, limit, formSearchUser);
-		List<UserEntity> listUser = listPageUser.getContent();
 		
+		ModelAndView mav = new ModelAndView("/admin/user/index");
 		mav.addObject("formSearchUser", formSearchUser);
-		mav.addObject("formAddUser", new FormAddUser());
-		mav.addObject("formEditUser", new FormEditUser());
+		mav.addObject("formAddUser", new AddUserRequest());
+		mav.addObject("formEditUser", new EditUserRequest());
 		
-		mav.addObject("user", listUser);
-		mav.addObject("currentPage", page);
-		mav.addObject("totalPage", listPageUser.getTotalPages());
+		try {
+			Page<UserDto> listPageUser = userService.findAll(page, limit, formSearchUser);
+			if(listPageUser != null) {
+				List<UserDto> listUser = listPageUser.getContent();
+				mav.addObject("user", listUser);
+				mav.addObject("currentPage", page);
+				mav.addObject("totalPage", listPageUser.getTotalPages());
+			}
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
+		}
 		
 		return mav;
 	}
 	
 	@PostMapping("/add")
-	public ModelAndView addUser(@ModelAttribute("formSignupAdmin") FormAddUser formAddUser) {
+	public ModelAndView handleCreate(@ModelAttribute("formSignupAdmin") AddUserRequest formAddUser) {
 		
 		ModelAndView mav = new ModelAndView("redirect:/admin/user");
 		
 		try {
-			if(userService.insert(formAddUser) != null) {
+			UserDto userReponse = userService.insert(formAddUser);
+			
+			if(userReponse != null) {
 				mav = new ModelAndView("redirect:/admin/user?add=success");
 			}else {
 				mav = new ModelAndView("redirect:/admin/user?add=fail");
 			}
-		} catch (BrandException e) {
+		} catch (UserException e) {
 			mav = new ModelAndView("redirect:/admin/user?add=exist");
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
 		
 		return mav;
 	}
 	
 	@GetMapping("/edit/{id}")
-	public UserEntity editProduct1(@PathVariable("id") long id) {
-		
+	public UserDto userApi(@PathVariable("id") long id) {
 		return userService.findById(id).get();
 	}
 	
 	@PostMapping("/edit")
-	public ResponseMessage editProduct(
+	public MessageResponse handleUpdate(
 					@RequestParam(value = "fileImage", required = false) MultipartFile fileImage,
-					@ModelAttribute("formEditUser") FormEditUser formEditUser,
+					@ModelAttribute("formEditUser") EditUserRequest formEditUser,
 					HttpServletRequest request) throws IOException {
 		
 		String nameImage = "";
 		String message = "";
-		UserEntity data = null;
+		UserDto data = null;
+		
 		try {
 			if(fileImage != null && !fileImage.isEmpty()) {
 				nameImage = StringUtils.cleanPath(fileImage.getOriginalFilename());
@@ -125,9 +138,10 @@ public class UserController {
 				String realPath = request.getServletContext().getRealPath(pathUploadImageUser);
 				UploadFileUtil.saveFile(realPath, nameImage, fileImage);
 			}
-			boolean userUpdate = userService.update(formEditUser);
+			
+			boolean userReponse = userService.update(formEditUser);
 
-			if (userUpdate) {
+			if (userReponse) {
 				message = "Update user successfully!";
 				data = userService.findById(formEditUser.getId()).get();
 			}else {
@@ -136,15 +150,18 @@ public class UserController {
 		} catch (UserException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
 
-		return new ResponseMessage(message, data);
+		return new MessageResponse(message, data);
 	}
 	
 	@PostMapping("/clock")
-	public ResponseMessage clockUser(@RequestParam("id") long id) {
+	public MessageResponse handleClockUser(@RequestParam("id") long id) {
 		String message = "";
-		UserEntity data = null;
+		UserDto data = null;
+		
 		try {
 			boolean clockUser = userService.clockUser(id);
 
@@ -157,15 +174,19 @@ public class UserController {
 		} catch (UserException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
-		return new ResponseMessage(message, data);
+		
+		return new MessageResponse(message, data);
 	}
 	
 	@PostMapping("/unclock")
-	public ResponseMessage unClockUser(@RequestParam("id") long id) {
+	public MessageResponse handleUnClockUser(@RequestParam("id") long id) {
 		
 		String message = "";
-		UserEntity data = null;
+		UserDto data = null;
+		
 		try {
 			boolean unClockUser = userService.unClockUser(id);
 
@@ -178,8 +199,11 @@ public class UserController {
 		} catch (UserException e) {
 			message = e.getMessage();
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error("Message error: {} --> ", e);
 		}
-		return new ResponseMessage(message, data);
+		
+		return new MessageResponse(message, data);
 	}
 	
 }

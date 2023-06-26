@@ -3,17 +3,20 @@ package com.phmth.laptopshop.dto;
 import java.lang.reflect.Field;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
-public class ResponseMessage {
+@NoArgsConstructor
+public class BrandDto {
 	
-	private String message;
-	private Object data;
+	private Long id;
+	private String name;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

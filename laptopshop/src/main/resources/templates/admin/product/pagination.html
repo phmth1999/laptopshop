@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:if="${product}">
+	<form id="formProduct" th:action="@{/admin/product}" method="post" th:object="${formSearchProduct}">
+		<ul class="pagination mt-4" id="pagination"></ul>
+		<input hidden="" id="page" name="page" th:value="${currentPage}" /> 
+		<input hidden="" id="totalPage" name="totalPage" th:value="${totalPage}" />
+
+		<input hidden="" th:field="*{name}" /> 
+		<input hidden="" th:field="*{price}" /> 
+		<input hidden="" th:field="*{quantity}" /> 
+		<input hidden="" th:field="*{discount}" /> 
+		<input hidden="" th:field="*{categoryName}" /> 
+		<input hidden="" th:field="*{brandName}" />
+	</form>
+</th:block>
+
+</html>

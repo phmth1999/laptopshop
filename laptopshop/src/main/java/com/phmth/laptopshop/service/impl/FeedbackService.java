@@ -1,6 +1,7 @@
 package com.phmth.laptopshop.service.impl;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phmth.laptopshop.dto.FeedbackDto;
 import com.phmth.laptopshop.entity.FeedbackEntity;
+import com.phmth.laptopshop.mapper.FeedbackMapper;
 import com.phmth.laptopshop.repository.IFeedbackRepository;
 import com.phmth.laptopshop.service.IFeedbackService;
 
@@ -20,56 +23,70 @@ public class FeedbackService implements IFeedbackService{
 	
 	@Autowired
 	private IFeedbackRepository feedbackRepository;
+	
+	private FeedbackMapper feedbackMapper = new FeedbackMapper();
 
 
 	@Override
-	public Page<FeedbackEntity> findAll(int page, int limit) {
+	public Page<FeedbackDto> findAll(int page, int limit) {
 		Sort sort = Sort.by(Sort.Direction.ASC, "id");
 		Pageable pageable = PageRequest.of(page-1, limit, sort);
-		return feedbackRepository.findAll(pageable);
-	}
-
-
-	@Override
-	public Iterable<FeedbackEntity> findAll() {
-		return feedbackRepository.findAll();
-	}
-
-
-	@Override
-	public Optional<FeedbackEntity> findOne(long id) {
-		return feedbackRepository.findById(id);
-	}
-
-
-	@Override
-	public FeedbackEntity insert(FeedbackEntity feedbackEntity) {
-		//If the input is null, return null
-		if(feedbackEntity == null) {
+		
+		Page<FeedbackEntity> listFeedbackEntity = feedbackRepository.findAll(pageable);
+		if(listFeedbackEntity.isEmpty()) {
 			return null;
 		}
-		return feedbackRepository.save(feedbackEntity);
+		
+		Page<FeedbackDto> listFeedbackDto = listFeedbackEntity.map(new Function<FeedbackEntity, FeedbackDto>(){
+
+			@Override
+			public FeedbackDto apply(FeedbackEntity feedbackEntity) {
+				return feedbackMapper.entityToDto(feedbackEntity);
+			}
+		});
+		
+		return listFeedbackDto;
+	}
+
+
+
+	@Override
+	public Optional<FeedbackDto> findById(long id) {
+		Optional<FeedbackEntity> feedbackEntity = feedbackRepository.findById(id);
+		if(feedbackEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<FeedbackDto> feedbackDto = feedbackEntity.map(new Function<FeedbackEntity, FeedbackDto>(){
+
+			@Override
+			public FeedbackDto apply(FeedbackEntity feedbackEntity) {
+				return feedbackMapper.entityToDto(feedbackEntity);
+			}
+		});
+		
+		return feedbackDto;
 	}
 
 
 	@Override
-	public boolean update(FeedbackEntity feedbackEntity) {
-		//If the input is null, return false
-		if(feedbackEntity == null) {
-			return false;
+	public FeedbackDto insert(FeedbackDto feedbackDto) {
+		//If the input is null, return null
+		if(feedbackDto == null) {
+			return null;
 		}
-		//If the data to be modified is not found, return false
-		FeedbackEntity feedbackUpdate = feedbackRepository.findById(feedbackEntity.getId()).get();
-		if(feedbackUpdate == null) {
-			return false;
+		
+		if(feedbackDto.isEmpty()) {
+			return null;
 		}
-		//If saving modification fail, return false
-		if(feedbackRepository.save(feedbackEntity) == null) {
-			return false;
+		
+		FeedbackEntity feedbackSave = feedbackRepository.save(feedbackMapper.dtoToEntity(feedbackDto));
+		if(!feedbackRepository.existsById(feedbackSave.getId())) {
+			return null;
 		}
-		return true;
+		
+		return feedbackMapper.entityToDto(feedbackSave);
 	}
-
 
 	@Override
 	public boolean remove(long id) {
@@ -88,16 +105,6 @@ public class FeedbackService implements IFeedbackService{
 			return false;
 		}
 		return true;
-	}
-
-
-	@Override
-	public boolean existsById(long id) {
-		//If id is less than or equal to 0, return false
-		if( id <= 0) {
-			return false;
-		}
-		return feedbackRepository.existsById(id);
 	}
 
 }

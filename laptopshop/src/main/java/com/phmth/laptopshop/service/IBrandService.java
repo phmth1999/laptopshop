@@ -1,31 +1,25 @@
 package com.phmth.laptopshop.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.phmth.laptopshop.dto.FormAddBrand;
-import com.phmth.laptopshop.dto.FormEditBrand;
-import com.phmth.laptopshop.entity.BrandEntity;
+import com.phmth.laptopshop.dto.BrandDto;
 
 public interface IBrandService{
 
-	Iterable<BrandEntity> findAll();
-	Page<BrandEntity> findAll(int page, int limit);
-	Page<BrandEntity> findAll(int page, int limit, String name);
+	List<BrandDto> findAll();
+	Page<BrandDto> findAll(int page, int limit);
+	Page<BrandDto> findAll(int page, int limit, String name);
 	
-    Optional<BrandEntity> findOne(long id);
-    Optional<BrandEntity> findOne(String name);
+    Optional<BrandDto> findById(long id);
+    Optional<BrandDto> findByName(String name);
 
-    BrandEntity insert(BrandEntity brandEntity);
-    BrandEntity insert(FormAddBrand formAddBrand);
+    BrandDto insert(BrandDto brandDto);
 
-    boolean update(BrandEntity brandEntity);
-    boolean update(FormEditBrand formEditBrand);
+    boolean update(BrandDto brandDto);
 
 	boolean remove(long id);
 	
-	boolean existsById(long id);
-	boolean existsByName(String name);
-
 }

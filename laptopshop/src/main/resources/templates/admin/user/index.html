@@ -135,7 +135,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<th:block th:if="${!user.isEmpty()}">
+							<th:block th:if="${user}">
 								<th:block th:each="item : ${user}">
 									<tr th:id="trow_+${item.id}">
 										<td class="td1" th:text="${itemStat.count+((currentPage-1)*3)}"></td>
@@ -147,7 +147,7 @@
 										<td class="td7"><h6>[[${item.address}]]</h6></td>
 										<td class="td8"><h6>[[${item.stateUser}]]</h6></td>
 										<td class="td9"><h6>[[${item.authType}]]</h6></td>
-										<td class="td10"><h6>[[${item.role.name}]]</h6></td>
+										<td class="td10"><h6>[[${item.role}]]</h6></td>
 										<td class="td11">
 											<a th:onclick="'editUser('+${item.id}+')'" data-bs-toggle="modal" data-bs-target="#edit" class="btn btn-sm btn-primary">Edit</a> 
 											<a th:onclick="'clickClockUser('+${item.id}+')'" class="btn btn-sm btn-danger">Clock</a>
@@ -156,14 +156,14 @@
 									</tr>
 								</th:block>
 							</th:block>
-							<th:block th:unless="${!user.isEmpty()}">
+							<th:block th:unless="${user}">
 								<tr>
 									<td colspan="4">Không có bản ghi nào!!!</td>
 								</tr>
 							</th:block>
 						</tbody>
 					</table>
-					<th:block th:if="${!user.isEmpty()}">
+					<th:block th:if="${user}">
 						<form id="formUser" th:action="@{/admin/user}" method="post" th:object="${formSearchUser}">
 							<ul class="pagination mt-4" id="pagination"></ul>
 							<input hidden="" id="page"  name="page" th:value="${currentPage}"/>

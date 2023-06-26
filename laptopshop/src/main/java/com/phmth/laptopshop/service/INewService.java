@@ -4,15 +4,15 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.phmth.laptopshop.entity.NewEntity;
+import com.phmth.laptopshop.dto.NewDto;
 
 public interface INewService {
 	
-	Page<NewEntity> findAll(int page, int limit);
+	Page<NewDto> findAll(int page, int limit);
 	
-	Optional<NewEntity> findOne(long id);
+	Optional<NewDto> findById(long id);
 	
-	NewEntity insert(NewEntity newEntity);
+	NewDto insert(NewDto newDto);
 	
-	boolean update(NewEntity newEntity);
+	boolean update(NewDto newDto);
 }

@@ -6,7 +6,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,14 +20,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phmth.laptopshop.dto.CartItem;
-import com.phmth.laptopshop.dto.FormOrderInfo;
-import com.phmth.laptopshop.dto.FormSearchOrder;
+import com.phmth.laptopshop.dto.OrderDetailDto;
+import com.phmth.laptopshop.dto.OrderDto;
+import com.phmth.laptopshop.dto.request.OrderInfoRequest;
+import com.phmth.laptopshop.dto.request.SearchOrderRequest;
 import com.phmth.laptopshop.entity.OrderDetailEntity;
 import com.phmth.laptopshop.entity.OrderEntity;
 import com.phmth.laptopshop.entity.UserEntity;
 import com.phmth.laptopshop.enums.StateCheckout;
 import com.phmth.laptopshop.enums.StateOrder;
 import com.phmth.laptopshop.exception.OrderException;
+import com.phmth.laptopshop.mapper.OrderDetailMapper;
+import com.phmth.laptopshop.mapper.OrderMapper;
+import com.phmth.laptopshop.mapper.ProductMapper;
 import com.phmth.laptopshop.repository.IOrderDetailRepository;
 import com.phmth.laptopshop.repository.IOrderRepository;
 import com.phmth.laptopshop.repository.IProductRepository;
@@ -39,6 +47,8 @@ import jakarta.persistence.criteria.Root;
 @Service
 @Transactional
 public class OrderService implements IOrderService {
+	@SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
 	@Autowired
 	private IUserRepository userRepository;
@@ -51,16 +61,48 @@ public class OrderService implements IOrderService {
 
 	@Autowired
 	private IOrderDetailRepository orderDetailRepository;
+	
+	private OrderMapper orderMapper = new OrderMapper();
+	
+	private OrderDetailMapper orderDetailMapper = new OrderDetailMapper();
+	
+	private ProductMapper productMapper = new ProductMapper();
 
 	@Override
-	public Page<OrderEntity> findAll(int page, int limit) {
+	public Page<OrderDto> findAll(int page, int limit) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
-		return orderRepository.findAll(pageable);
+		
+		Page<OrderEntity> listOrderEntity = orderRepository.findAll(pageable);
+		if(listOrderEntity.isEmpty()) {
+			return null;
+		}
+		
+		Page<OrderDto> listOrderDto = listOrderEntity.map(new Function<OrderEntity, OrderDto>(){
+
+			@Override
+			public OrderDto apply(OrderEntity orderEntity) {
+				OrderDto orderDto = orderMapper.entityToDto(orderEntity);
+				
+				List<OrderDetailEntity> listOrderDetailEntity = orderEntity.getOrderdetail();
+				List<OrderDetailDto> listOrderDetailDto = new ArrayList<>();
+				for (OrderDetailEntity orderDetailEntity : listOrderDetailEntity) {
+					OrderDetailDto orderDetailDto = orderDetailMapper.entityToDto(orderDetailEntity);
+					orderDetailDto.setProduct(productMapper.entityToDto(orderDetailEntity.getProduct()));
+					listOrderDetailDto.add(orderDetailDto);
+				}
+				
+				orderDto.setOrderdetail(listOrderDetailDto);
+				
+				return orderDto;
+			}
+		});
+		
+		return listOrderDto;
 	}
 
 	@Override
-	public Page<OrderEntity> findAll(int page, int limit, FormSearchOrder formSearchOrder) {
+	public Page<OrderDto> findAll(int page, int limit, SearchOrderRequest formSearchOrder) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page - 1, limit, sort);
 		Specification<OrderEntity> specification = new Specification<OrderEntity>() {
@@ -83,23 +125,88 @@ public class OrderService implements IOrderService {
 			}
 
 		};
-		return orderRepository.findAll(specification, pageable);
+		
+		Page<OrderEntity> listOrderEntity = orderRepository.findAll(specification, pageable);
+		if(listOrderEntity.isEmpty()) {
+			return null;
+		}
+		
+		Page<OrderDto> listOrderDto = listOrderEntity.map(new Function<OrderEntity, OrderDto>(){
+
+			@Override
+			public OrderDto apply(OrderEntity orderEntity) {
+				OrderDto orderDto = orderMapper.entityToDto(orderEntity);
+				
+				List<OrderDetailEntity> listOrderDetailEntity = orderEntity.getOrderdetail();
+				List<OrderDetailDto> listOrderDetailDto = new ArrayList<>();
+				for (OrderDetailEntity orderDetailEntity : listOrderDetailEntity) {
+					OrderDetailDto orderDetailDto = orderDetailMapper.entityToDto(orderDetailEntity);
+					orderDetailDto.setProduct(productMapper.entityToDto(orderDetailEntity.getProduct()));
+					listOrderDetailDto.add(orderDetailDto);
+				}
+				
+				orderDto.setOrderdetail(listOrderDetailDto);
+				
+				return orderDto;
+			}
+		});
+		
+		return listOrderDto;
 	}
 
 	@Override
-	public List<OrderEntity> findByUser(long id) {
+	public List<OrderDto> findByUser(long id) {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setId(id);
-		return orderRepository.findByUser(userEntity);
+		
+		List<OrderEntity> listOrderEntity = orderRepository.findByUser(userEntity);
+		if(listOrderEntity.isEmpty()){
+			return null ;
+		}
+		
+		List<OrderDto> listOrderDto = new ArrayList<>();
+		for (OrderEntity orderEntity : listOrderEntity) {
+			OrderDto orderDto = orderMapper.entityToDto(orderEntity);
+			
+			List<OrderDetailEntity> listOrderDetailEntity = orderEntity.getOrderdetail();
+			List<OrderDetailDto> listOrderDetailDto = new ArrayList<>();
+			for (OrderDetailEntity orderDetailEntity : listOrderDetailEntity) {
+				OrderDetailDto orderDetailDto = orderDetailMapper.entityToDto(orderDetailEntity);
+				orderDetailDto.setProduct(productMapper.entityToDto(orderDetailEntity.getProduct()));
+				listOrderDetailDto.add(orderDetailDto);
+			}
+			
+			orderDto.setOrderdetail(listOrderDetailDto);
+			
+			listOrderDto.add(orderDto);
+		}
+		
+		return listOrderDto;
 	}
 
 	@Override
-	public Optional<OrderEntity> findOne(long id) {
-		return orderRepository.findById(id);
+	public Optional<OrderDto> findById(long id) {
+		Optional<OrderEntity> orderEntity = orderRepository.findById(id);
+		if(orderEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<OrderDto> orderDto = orderEntity.map(new Function<OrderEntity, OrderDto>(){
+
+			@Override
+			public OrderDto apply(OrderEntity orderEntity) {
+				OrderDto orderDto = orderMapper.entityToDto(orderEntity);
+				
+				return orderDto;
+			}
+		});
+		
+		return orderDto;
+		
 	}
 
 	@Override
-	public OrderEntity Order(Collection<CartItem> carts, FormOrderInfo formOrderInfo) {
+	public OrderDto Order(Collection<CartItem> carts, OrderInfoRequest formOrderInfo) {
 		// If the input is null, throw exception
 		if (formOrderInfo == null || carts == null) {
 			throw new OrderException("The input is null!");
@@ -152,8 +259,13 @@ public class OrderService implements IOrderService {
 		String date = formatter.format(order.getCreated_at());
 		String codeOrder = "" + order.getId() + order.getUser().getId() + date;
 		order.setCodeOrder(codeOrder);
-
-		return orderRepository.save(order);
+		
+		OrderEntity orderSave = orderRepository.save(order);
+		if(!orderRepository.existsById(orderSave.getId())) {
+			return null;
+		}
+		
+		return orderMapper.entityToDto(orderSave);
 	}
 
 	@Override
@@ -207,8 +319,33 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
-	public Optional<OrderEntity> findByCodeOrder(String codeOrder) {
-		return orderRepository.findByCodeOrder(codeOrder);
+	public Optional<OrderDto> findByCodeOrder(String codeOrder) {
+		Optional<OrderEntity> orderEntity = orderRepository.findByCodeOrder(codeOrder);
+		if(orderEntity.isEmpty()) {
+			return null;
+		}
+		
+		Optional<OrderDto> orderDto = orderEntity.map(new Function<OrderEntity, OrderDto>(){
+
+			@Override
+			public OrderDto apply(OrderEntity orderEntity) {
+				OrderDto orderDto = orderMapper.entityToDto(orderEntity);
+				
+				List<OrderDetailEntity> listOrderDetailEntity = orderEntity.getOrderdetail();
+				List<OrderDetailDto> listOrderDetailDto = new ArrayList<>();
+				for (OrderDetailEntity orderDetailEntity : listOrderDetailEntity) {
+					OrderDetailDto orderDetailDto = orderDetailMapper.entityToDto(orderDetailEntity);
+					orderDetailDto.setProduct(productMapper.entityToDto(orderDetailEntity.getProduct()));
+					listOrderDetailDto.add(orderDetailDto);
+				}
+				
+				orderDto.setOrderdetail(listOrderDetailDto);
+				
+				return orderDto;
+			}
+		});
+		
+		return orderDto;
 	}
 
 }

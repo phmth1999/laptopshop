@@ -39,58 +39,7 @@
 			</div>
 		</section>
 		
-		<section class="search">
-			<div class="container">
-				<form th:action="@{/admin/product}" method="post" th:object="${formSearchProduct}">
-					<h5 class="px-3 mb-4">Form search product</h5>
-					<div class="row">
-						<div class="col-6 left px-4">
-							<div class="form-group d-flex justify-content-between">
-								<label for="" class="col-form-label">Name:</label>
-								<input type="text" th:field="*{name}" class="form-control">
-							</div>
-							<div class="form-group d-flex justify-content-between">
-								<label for="" class="col-form-label">Price:</label>
-								<input type="number" th:field="*{price}" class="form-control">
-							</div>
-							<div class="form-group d-flex justify-content-between">
-								<label for="" class="col-form-label">Category:</label>
-								<select class="form-control form-select" th:field="*{category}">
-									<option selected="selected" value="0"></option>
-									<option value="1">Laptop</option>
-									<option value="2">Keyboard</option>
-									<option value="3">Mouse</option>
-									<option value="4">USB</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-6 right px-4">
-							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">Quantity:</label>
-								<input type="number" th:field="*{quantity}" class="form-control">
-							</div>
-							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">Discount:</label>
-								<input type="number" th:field="*{discount}" class="form-control">
-							</div>
-							<div class="form-group d-flex justify-content-between">
-								<label for="" class="col-form-label">Brand:</label>
-								<select class="form-control form-select" th:field="*{brand}">
-									<option selected="selected" value="0"></option>
-									<option value="1">ASUS</option>
-									<option value="2">DELL</option>
-									<option value="3">HP</option>
-									<option value="4">LOGITECH</option>
-								</select>
-							</div>
-						</div>
-						<div class="d-flex justify-content-center pr-4 mb-3">
-							<button class="btn btn-primary px-4" type="submit">Search</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</section>
+		<div th:replace="/admin/product/search-form"></div>
 
 		<section class="content">
 
@@ -119,14 +68,14 @@
 							</tr>
 						</thead>
 						<tbody>
-							<th:block th:if="${!product.isEmpty()}">
+							<th:block th:if="${product}">
 								<th:block th:each="item : ${product}">
 									<tr th:id="trow_+${item.id}">
 										<td class="td1" th:text="${itemStat.count+((currentPage-1)*5)}"></td>
 										<td class="td2"><img th:src='@{../images/product/{img}(img=${item.thumbnail})}' alt=""></td>
 										<td class="td3"><h6>[[${item.name}]]</h6></td>
-										<td class="td4"><h6>[[${item.category.name}]]</h6></td>
-										<td class="td5"><h6>[[${item.brand.name}]]</h6></td>
+										<td class="td4"><h6>[[${item.categoryName}]]</h6></td>
+										<td class="td5"><h6>[[${item.brandName}]]</h6></td>
 										<td class="td6"><h6>[[${#numbers.formatInteger(item.price,3,'POINT')}]]đ</h6></td>
 										<td class="td7"><h6>[[${item.quantity_in_stock}]]</h6></td>
 										<td class="td8"><h6>[[${item.discount}]]%</h6></td>
@@ -138,181 +87,22 @@
 									</tr>
 								</th:block>
 							</th:block>
-							<th:block th:unless="${!product.isEmpty()}">
+							<th:block th:unless="${product}">
 								<tr>
 									<td colspan="4">Không có bản ghi nào!!!</td>
 								</tr>
 							</th:block>
 						</tbody>
 					</table>
-					<th:block th:if="${!product.isEmpty()}">
-						<form id="formProduct" th:action="@{/admin/product}" method="post" th:object="${formSearchProduct}">
-							<ul class="pagination mt-4" id="pagination"></ul>
-							<input hidden="" id="page"  name="page" th:value="${currentPage}"/>
-							<input hidden="" id="totalPage" name="totalPage" th:value="${totalPage}"/>
-							
-							<input hidden="" th:field="*{name}"/>
-							<input hidden="" th:field="*{price}"/>
-							<input hidden="" th:field="*{quantity}"/>
-							<input hidden="" th:field="*{discount}"/>
-							<input hidden="" th:field="*{category}"/>
-							<input hidden="" th:field="*{brand}"/>
-						</form>
-					</th:block>
+					<div th:replace="/admin/product/pagination"></div>
 				</div>
 			</div>
 		</section>
 										
-		<div class="modal" id="add">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<form th:action="@{/admin/product/add}" method="post" th:object="${productDto}" enctype="multipart/form-data">
-						<div class="modal-header">
-							<h4 class="modal-title">Add new product</h4>
-							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-						</div>
-						<div class="modal-body">
-							<div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
-								<div class="form-group">
-									<label for="">Name</label> 
-									<input type="text" th:field="*{name}" class="form-control" placeholder="Category name" required="required" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Category</label> 
-									<select th:field="*{categoryId}" class="form-control form-select" required="required">
-										<option value="1">Laptop</option>
-										<option value="2">Keyboard</option>
-										<option value="3">Mouse</option>
-										<option value="4">USB</option>
-									</select>
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Brand</label> 
-									<select th:field="*{brandId}" class="form-control form-select" required="required">
-										<option value="1">ASUS</option>
-										<option value="2">DELL</option>
-										<option value="3">HP</option>
-										<option value="4">LOGITECH</option>
-									</select>
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Price</label> 
-									<input type="text" th:field="*{price}" class="form-control" required="required" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Discount</label> 
-									<input type="text" th:field="*{discount}" class="form-control" required="required" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Quantity</label> 
-									<input type="text" th:field="*{quantity_in_stock}" class="form-control"  required="required" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Description</label> 
-									<textarea th:field="*{description}" class="form-control" required="required" rows="4"></textarea>
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Img</label> 
-									<input class="form-control" onchange="chooseFile(this, 'add')" type="file" name="fileImage" required="required"/>
-								</div>
-								<div class="form-group d-flex justify-content-center">
-									<img id="imageAdd" alt="" src="" height="200px" width="200px"/>
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-							<button type="submit" class="btn btn-primary">Add</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		<div class="modal" id="edit">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<form id="formEditProduct" th:action="@{/admin/product/edit}" method="post" th:object="${productDto}" enctype="multipart/form-data">
-						<div class="modal-header">
-							<h4 class="modal-title">Edit product</h4>
-							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-						</div>
-						<div class="modal-body">
-							<div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
-								<div class="form-group">
-									<label for="">Id</label> 
-									<input type="text" id="idEdit" th:field="*{id}" class="form-control" readonly="readonly" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Name</label> 
-									<input type="text" id="nameEdit" th:field="*{name}" class="form-control" required="required" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Category</label> 
-									<select th:field="*{categoryId}" class="form-control form-select" id="categoryEdit" required="required">
-										<option value="1">Laptop</option>
-										<option value="2">Keyboard</option>
-										<option value="3">Mouse</option>
-										<option value="4">USB</option>
-									</select>
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Brand</label> 
-									<select th:field="*{brandId}" class="form-control form-select" id="brandEdit" required="required">
-										<option value="1">ASUS</option>
-										<option value="2">DELL</option>
-										<option value="3">HP</option>
-										<option value="4">LOGITECH</option>
-									</select>
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Price</label> 
-									<input type="text" th:field="*{price}" class="form-control" id="priceEdit" required="required" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Discount</label> 
-									<input type="text" th:field="*{discount}" class="form-control" id="discountEdit" required="required" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Quantity</label> 
-									<input type="text" th:field="*{quantity_in_stock}" class="form-control" id="quantityEdit" required="required" />
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Description</label> 
-									<textarea th:field="*{description}" class="form-control" required="required" id="descriptionEdit" rows="4"></textarea>
-									<div class="text-danger"></div>
-								</div>
-								<div class="form-group">
-									<label for="">Img</label> 
-									<input hidden="" type="text" id="thumbnailEdit" th:field="*{thumbnail}" > 
-									<input class="form-control" onchange="chooseFile(this, 'edit')" type="file" name="fileImage"/>
-								</div>
-								<div class="form-group d-flex justify-content-center">
-									<img id="imageEdit" alt="" class="thumbnailEdit" src="" height="200px" width="200px"/>
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-							<button th:onclick="clickEditProduct()" type="button" class="btn btn-primary">Edit</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
+		<div th:replace="/admin/product/add-modal"></div>
+		
+		<div th:replace="/admin/product/edit-modal"></div>
+		
 	</div>
 
 	<th:block layout:fragment="script">
@@ -368,8 +158,8 @@
 						if(res){
 							$('#idEdit').val(res.id);
 							$('#nameEdit').val(res.name);
-							$('#categoryEdit').val(res.category.id);
-							$('#brandEdit').val(res.brand.id);
+							$('#categoryEdit').val(res.categoryName);
+							$('#brandEdit').val(res.brandName);
 							$('#priceEdit').val(res.price);
 							$('#discountEdit').val(res.discount);
 							$('#quantityEdit').val(res.quantity_in_stock);
@@ -397,15 +187,15 @@
 							html += `<td class="td1">${stt}</td>`;
 							html += `<td class="td2"><img src='/${firstPath}/images/product/${res.data.thumbnail}' alt=""></td>`;
 							html += `<td class="td3"><h6>${res.data.name}</h6></td>`;
-							html += `<td class="td4"><h6>${res.data.category.name}</h6></td>`;
-							html += `<td class="td5"><h6>${res.data.brand.name}</h6></td>`;
+							html += `<td class="td4"><h6>${res.data.categoryName}</h6></td>`;
+							html += `<td class="td5"><h6>${res.data.brandName}</h6></td>`;
 							html += `<td class="td6"><h6>${res.data.price}</h6></td>`;
 							html += `<td class="td7"><h6>${res.data.quantity_in_stock}</h6></td>`;
 							html += `<td class="td8"><h6>${res.data.discount}</h6></td>`;
 							html += `<td class="td9"><h6>${res.data.description}</h6></td>`;
 							html += `<td class="td10">`;
 							html += `<a onclick="editProduct(${res.data.id})" data-bs-toggle="modal" data-bs-target="#edit" class="btn btn-sm btn-primary mr-1">Edit</a>`;
-							html += `<a onclick="clickDeleteProduct(${res.data.id})" class="btn btn-sm btn-primary mr">Delete</a>`;
+							html += `<a onclick="clickDeleteProduct(${res.data.id})" class="btn btn-sm btn-danger mr">Delete</a>`;
 							html += `</td> )`;
 							 $('#trow_' + res.data.id).empty();
 							 $('#trow_' + res.data.id).append(html);

@@ -49,6 +49,7 @@ public class CustomUserService implements UserDetailsService {
 		CustomUser userLogin = new CustomUser(user.get().getEmail(), user.get().getHash_password(), grantedAuthorities);
 		userLogin.setId(user.get().getId());
 		userLogin.setName(user.get().getFullname());
+		userLogin.setThumbnail(user.get().getImg());
 		
 		return userLogin;
 	}

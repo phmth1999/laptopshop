@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.phmth.laptopshop.entity.ProductEntity;
+import com.phmth.laptopshop.dto.ProductDto;
 import com.phmth.laptopshop.service.IProductService;
 
 @RestController
@@ -23,8 +23,8 @@ public class SearchController {
 	private IProductService productService;
 	
 	@GetMapping
-	public List<ProductEntity> search(@RequestParam("term") String term){
-		List<ProductEntity> listSearch = productService.findByNameSearch(term);
+	public List<ProductDto> search(@RequestParam("term") String term){
+		List<ProductDto> listSearch = productService.findByNameSearch(term);
 		return listSearch;
 	}
 	

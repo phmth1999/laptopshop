@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UploadFileUtil {
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
 
 	public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
@@ -23,7 +24,6 @@ public class UploadFileUtil {
 			Path filePath = path.resolve(fileName);
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (Exception e) {
-			logger.error("Count not save image file" + fileName);
 			throw new IOException("Count not save image file: " + fileName);
 		}
 	}

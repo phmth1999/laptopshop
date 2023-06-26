@@ -9,7 +9,7 @@
 			<div class="sidebar">
 				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 					<div class="image">
-						<img th:src='@{/logo.svg}' class="img-circle elevation-2" alt="User Image">
+						<img th:src="@{../images/user/{imgs}(imgs=${#authentication.principal.thumbnail})}" class="img-circle elevation-2" alt="User Image">
 					</div>
 					<div class="info">
 						<a th:href="@{/admin/home}" class="d-block" sec:authentication="principal.name"></a>

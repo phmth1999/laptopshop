@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="modal" id="add">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form th:action="@{/admin/product/add}" method="post" th:object="${productDto}" enctype="multipart/form-data">
+				<div class="modal-header">
+					<h4 class="modal-title">Add new product</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<div id="logins-part" class="content" role="tabpanel"
+						aria-labelledby="logins-part-trigger">
+						<div class="form-group">
+							<label for="">Name</label> 
+							<input type="text" th:field="*{name}" class="form-control" required="required" />
+							<div class="text-danger"></div>
+						</div>
+						<div class="form-group">
+							<label for="">Category</label> 
+							<select th:field="*{categoryName}" class="form-control form-select" required="required">
+								<th:block th:each="item : ${category}">
+									<option th:value="${item.name}">[[${item.name}]]</option>
+								</th:block>
+							</select>
+							<div class="text-danger"></div>
+						</div>
+						<div class="form-group">
+							<label for="">Brand</label> 
+							<select th:field="*{brandName}" class="form-control form-select" required="required">
+								<th:block th:each="item : ${brand}">
+									<option th:value="${item.name}">[[${item.name}]]</option>
+								</th:block>
+							</select>
+							<div class="text-danger"></div>
+						</div>
+						<div class="form-group">
+							<label for="">Price</label> 
+							<input type="text" th:field="*{price}" class="form-control" required="required" />
+							<div class="text-danger"></div>
+						</div>
+						<div class="form-group">
+							<label for="">Discount</label> 
+							<input type="text" th:field="*{discount}" class="form-control" required="required" />
+							<div class="text-danger"></div>
+						</div>
+						<div class="form-group">
+							<label for="">Quantity</label> 
+							<input type="text" th:field="*{quantity_in_stock}" class="form-control" required="required" />
+							<div class="text-danger"></div>
+						</div>
+						<div class="form-group">
+							<label for="">Description</label>
+							<textarea th:field="*{description}" class="form-control" required="required" rows="4"></textarea>
+							<div class="text-danger"></div>
+						</div>
+						<div class="form-group">
+							<label for="">Img</label> 
+							<input class="form-control" onchange="chooseFile(this, 'add')" type="file" name="fileImage" required="required" />
+						</div>
+						<div class="form-group d-flex justify-content-center">
+							<img id="imageAdd" alt="" src="" height="200px" width="200px" />
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+					<button type="submit" class="btn btn-primary">Add</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+</html>

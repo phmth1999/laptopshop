@@ -1,6 +1,7 @@
 package com.phmth.laptopshop.entity;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,10 +39,9 @@ public class CategoryEntity {
 	
 	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Set<NewEntity> news;
+	private List<NewEntity> news;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);

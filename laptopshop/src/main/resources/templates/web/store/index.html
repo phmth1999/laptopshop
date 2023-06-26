@@ -40,24 +40,22 @@
 									<div class="col-md-3 col-6 p-1">
 										<div class="select-option">
 											<p>Category: </p>
-											<select class="category"  onchange="SubmitForm()" th:field="*{cateogryId}">
-												<option value='0'>ALL</option>
-												<option value='1'>Laptop</option>
-												<option value='2'>keyboard</option>
-												<option value='3'>Mouse</option>
-												<option value='4'>USB</option>
+											<select class="category"  onchange="SubmitForm()" th:field="*{cateogryName}">
+												<option value='all'>ALL</option>
+												<th:block th:each="item : ${category}">
+													<option th:value="${item.name}">[[${item.name}]]</option>
+												</th:block>
 											</select>
 										</div>
 									</div>
 									<div class="col-md-3 col-6 p-1">
 										<div class="select-option">
 											<p>Brand: </p>
-											<select class="brand" onchange="SubmitForm()" th:field="*{brandId}">
-												<option value='0'>ALL</option>
-												<option value='1'>ASUS</option>
-												<option value='2'>DELL</option>
-												<option value='3'>HP</option>
-												<option value='4'>Logitech</option>
+											<select class="brand" onchange="SubmitForm()" th:field="*{brandName}">
+												<option value='all'>ALL</option>
+												<th:block th:each="item : ${brand}">
+													<option th:value="${item.name}">[[${item.name}]]</option>
+												</th:block>
 											</select>
 										</div>
 									</div>
@@ -76,7 +74,7 @@
 							</div>
 							<div class="product-list">
 								<div class="row">
-									<th:block th:if="${!listProduct.isEmpty()}" th:each="item : ${listProduct}">
+									<th:block th:if="${listProduct}" th:each="item : ${listProduct}">
 										<div class="col-lg-3 col-sm-6 col-6">
 											<div class="product-item">
 												<div class="pi-pic">
@@ -98,12 +96,12 @@
 											</div>
 										</div>
 									</th:block>
-									<th:block th:if="${listProduct.isEmpty()}">
+									<th:block th:unless="${listProduct}">
 										<div class="col-lg-3 col-sm-6 col-6">
 											Not found products
 										</div>
 									</th:block>
-									<th:block th:if="${!listProduct.isEmpty()}">
+									<th:block th:if="${listProduct}">
 										<ul class="pagination mt-4" id="pagination"></ul>
 										<input hidden="" id="page"  name="page" th:value="${currentPage}"/>
 										<input hidden="" id="totalPage" name="totalPage" th:value="${totalPage}"/>

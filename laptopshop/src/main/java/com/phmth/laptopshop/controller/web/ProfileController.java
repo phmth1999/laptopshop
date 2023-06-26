@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.FormProfile;
-import com.phmth.laptopshop.entity.UserEntity;
+import com.phmth.laptopshop.dto.UserDto;
+import com.phmth.laptopshop.dto.request.EditProfileRequest;
 import com.phmth.laptopshop.service.IUserService;
 import com.phmth.laptopshop.utils.IdLogged;
 import com.phmth.laptopshop.utils.UploadFileUtil;
@@ -49,9 +49,9 @@ public class ProfileController {
 			 * 	Find the user who is logged in
 			 * 	true --> convert entity to dto --> set data profile = user login
 			 * */
-			Optional<UserEntity> userEntity = userService.findById(IdLogged.getId());
+			Optional<UserDto> userEntity = userService.findById(IdLogged.getId());
 			if(userEntity != null) {
-				FormProfile formProfile = new FormProfile();
+				EditProfileRequest formProfile = new EditProfileRequest();
 				formProfile.setFullname(userEntity.get().getFullname());
 				formProfile.setSex(userEntity.get().getSex());
 				formProfile.setBirthday(userEntity.get().getBirthday());
@@ -71,7 +71,7 @@ public class ProfileController {
 	@PostMapping("profile")
 	public ModelAndView editProfilePage(
 						@RequestParam(value = "fileImage", required = false) MultipartFile fileImage, 
-						@ModelAttribute("profile") @Valid FormProfile formProfile,
+						@ModelAttribute("profile") @Valid EditProfileRequest formProfile,
 						BindingResult result,
 						HttpServletRequest request
 						) throws IOException {
@@ -94,7 +94,7 @@ public class ProfileController {
 			 * 	true --> convert dto to entity --> set value --> save data into database
 			 * 	Check save data = true --> executed save file image
 			 * */
-			UserEntity userNeedEdit = userService.findById(formProfile.getId()).get();
+			UserDto userNeedEdit = userService.findById(formProfile.getId()).get();
 			if(userNeedEdit != null) {
 				userService.update(formProfile);
 			}

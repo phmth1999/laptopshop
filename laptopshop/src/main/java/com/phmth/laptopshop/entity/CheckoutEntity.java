@@ -71,7 +71,6 @@ public class CheckoutEntity {
 	private String secureHash;
 	
 	public boolean isEmpty()  {
-
 	    for (Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);
