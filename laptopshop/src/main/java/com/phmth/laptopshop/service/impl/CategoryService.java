@@ -21,12 +21,14 @@ import com.phmth.laptopshop.mapper.CategoryMapper;
 import com.phmth.laptopshop.repository.ICategoryRepository;
 import com.phmth.laptopshop.service.ICategoryService;
 
+import groovy.util.logging.Slf4j;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 @Service
+@Slf4j
 @Transactional
 public class CategoryService implements ICategoryService {
 

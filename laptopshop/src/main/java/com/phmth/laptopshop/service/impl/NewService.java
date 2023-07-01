@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.phmth.laptopshop.dto.NewDto;
 import com.phmth.laptopshop.entity.CategoryEntity;
@@ -19,7 +20,11 @@ import com.phmth.laptopshop.repository.ICategoryRepository;
 import com.phmth.laptopshop.repository.INewRepository;
 import com.phmth.laptopshop.service.INewService;
 
+import groovy.util.logging.Slf4j;
+
 @Service
+@Slf4j
+@Transactional
 public class NewService implements INewService{
 	
 	@Autowired

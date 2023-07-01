@@ -15,7 +15,10 @@ import com.phmth.laptopshop.repository.IOrderRepository;
 import com.phmth.laptopshop.repository.IUserRepository;
 import com.phmth.laptopshop.service.ICheckoutService;
 
+import groovy.util.logging.Slf4j;
+
 @Service
+@Slf4j
 public class CheckoutService implements ICheckoutService{
 
 	@Autowired

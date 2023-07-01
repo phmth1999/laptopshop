@@ -15,7 +15,10 @@ import com.phmth.laptopshop.mapper.ProductMapper;
 import com.phmth.laptopshop.repository.IOrderDetailRepository;
 import com.phmth.laptopshop.service.IOrderDetailService;
 
+import groovy.util.logging.Slf4j;
+
 @Service
+@Slf4j
 @Transactional
 public class OrderDetailService implements IOrderDetailService {
 

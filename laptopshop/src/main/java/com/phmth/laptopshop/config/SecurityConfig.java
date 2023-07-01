@@ -49,7 +49,7 @@ public class SecurityConfig{
 	                .authorizeHttpRequests()
 	                	.requestMatchers(
 	                	"/home", "/store", "/store/**", "/cart/**", "/search/**", "/new/**",
-	                	"/contact", "/about",
+	                	"/contact", "/about", "/elasticsearch/**",
 	                	"/auth/**", "/oauth2/**",
 	                	"/logo.svg", "/images/**", "/web/css/**", "/web/js/**",  "/admin/css/**", "/admin/js/**")
 	                	.permitAll()

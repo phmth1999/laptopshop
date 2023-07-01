@@ -17,7 +17,10 @@ import com.phmth.laptopshop.mapper.FeedbackMapper;
 import com.phmth.laptopshop.repository.IFeedbackRepository;
 import com.phmth.laptopshop.service.IFeedbackService;
 
+import groovy.util.logging.Slf4j;
+
 @Service
+@Slf4j
 @Transactional
 public class FeedbackService implements IFeedbackService{
 	

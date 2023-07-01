@@ -21,12 +21,14 @@ import com.phmth.laptopshop.mapper.BrandMapper;
 import com.phmth.laptopshop.repository.IBrandRepository;
 import com.phmth.laptopshop.service.IBrandService;
 
+import groovy.util.logging.Slf4j;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 @Service
+@Slf4j
 @Transactional
 public class BrandService implements IBrandService {
 	

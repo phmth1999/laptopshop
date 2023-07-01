@@ -1,6 +1,5 @@
 package com.phmth.laptopshop.entity;
 
-import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Entity
 @Table(name = "products")
 public class ProductEntity {
@@ -79,7 +79,7 @@ public class ProductEntity {
 	private List<OrderDetailEntity> order_details;
 	
 	public boolean isEmpty()  {
-	    for (Field field : this.getClass().getDeclaredFields()) {
+	    for (java.lang.reflect.Field field : this.getClass().getDeclaredFields()) {
 	        try {
 	            field.setAccessible(true);
 	            if (field.get(this)!=null) {

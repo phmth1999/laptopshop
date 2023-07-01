@@ -14,9 +14,8 @@ function incFunction(id){
 }
 $(function () {
  	const firstPath = location.pathname.split('/')[1];
- 	console.log("ok")
 	$("#inputSearch").autocomplete({
-		source: `/${firstPath}/search`,
+		source: `/${firstPath}/elasticsearch/search`,
 		create: function() {
 			$(this).data('ui-autocomplete')._renderItem = function(ul, item) {
 			var price = item.price;

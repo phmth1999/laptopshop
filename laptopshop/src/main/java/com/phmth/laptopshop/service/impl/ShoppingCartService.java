@@ -14,7 +14,10 @@ import com.phmth.laptopshop.entity.ProductEntity;
 import com.phmth.laptopshop.repository.IProductRepository;
 import com.phmth.laptopshop.service.IShoppingCartService;
 
+import groovy.util.logging.Slf4j;
+
 @Service
+@Slf4j
 public class ShoppingCartService implements IShoppingCartService {
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ShoppingCartService.class);
