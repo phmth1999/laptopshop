@@ -282,9 +282,9 @@
 			var totalPages = /*[[${totalPage}]]*/ "";
 			$(function () {
 				$('#pagination').twbsPagination({
-					totalPages: totalPages,
+					totalPages: (totalPages == null) ? 1:totalPages,
 					visiblePages: 3,
-					startPage: currentPage,
+					startPage: (currentPage == null) ? 1:currentPage,
 					onPageClick: function (event, page) {
 						if (currentPage != page) {
 							$('#page').val(page);

@@ -26,7 +26,7 @@ import com.phmth.laptopshop.exception.ProductException;
 import com.phmth.laptopshop.service.IBrandService;
 import com.phmth.laptopshop.service.ICategoryService;
 import com.phmth.laptopshop.service.IProductService;
-import com.phmth.laptopshop.service.impl.ProductElasticsearchService;
+//import com.phmth.laptopshop.service.impl.ProductElasticsearchService;
 import com.phmth.laptopshop.utils.UploadFileUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,8 +48,8 @@ public class ProductController {
 	@Value("${upload.path.image.product}")
 	private String pathUploadImageProduct;
 	
-	@Autowired
-	private ProductElasticsearchService productElasticsearchService;
+//	@Autowired
+//	private ProductElasticsearchService productElasticsearchService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
@@ -128,7 +128,7 @@ public class ProductController {
 			ProductDto productReponse = productService.insert(productDto);
 			
 			if(productReponse != null) {
-				productElasticsearchService.dataSynchronization(productReponse);
+//				productElasticsearchService.dataSynchronization(productReponse);
 				mav = new ModelAndView("redirect:/admin/product?add=success");
 			}else {
 				mav = new ModelAndView("redirect:/admin/product?add=fail");
@@ -169,7 +169,7 @@ public class ProductController {
 			boolean productReponse = productService.update(productDto);
 
 			if (productReponse) {
-				productElasticsearchService.dataSynchronization(productService.findById(productDto.getId()).get());
+//				productElasticsearchService.dataSynchronization(productService.findById(productDto.getId()).get());
 				message = "Update product successfully!";
 				data = productService.findById(productDto.getId()).get();
 			}else {

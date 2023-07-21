@@ -42,7 +42,7 @@ public class NewController {
 	public ModelAndView processNew(@RequestParam(name = "page", defaultValue = "1") int page) {
 		ModelAndView mav = new ModelAndView("/web/new/index");
 		int limit = 4;
-		
+		logger.error(""+page);
 		Page<NewDto> listPageNew = newService.findAll(page, limit);
 		List<NewDto> listNew = listPageNew.getContent();
 		

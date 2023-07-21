@@ -32,8 +32,8 @@
 										</div>
 									</div>
 									<form th:id="formNewDetail+${item.id}" th:action="@{/new/detail}" method="post">
-										<input hidden="" id="page"  name="page" th:value="${currentPage}"/>
-										<input hidden="" id="id"  name="id" th:value="${item.id}"/>
+										<input hidden="" name="page" th:value="${currentPage}"/>
+										<input hidden="" name="id" th:value="${item.id}"/>
 									</form>
 								</div>
 							</div>
@@ -44,8 +44,7 @@
 				<th:block th:if="${news}">
 					<form class="mx-3" id="formNew" th:action="@{/new}" method="post">
 						<ul class="pagination mt-4" id="pagination"></ul>
-						<input hidden="" id="page"  name="page" th:value="${currentPage}"/>
-						<input hidden="" id="totalPage" name="totalPage" th:value="${totalPage}"/>
+						<input hidden=""  id="page"  name="page" th:value="${currentPage}"/>
 					</form>
 				</th:block>
 			</div>
@@ -59,9 +58,9 @@
 		var totalPages = /*[[${totalPage}]]*/ "";
 		$(function () {
 			$('#pagination').twbsPagination({
-				totalPages: totalPages,
+				totalPages: (totalPages == null) ? 1:totalPages,
 				visiblePages: 3,
-				startPage: currentPage,
+				startPage: (currentPage == null) ? 1:currentPage,
 				onPageClick: function (event, page) {
 					if (currentPage != page) {
 						$('#page').val(page);

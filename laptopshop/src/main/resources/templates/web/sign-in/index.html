@@ -38,10 +38,10 @@
 						<h3>Login Account</h3>
 						<div class="inp">
 							<input type="text" name="username" id="username" placeholder="User Name" required> 
-							<input type="password" name="password" id="password" placeholder="Password" required>
+							<input autocomplete="" type="password" name="password" id="password" placeholder="Password" required>
 						</div>
-						<div class="pt-4"><input type="checkbox" /> Remember me</div>
-						<p><a th:href="@{/auth/forgot-password}">Forgot Your Password</a></p>
+						<div class="m-0 p-2 mt-2"><input type="checkbox" /> Remember me</div>
+						<p class="m-0"><a th:href="@{/auth/forgot-password}">Forgot Your Password</a></p>
 						<div id="login">
 							<a th:href="@{/oauth2/authorization/google}"><button  type="button"><i class="fa-brands fa-google"></i> &ensp; Sign in by Gmail</button></a>
 						</div>
