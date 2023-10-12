@@ -11,10 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.phmth.laptopshop.security.DatabaseLoginSuccessHandler;
-import com.phmth.laptopshop.security.CustomUserService;
 import com.phmth.laptopshop.security.oauth2.CustomOAuth2UserService;
 import com.phmth.laptopshop.security.oauth2.OAuthLoginSuccessHandler;
+import com.phmth.laptopshop.security.user.CustomUserService;
+import com.phmth.laptopshop.security.user.DatabaseLoginSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -76,6 +76,8 @@ public class SecurityConfig{
 		                .logoutSuccessUrl("/auth/sign-in?logout")
 		                .invalidateHttpSession(true)
 		                .deleteCookies("JSESSIONID")
+		            .and()
+		            .rememberMe()
 		            .and()
 		            	.exceptionHandling().accessDeniedPage("/auth/sign-in?accessDenied")
 	                .and().build();

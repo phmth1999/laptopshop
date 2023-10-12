@@ -6,19 +6,19 @@
 		<div class="modal-content">
 			<form th:action="@{/admin/product/add}" method="post" th:object="${productDto}" enctype="multipart/form-data">
 				<div class="modal-header">
-					<h4 class="modal-title">Add new product</h4>
+					<h4 class="modal-title">[[#{add_new_product}]]</h4>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body">
 					<div id="logins-part" class="content" role="tabpanel"
 						aria-labelledby="logins-part-trigger">
 						<div class="form-group">
-							<label for="">Name</label> 
+							<label for="">[[#{name}]]</label> 
 							<input type="text" th:field="*{name}" class="form-control" required="required" />
 							<div class="text-danger"></div>
 						</div>
 						<div class="form-group">
-							<label for="">Category</label> 
+							<label for="">[[#{category}]]</label> 
 							<select th:field="*{categoryName}" class="form-control form-select" required="required">
 								<th:block th:each="item : ${category}">
 									<option th:value="${item.name}">[[${item.name}]]</option>
@@ -27,7 +27,7 @@
 							<div class="text-danger"></div>
 						</div>
 						<div class="form-group">
-							<label for="">Brand</label> 
+							<label for="">[[#{brand}]]</label> 
 							<select th:field="*{brandName}" class="form-control form-select" required="required">
 								<th:block th:each="item : ${brand}">
 									<option th:value="${item.name}">[[${item.name}]]</option>
@@ -36,27 +36,27 @@
 							<div class="text-danger"></div>
 						</div>
 						<div class="form-group">
-							<label for="">Price</label> 
+							<label for="">[[#{price}]]</label> 
 							<input type="text" th:field="*{price}" class="form-control" required="required" />
 							<div class="text-danger"></div>
 						</div>
 						<div class="form-group">
-							<label for="">Discount</label> 
+							<label for="">[[#{discount}]]</label> 
 							<input type="text" th:field="*{discount}" class="form-control" required="required" />
 							<div class="text-danger"></div>
 						</div>
 						<div class="form-group">
-							<label for="">Quantity</label> 
+							<label for="">[[#{quantity}]]</label> 
 							<input type="text" th:field="*{quantity_in_stock}" class="form-control" required="required" />
 							<div class="text-danger"></div>
 						</div>
 						<div class="form-group">
-							<label for="">Description</label>
+							<label for="">[[#{description}]]</label>
 							<textarea th:field="*{description}" class="form-control" required="required" rows="4"></textarea>
 							<div class="text-danger"></div>
 						</div>
 						<div class="form-group">
-							<label for="">Img</label> 
+							<label for="">[[#{image}]]</label> 
 							<input class="form-control" onchange="chooseFile(this, 'add')" type="file" name="fileImage" required="required" />
 						</div>
 						<div class="form-group d-flex justify-content-center">
@@ -65,8 +65,8 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-					<button type="submit" class="btn btn-primary">Add</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">[[#{close}]]</button>
+					<button type="submit" class="btn btn-primary">[[#{add}]]</button>
 				</div>
 			</form>
 		</div>

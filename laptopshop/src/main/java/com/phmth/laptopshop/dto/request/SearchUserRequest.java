@@ -23,7 +23,7 @@ public class SearchUserRequest {
 	private String email;
 	private StateUser stateUser;
 	private AuthenticationType authType;
-	private Long role;
+	private String role;
 	
 	public boolean isEmpty()  {
 	    for (Field field : this.getClass().getDeclaredFields()) {

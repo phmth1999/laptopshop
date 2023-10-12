@@ -41,7 +41,7 @@ public class StoreController {
 				@ModelAttribute("formFilterProduct") FilterProductRequest formFilterProduct, 
 				@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		int limit = 4;
+		int limit = 12;
 		
 		ModelAndView mav = new ModelAndView("/web/store/index");
 		
@@ -77,7 +77,7 @@ public class StoreController {
 			@ModelAttribute("formFilterProduct") FilterProductRequest formFilterProduct, 
 			@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		int limit = 4;
+		int limit = 12;
 		
 		ModelAndView mav = new ModelAndView("/web/store/index");
 		

@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/web/layout">
 <head>
-	<title>About Page</title>
+	<title>[[#{about_page}]]</title>
 </head>
 <body>
 
@@ -12,11 +12,11 @@
        <section class="container p-0" id="about">
 			<div class="breadcrumbs d-flex flex-row align-items-center col-12 mb-3">
 				<ul>
-					<li><a th:href="@{/home}">Home</a></li>
-					<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>About</a></li>
+					<li><a th:href="@{/home}">[[#{home}]]</a></li>
+					<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{about}]]</a></li>
 				</ul>
 			</div>
-			<h1>ABOUT US</h1>
+			<h1>[[#{about_us}]]</h1>
 			<div class="row" style="margin-top: 50px;">
 				<div class="col-md-6 py-3 py-md-0">
 					<div class="card">

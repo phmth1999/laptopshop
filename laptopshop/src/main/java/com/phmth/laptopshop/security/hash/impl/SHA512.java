@@ -1,4 +1,4 @@
-package com.phmth.laptopshop.utils.hash.impl;
+package com.phmth.laptopshop.security.hash.impl;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,15 +7,15 @@ import java.security.SecureRandom;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.phmth.laptopshop.utils.hash.IHashing;
+import com.phmth.laptopshop.security.hash.IHashing;
 
 @Component
-@Qualifier("md5")
+@Qualifier("sha512")
 /*
- * Simplest one – 128-bit hash
+ * Stronger than SHA-384 – 512 bits Hash
  **/
-public class MD5 implements IHashing {
-
+public class SHA512 implements IHashing {
+	
 	@Override
 	public byte[] generatedSalt() throws NoSuchAlgorithmException {
 		SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
@@ -24,11 +24,12 @@ public class MD5 implements IHashing {
 		return salt;
 	}
 
+
 	@Override
 	public String hashText(String text, byte[] salt) {
 		String generatedtext = null;
 		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
+			MessageDigest md = MessageDigest.getInstance("SHA-512");
 			md.update(text.getBytes());
 			md.update(salt);
 

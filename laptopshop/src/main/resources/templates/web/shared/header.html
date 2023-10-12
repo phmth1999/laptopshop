@@ -2,32 +2,37 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 	<header class="top-navbar">
+		<!--  -->
 		<div class="top-icons">
 			<i class="fa-brands fa-twitter"></i> 
 			<i class="fa-brands fa-facebook-f"></i> 
 			<i class="fa-brands fa-instagram"></i>
-			<!-- <div th:text="${#authentication.principal.id}"></div> -->
 		</div>
+		<!--  -->
+		
 		<div class="other-links">
+			<!--  -->
 			<th:block sec:authorize="isAuthenticated()">
-				<!-- <span sec:authentication="name">Bob</span>
-				<span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
-				<span sec:authentication="principal.id"></span> -->
 				<th:block sec:authorize ="hasRole('ROLE_ADMIN')">
-				  	<a th:href="@{/admin/home}"><button id="btn-login">Admin</button></a> 
+				  	<a th:href="@{/admin/home}"><button id="btn-login">[[#{admin}]]</button></a> 
 				</th:block>
-				<a th:href="@{/logout}"><button id="btn-login">Logout</button></a> 
+				<a th:href="@{/logout}"><button id="btn-login">[[#{logout}]]</button></a> 
 			</th:block>
+			<!--  -->
+			<!--  -->
 			<th:block sec:authorize="!isAuthenticated()">
-				<a th:href="@{/auth/sign-in}"><button id="btn-login">Login</button></a> 
+				<a th:href="@{/auth/sign-in}"><button id="btn-login">[[#{login}]]</button></a> 
 			</th:block>
-			<a th:href="@{/auth/sign-up}"><button id="btn-signup">Sign up</button></a> 
+			<!--  -->
+			<!--  -->
 			<th:block sec:authorize="isAuthenticated()">
 				<a th:href="@{/user/purchase-history}"><i class="fa-solid fa-money-check-dollar"></i></a>
 				<a th:href="@{/user/profile}"><i class="fa-solid fa-address-card"></i></a>
 			</th:block>
+			<!--  -->
+			<!--  -->
 			<a th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a>
+			<!--  -->
 		</div>
 	</header>
-	
 </html>

@@ -11,6 +11,7 @@ import com.phmth.laptopshop.dto.request.SearchProductRequest;
 
 public interface IProductService{
 
+	List<ProductDto> findAll();
 	Page<ProductDto> findAll(int page, int limit);
 	Page<ProductDto> findAll(FilterProductRequest formFilterProduct, int page, int limit);
 	Page<ProductDto> findAll(int page, int limit, SearchProductRequest formSearchProduct);

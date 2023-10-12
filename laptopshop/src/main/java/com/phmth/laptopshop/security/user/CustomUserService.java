@@ -1,4 +1,4 @@
-package com.phmth.laptopshop.security;
+package com.phmth.laptopshop.security.user;
 
 import java.util.HashSet;
 import java.util.Optional;

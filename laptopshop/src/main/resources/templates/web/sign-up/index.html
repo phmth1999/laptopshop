@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/web/layout">
 <head>
-	<title>Register Page</title>
+	<title>[[#{register_page}]]</title>
 </head>
 <body>
 
@@ -13,20 +13,20 @@
 			<div class="row">
 				<div class="breadcrumbs d-flex flex-row align-items-center col-12">
 					<ul>
-						<li><a th:href="@{/home}">Home</a></li>
-						<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Sign up</a></li>
+						<li><a th:href="@{/home}">[[#{home}]]</a></li>
+						<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{signup}]]</a></li>
 					</ul>
 				</div>
 				<div class="col-md-4 col-12 p-0" id="side1">
 					<div>
-						<h3>Welcome Back!!</h3>
-	                	<p>Login Account</p>
-						<a th:href="@{/auth/sign-in}"><button id="btn">Sign in</button></a>
+						<h3>[[#{welcome_back}]]</h3>
+	                	<p>[[#{login_account}]]</p>
+						<a th:href="@{/auth/sign-in}"><button id="btn">[[#{signin}]]</button></a>
 					</div>
 				</div>
 				<div class="col-md-8 col-12 p-0" id="side2">
 					<div class="form-login">
-						<h3>Create Account</h3>
+						<h3>[[#{create_new_account}]]</h3>
 						<div th:if="${error}">
 			                <div class="alert alert-danger">[[${error}]]</div>
 			            </div>
@@ -39,13 +39,13 @@
 									th:field="*{fullname}" 
 									type="text" 
 									required 
-									placeholder="Name" 
+									th:placeholder="#{enter_your_full_name_please}" 
 									title="VD: Phạm Minh Thiện"
 									>
 			                    <input 
 			                    	th:field="*{email}" 
 			                    	type="email" 
-			                    	placeholder="Email"  
+			                    	th:placeholder="#{enter_your_email_please}"  
 			                    	required 
 			                    	pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
 			                    	title="VD: admin@gmail.com"
@@ -53,7 +53,7 @@
 			                    <input 
 			                    	autocomplete=""
 			                    	type="password" 
-			                    	placeholder="Password" 
+			                    	th:placeholder="#{enter_your_password_please}" 
 			                    	th:field="*{password}" 
 			                    	required
 			                    	pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])([0-9a-zA-Z]{8,})$"
@@ -61,7 +61,7 @@
 			                    	>
 							</div>
 							<div id="login">
-								<button type="submit">Sign up</button>
+								<button type="submit">[[#{signup}]]</button>
 							</div>
 						</form>
 					</div>

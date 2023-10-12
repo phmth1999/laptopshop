@@ -2,8 +2,8 @@ package com.phmth.laptopshop.utils;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.phmth.laptopshop.security.CustomUser;
 import com.phmth.laptopshop.security.oauth2.CustomOAuth2User;
+import com.phmth.laptopshop.security.user.CustomUser;
 
 public class IdLogged {
 	

@@ -1,4 +1,4 @@
-package com.phmth.laptopshop.security;
+package com.phmth.laptopshop.security.user;
 
 import java.io.IOException;
 import java.util.Collection;

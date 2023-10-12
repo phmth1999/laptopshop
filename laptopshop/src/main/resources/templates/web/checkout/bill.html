@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="/web/layout">
 <head>
-	<title>Hóa đơn</title>
+	<title>[[#{bill}]]</title>
 </head>
 <body>
 	<div layout:fragment="content">
@@ -17,68 +17,68 @@
 			            </div>
 			            <div class="table-responsive col-12">
 			                <div class="form-group">
-			                    <label >Mã giao dịch người bán:</label>
+			                    <label >[[#{seller_transaction_code}]]:</label>
 			                    <label>[[${vnp_TxnRef}]]</label>
 			                </div>    
 			                <div class="form-group">
-			                    <label >Số tiền:</label>
+			                    <label >[[#{amount_of_money}]]:</label>
 			                    <label>[[${#numbers.formatInteger(vnp_Amount,3,'POINT')}]]đ</label>
 			                </div>  
 			                <div class="form-group">
-			                    <label >Nội dung:</label>
+			                    <label >[[#{content}]]:</label>
 			                    <label>[[${vnp_OrderInfo}]]</label>
 			                </div> 
 			                <div class="form-group">
-			                    <label >VNPAY Response Code:</label>
+			                    <label >[[#{vnpay_response_code}]]:</label>
 			                    <label>[[${vnp_ResponseCode}]]</label>
 			                </div> 
 			                <div class="form-group">
-			                    <label >VNPAY Transaction Code:</label>
+			                    <label >[[#{vnpay_transaction_code}]]:</label>
 			                    <label>[[${vnp_TransactionNo}]]</label>
 			                </div> 
 			                <div class="form-group">
-			                    <label >Tên ngân hàng:</label>
+			                    <label >[[#{bank_name}]]:</label>
 			                    <label>[[${vnp_BankCode}]]</label>
 			                </div> 
 			                <div class="form-group">
-			                    <label >Ngày thanh toán:</label>
+			                    <label >[[#{date_of_payment}]]:</label>
 			                    <label>[[${vnp_PayDate}]]</label>
 			                </div> 
 			            </div>
 			        </div>
 					<div class="row">
 						<div class="col-12 pt-4">
-			                <h3 class="text-center">Đặt hàng thành công</h3>
+			                <h3 class="text-center">[[#{order_success}]]</h3>
 			            </div>
 						<div class="col-lg-6">
 							<div class="information-detail py-4">
 								<div class="col-12 mb-2 border info-user p-3">
 									<div class="col-lg-12 d-flex align-items-center">
-										<label>Mã hóa đơn :</label>  <label>#[[${order.codeOrder}]]</label>
+										<label>[[#{code_bill}]] :</label>  <label>#[[${order.codeOrder}]]</label>
 									</div>
 									<div class="col-lg-12 d-flex align-items-center">
-										<label>Họ và tên :</label>  <label>[[${order.name}]]</label>
+										<label>[[#{full_name}]] :</label>  <label>[[${order.name}]]</label>
 									</div>
 									<div class="col-lg-12 d-flex align-items-center">
 										<label>Email :</label> <label>[[${order.email}]]</label>
 									</div>
 									<div class="col-lg-12 d-flex align-items-center">
-										<label>SĐT :</label> <label>[[${order.phone}]]</label>
+										<label>[[#{phone}]] :</label> <label>[[${order.phone}]]</label>
 									</div>
 									<div class="col-lg-12 d-flex align-items-center">
-										<label>Địa chỉ nhận hàng :</label> <label>[[${order.address_delivery}]]</label>
+										<label>[[#{delivery_address}]] :</label> <label>[[${order.address_delivery}]]</label>
 									</div>
 									<div class="col-lg-12 d-flex align-items-center">
-										<label>Ngày đặt hàng :</label>  <label>[[${#dates.format(order.created_at,'dd-MM-yyyy')}]]</label>
+										<label>[[#{date}]] :</label>  <label>[[${#dates.format(order.created_at,'dd-MM-yyyy')}]]</label>
 									</div>
 									<div class="col-lg-12 d-flex align-items-center">
-										<label>Số lượng :</label><label>[[${order.num}]]</label>
+										<label>[[#{quantity}]] :</label><label>[[${order.num}]]</label>
 									</div>
 									<div class="col-lg-12 d-flex align-items-center">
-										<label>Tổng tiền :</label> <label>[[${#numbers.formatInteger(order.total_money,3,'POINT')}]]đ</label>
+										<label>[[#{total_money}]] :</label> <label>[[${#numbers.formatInteger(order.total_money,3,'POINT')}]]đ</label>
 									</div>
 									<div class="col-lg-12 d-flex align-items-center">
-										<label>Hình thức thanh toán :</label> <label>[[${order.payment}]]</label>
+										<label>[[#{payments}]] :</label> <label>[[${order.payment}]]</label>
 									</div>
 								</div>
 							</div>
@@ -87,12 +87,12 @@
 							<div class="place-order py-4">
 								<div class="order-total">
 									<ul class="order-table p-0">
-										<li><span>Sản phẩm</span><span>Số lượng</span><span>Giá</span></li>
+										<li><span>[[#{product}]]</span><span>[[#{quantity}]]</span><span>[[#{price}]]</span></li>
 										<th:block th:each="item : ${orderdetail}">
 											<li class="fw-normal"><span><img th:src="@{/images/product/{img}(img=${item.product.thumbnail})}" width="50px" height="50px"/></span> <span>[[${item.num}]]</span><span>[[${#numbers.formatInteger(item.totalPrice,3,'POINT')}]]đ</span></li>
 										</th:block>
-										<li class="total-price">Tổng số lượng <p>[[${order.num}]]</p></li>
-										<li class="total-price">Tổng giá <p>[[${#numbers.formatInteger(order.total_money,3,'POINT')}]]đ</p></li>
+										<li class="total-price">[[#{total_quantity}]] <p>[[${order.num}]]</p></li>
+										<li class="total-price">[[#{total_price}]] <p>[[${#numbers.formatInteger(order.total_money,3,'POINT')}]]đ</p></li>
 									</ul>
 								</div>
 							</div>

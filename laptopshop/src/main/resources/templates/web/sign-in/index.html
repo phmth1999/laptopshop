@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/web/layout">
 <head>
-	<title>Login Page</title>
+	<title>[[#{login_page}]]</title>
 </head>
 <body>
 
@@ -13,40 +13,43 @@
 			<div class="row">
 				<div class="breadcrumbs d-flex flex-row align-items-center col-12">
 					<ul>
-						<li><a th:href="@{/home}">Home</a></li>
-						<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Sign in</a></li>
+						<li><a th:href="@{/home}">[[#{home}]]</a></li>
+						<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{login}]]</a></li>
 					</ul>
 				</div>
 				<div class="col-md-4 col-12 p-0" id="side1">
 					<div>
-						<h3>Hello Friend!</h3>
-						<p>Create New Account</p>
-						<a th:href="@{/auth/sign-up}"><button id="btn">Sign up</button></a>
+						<h3>[[#{hello_friend}]]!</h3>
+						<p>[[#{create_new_account}]]</p>
+						<a th:href="@{/auth/sign-up}"><button id="btn">[[#{signup}]]</button></a>
 					</div>
 				</div>
 				<div class="col-md-8 col-12 p-0" id="side2">
 					<form class="form-login" th:method="post" th:action="@{/j_spring_security_check}">
 						<div th:if="${param.error}">
-			                <div class="alert alert-danger">Invalid Email or Password</div>
+			                <div class="alert alert-danger">[[#{email_or_password_is_incorrect}]]</div>
 			            </div>
 			            <div th:if="${param.logout}">
-			                <div class="alert alert-success"> You have been logged out.</div>
+			                <div class="alert alert-success"> [[#{you_have_been_logged_out}]]</div>
 			            </div>
 			            <div th:if="${param.accessDenied}">
-			                <div class="alert alert-danger"> You not authorize</div>
+			                <div class="alert alert-danger"> [[#{you_do_not_have_enough_authorized}]]</div>
 			            </div>
-						<h3>Login Account</h3>
+						<h3>[[#{login_account}]]</h3>
 						<div class="inp">
-							<input type="text" name="username" id="username" placeholder="User Name" required> 
-							<input autocomplete="" type="password" name="password" id="password" placeholder="Password" required>
+							<input type="text" name="username" id="username" th:placeholder="#{enter_your_username_please}" required> 
+							<input autocomplete="" type="password" name="password" id="password" th:placeholder="#{enter_your_password_please}" required>
 						</div>
-						<div class="m-0 p-2 mt-2"><input type="checkbox" /> Remember me</div>
-						<p class="m-0"><a th:href="@{/auth/forgot-password}">Forgot Your Password</a></p>
+						<div class="m-0 p-2 mt-2 d-flex">
+							<input type="checkbox" checked="checked" name="remember-me" id="remember-me" /> 
+							<label class="mx-2" for="remember-me">[[#{remember_me}]]</label>
+						</div>
+						<p class="m-0"><a th:href="@{/auth/forgot-password}">[[#{forgot_your_password}]]!</a></p>
 						<div id="login">
-							<a th:href="@{/oauth2/authorization/google}"><button  type="button"><i class="fa-brands fa-google"></i> &ensp; Sign in by Gmail</button></a>
+							<a th:href="@{/oauth2/authorization/google}"><button  type="button"><i class="fa-brands fa-google"></i> &ensp; [[#{signin_by_gmail}]]</button></a>
 						</div>
 						<div id="login">
-							<button type="submit">Sign in</button>
+							<button type="submit">[[#{signin}]]</button>
 						</div>
 					</form>
 				</div>

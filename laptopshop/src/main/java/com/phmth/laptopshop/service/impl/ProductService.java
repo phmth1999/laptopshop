@@ -29,14 +29,12 @@ import com.phmth.laptopshop.repository.ICategoryRepository;
 import com.phmth.laptopshop.repository.IProductRepository;
 import com.phmth.laptopshop.service.IProductService;
 
-import groovy.util.logging.Slf4j;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 @Service
-@Slf4j
 @Transactional
 public class ProductService implements IProductService {
 
@@ -53,6 +51,15 @@ public class ProductService implements IProductService {
 	
 	private ProductMapper productMapper = new ProductMapper();
 
+	@Override
+	public List<ProductDto> findAll() {
+		List<ProductDto> listProductDto = new ArrayList<>();
+		List<ProductEntity> listProductEntity = productRepository.findAll();
+		for (ProductEntity productEntity : listProductEntity) {
+			listProductDto.add(productMapper.entityToDto(productEntity));
+		}
+		return listProductDto;
+	}
 	@Override
 	public Page<ProductDto> findAll(int page, int limit) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "id");
@@ -351,7 +358,7 @@ public class ProductService implements IProductService {
 			return null;
 		}
 		
-		Set<ProductEntity> listProductEntity = categoryEntity.get().getProducts();
+		Set<ProductEntity> listProductEntity = productRepository.findTop10ByCategoryOrderByIdDesc(categoryEntity.get());
 		List<ProductDto> listProductDto = new ArrayList<>();
 		
 		for (ProductEntity productEntity : listProductEntity) {

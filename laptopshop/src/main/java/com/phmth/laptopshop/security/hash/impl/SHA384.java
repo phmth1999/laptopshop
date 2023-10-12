@@ -1,4 +1,4 @@
-package com.phmth.laptopshop.utils.hash.impl;
+package com.phmth.laptopshop.security.hash.impl;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,14 +7,14 @@ import java.security.SecureRandom;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.phmth.laptopshop.utils.hash.IHashing;
+import com.phmth.laptopshop.security.hash.IHashing;
 
 @Component
-@Qualifier("sha256")
+@Qualifier("sha384")
 /*
- * Stronger than SHA-1 – 256 bits Hash
+ * Stronger than SHA-256 – 384 bits Hash
  **/
-public class SHA256 implements IHashing {
+public class SHA384 implements IHashing {
 
 	@Override
 	public byte[] generatedSalt() throws NoSuchAlgorithmException {
@@ -29,7 +29,7 @@ public class SHA256 implements IHashing {
 	public String hashText(String text, byte[] salt) {
 		String generatedtext = null;
 		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			MessageDigest md = MessageDigest.getInstance("SHA-384");
 			md.update(text.getBytes());
 			md.update(salt);
 

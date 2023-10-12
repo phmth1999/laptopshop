@@ -8,7 +8,7 @@
             <div class="row align-items-center">
               <div class="col-lg-4 my-3">
                 <div class="footer-top-data d-flex gap-30 align-items-center">
-                  <h2 class='mb-0 text-white'>Sign Up for Newsletter</h2>
+                  <h2 class='mb-0 text-white'>[[#{signupfornewsletter}]]</h2>
                 </div>
               </div>
               <div class="col-lg-8 my-3">
@@ -16,12 +16,12 @@
                   <input 
                   type="text"
                   class="form-control py-1"
-                  placeholder="Your Email Address"
+                  th:placeholder="#{enter_your_email_address_please}"
                   aria-label="Your Email Address"
                   aria-describedby="basic-addon2"
                   />
                   <span class="input-group-text py-2" id="basic-addon2">
-                    Subscribe
+                    [[#{subscribe}]]
                   </span>
                 </div>
               </div>
@@ -32,7 +32,7 @@
 	<hr>
 	<div class="container py-4 ">
 		<div class="copyright">
-			&copy; Copyright <strong th:text="${#dates.year(#dates.createNow())}"></strong> <strong>PMT</strong>.All Rights Reserved
+			&copy; [[#{copyright}]] <strong th:text="${#dates.year(#dates.createNow())}"></strong> <strong>PMT</strong>.[[#{all_rights_reserved}]].
 		</div>
 	</div>
 </footer>

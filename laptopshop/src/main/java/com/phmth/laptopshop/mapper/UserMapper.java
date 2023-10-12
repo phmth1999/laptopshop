@@ -23,6 +23,7 @@ public class UserMapper {
 		userDto.setAddress(userEntity.getAddress());
 		userDto.setImg(userEntity.getImg());
 		userDto.setStateUser(userEntity.getStateUser());
+		userDto.setAuthType(userEntity.getAuthType());
 		userDto.setRole(userEntity.getRole().getName());
 		
 		return userDto;
@@ -38,6 +39,7 @@ public class UserMapper {
 		userEntity.setBirthday(userDto.getBirthday());
 		userEntity.setImg(userDto.getImg());
 		userEntity.setStateUser(userDto.getStateUser());
+		userEntity.setAuthType(userDto.getAuthType());
 		RoleEntity roleEntity = roleRepository.findByName(userDto.getRole());
 		userEntity.setRole(roleEntity);
 		

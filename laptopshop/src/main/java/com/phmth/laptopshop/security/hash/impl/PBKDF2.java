@@ -1,21 +1,21 @@
-package com.phmth.laptopshop.utils.hash.impl;
+package com.phmth.laptopshop.security.hash.impl;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.phmth.laptopshop.utils.hash.IHashing;
+import com.phmth.laptopshop.security.hash.IHashing;
 
 @Component
-@Qualifier("sha512")
-/*
- * Stronger than SHA-384 – 512 bits Hash
- **/
-public class SHA512 implements IHashing {
-	
+@Qualifier("pbkdf2")
+public class PBKDF2 implements IHashing {
+
 	@Override
 	public byte[] generatedSalt() throws NoSuchAlgorithmException {
 		SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
@@ -24,16 +24,14 @@ public class SHA512 implements IHashing {
 		return salt;
 	}
 
-
 	@Override
 	public String hashText(String text, byte[] salt) {
 		String generatedtext = null;
 		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-512");
-			md.update(text.getBytes());
-			md.update(salt);
+			KeySpec spec = new PBEKeySpec(text.toCharArray(), salt, 65536, 128);
+			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
-			byte[] byteData = md.digest();
+			byte[] byteData = factory.generateSecret(spec).getEncoded();
 
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < byteData.length; i++) {

@@ -30,7 +30,7 @@ public class EditUserRequest {
 	
 	private AuthenticationType authType;
 	
-	private Long role;
+	private String role;
 	
 	private String img;
 	

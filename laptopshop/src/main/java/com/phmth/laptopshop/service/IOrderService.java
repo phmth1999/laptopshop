@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
-import com.phmth.laptopshop.dto.CartItem;
+import com.phmth.laptopshop.dto.CartItemDto;
 import com.phmth.laptopshop.dto.OrderDto;
 import com.phmth.laptopshop.dto.request.OrderInfoRequest;
 import com.phmth.laptopshop.dto.request.SearchOrderRequest;
@@ -22,7 +22,7 @@ public interface IOrderService{
 	
 	Optional<OrderDto> findById(long id);
 	
-	OrderDto Order(Collection<CartItem> carts, OrderInfoRequest formOrderInfo);
+	OrderDto Order(Collection<CartItemDto> carts, OrderInfoRequest formOrderInfo);
 	
 	Optional<OrderDto> findByCodeOrder(String codeOrder);
 	

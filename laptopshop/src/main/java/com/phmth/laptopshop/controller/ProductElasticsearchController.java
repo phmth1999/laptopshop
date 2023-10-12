@@ -14,8 +14,10 @@
 //import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.web.bind.annotation.RestController;
 //
+//import com.phmth.laptopshop.dto.ProductDto;
 //import com.phmth.laptopshop.entity.ProductElasticsearch;
 //import com.phmth.laptopshop.service.impl.ProductElasticsearchService;
+//import com.phmth.laptopshop.service.impl.ProductService;
 //
 //@RestController
 //@RequestMapping("/elasticsearch")
@@ -24,9 +26,19 @@
 //	@Autowired
 //	private ProductElasticsearchService productElasticsearchService;
 //	
+//	@Autowired
+//	private ProductService p;
+//	
 //	@PostMapping("/saveProduct")
 //	public List<ProductElasticsearch> createProductByList(@RequestBody List<ProductElasticsearch> listProduct){
 //		return productElasticsearchService.createProductByList(listProduct);
+//	}
+//	
+//	@GetMapping("/a")
+//	public String get() {
+//		List<ProductDto> l = p.findAll();
+//		productElasticsearchService.dataSynchronization(l);
+//		return "ok";
 //	}
 //	
 //	@GetMapping("/getProduct/{id}")
@@ -45,8 +57,12 @@
 //	}
 //	
 //	@GetMapping("/search")
-//	public List<ProductElasticsearch> search(@RequestParam("term") String term){
-//		return productElasticsearchService.search(term);
+//	public List<ProductDto> search(@RequestParam("term") String term){
+//		List<ProductDto> productElasticsearch = productElasticsearchService.search(term);
+//		if(productElasticsearch==null) {
+//			productElasticsearch = p.findByNameSearch(term);
+//		}
+//		return productElasticsearch;
 //	}
 //	@GetMapping("/searchAll")
 //	public Iterable<ProductElasticsearch> searchAll(){

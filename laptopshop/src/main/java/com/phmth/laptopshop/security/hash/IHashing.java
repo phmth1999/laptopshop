@@ -1,4 +1,4 @@
-package com.phmth.laptopshop.utils.hash;
+package com.phmth.laptopshop.security.hash;
 
 import java.security.NoSuchAlgorithmException;
 

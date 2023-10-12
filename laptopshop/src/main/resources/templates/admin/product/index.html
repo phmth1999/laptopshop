@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="/admin/layout">
 <head>
-<title>Admin Product Page</title>
+<title>[[#{product_admin_page}]]</title>
 </head>
 <body>
 
@@ -13,10 +13,10 @@
 				<a class="nav-link" data-widget="pushmenu" href="#" role="button"> <i class="fas fa-bars"></i></a>
 			</li>
 			<li class="nav-item d-none d-sm-inline-block">
-				<a th:href='@{/admin/home}' class="nav-link">Home</a>
+				<a th:href='@{/admin/home}' class="nav-link">[[#{home}]]</a>
 			</li>
 			<li class="nav-item d-none d-sm-inline-block">
-				<a th:href='@{/admin/product}' class="nav-link">Product</a>
+				<a th:href='@{/admin/product}' class="nav-link">[[#{product}]]</a>
 			</li>
 		</ul>
 	</div>
@@ -27,12 +27,12 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1>Manage product</h1>
+						<h1>[[#{product_management}]]</h1>
 					</div>
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a th:href='@{/admin/home}'>Home</a></li>
-							<li class="breadcrumb-item active">Product</li>
+							<li class="breadcrumb-item"><a th:href='@{/admin/home}'>[[@{home}]]</a></li>
+							<li class="breadcrumb-item active">[[#{product}]]</li>
 						</ol>
 					</div>
 				</div>
@@ -46,25 +46,25 @@
 			<!-- Default box -->
 			<div class="card">
 				<div class="card-header ">
-					<h3 class="card-title mt-1">List of product</h3>
+					<h3 class="card-title mt-1">[[#{list_of_product}]]</h3>
 					<div class="card-tools mr-1">
-						<a data-bs-toggle="modal" data-bs-target="#add" class="btn btn-primary">Add new</a>
+						<a data-bs-toggle="modal" data-bs-target="#add" class="btn btn-primary">[[#{add_new}]]</a>
 					</div>
 				</div>
 				<div class="card-body">
 					<table class="text-center product-table">
 						<thead>
 							<tr>
-								<th>STT</th>
-								<th>Img</th>
-								<th>Name</th>
-								<th>Category</th>
-								<th>Brand</th>
-								<th>Price</th>
-								<th>Quantity</th>
-								<th>Discount</th>
-								<th>Description</th>
-								<th>Action</th>
+								<th>No.</th>
+								<th>[[#{image}]]</th>
+								<th>[[#{name}]]</th>
+								<th>[[#{category}]]</th>
+								<th>[[#{brand}]]</th>
+								<th>[[#{price}]]</th>
+								<th>[[#{quantity}]]</th>
+								<th>[[#{discount}]]</th>
+								<th>[[#{description}]]</th>
+								<th>[[#{actions}]]</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -81,15 +81,15 @@
 										<td class="td8"><h6>[[${item.discount}]]%</h6></td>
 										<td class="td9"><h6>[[${item.description}]]%</h6></td>
 										<td class="td10">
-											<a th:onclick="'editProduct('+${item.id}+')'" data-bs-toggle="modal" data-bs-target="#edit"  class="btn btn-sm btn-primary">Edit</a> 
-											<a th:onclick="'clickDeleteProduct('+${item.id}+')'" class="btn btn-sm btn-danger">Delete</a>
+											<a th:onclick="'editProduct('+${item.id}+')'" data-bs-toggle="modal" data-bs-target="#edit"  class="btn btn-sm btn-primary">[[#{update}]]</a> 
+											<a th:onclick="'clickDeleteProduct('+${item.id}+')'" class="btn btn-sm btn-danger">[[#{delete}]]</a>
 										</td>
 									</tr>
 								</th:block>
 							</th:block>
 							<th:block th:unless="${product}">
 								<tr>
-									<td colspan="4">Không có bản ghi nào!!!</td>
+									<td colspan="4">[[#{there_are_no_records}]]!</td>
 								</tr>
 							</th:block>
 						</tbody>

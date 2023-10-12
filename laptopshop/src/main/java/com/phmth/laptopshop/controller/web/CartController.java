@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.CartItem;
+import com.phmth.laptopshop.dto.CartItemDto;
 import com.phmth.laptopshop.dto.ProductDto;
+import com.phmth.laptopshop.service.ICookieService;
 import com.phmth.laptopshop.service.IProductService;
 import com.phmth.laptopshop.service.IShoppingCartService;
+import com.phmth.laptopshop.utils.IdLogged;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -34,33 +35,8 @@ public class CartController {
 	@Autowired
 	private IShoppingCartService shoppingCartService;
 	
-	private void addCookieCart(HttpServletResponse response, String txt) {
-		try {
-			
-			Cookie cookie = new Cookie("cart", txt); 
-			cookie.setHttpOnly(true);
-			cookie.setMaxAge(1*24*60*60); 
-			cookie.setPath("/");
-			response.addCookie(cookie);
-			
-		} catch (Exception e) {
-			logger.error("Message erro --> {}: ", e);
-		}
-	}
-	
-	private void deleteCookieCart(HttpServletResponse response) {
-		try {
-			
-			Cookie cookie = new Cookie("cart", ""); 
-			cookie.setHttpOnly(true);
-			cookie.setMaxAge(0); 
-			cookie.setPath("/");
-			response.addCookie(cookie);
-			
-		} catch (Exception e) {
-			logger.error("Message erro --> {}: ", e);
-		}
-	}
+	@Autowired
+	private ICookieService cookieService;
 	
 	@GetMapping
 	public ModelAndView carts(
@@ -70,8 +46,14 @@ public class CartController {
 		ModelAndView mav = new ModelAndView("/web/cart/index");
 		
 		try {
-			/* use cookies to create shopping cart list */
-			shoppingCartService.readCookieCart(cookieCart);
+			logger.error("start read cookie");
+			shoppingCartService.readCookieCart(cookieCart, IdLogged.getId());
+			logger.error("end read cookie");
+			
+			if(IdLogged.getId() > 0) {
+				shoppingCartService.readDatabaseCart(IdLogged.getId());
+				cookieService.remove("cart");
+			}
 			
 			/* Set the value to display on the interface */
 			mav.addObject("listCart", shoppingCartService.getAllItems());
@@ -100,40 +82,34 @@ public class CartController {
 			/* add cartItem on shopping cart list */
 			ProductDto productEntity = productService.findById(productId).get();
 			if(productEntity != null) {
-				CartItem cartItem = new CartItem(
-						productId, 
-						productEntity.getName(), 
-						productEntity.getPrice(), 
-						productEntity.getDiscount(), 
-						productEntity.getQuantity_in_stock(),
-						productEntity.getThumbnail(), 
-						numProduct, 
-						numProduct*(productEntity.getPrice()-(productEntity.getPrice()*productEntity.getDiscount()/100)));
-				CartItem cartItems = shoppingCartService.findCartItem(productId);
+				CartItemDto cartItems = shoppingCartService.findCartItem(productId);
 				if(cartItems != null) {
 					if(productEntity.getQuantity_in_stock()-cartItems.getNumProduct()-numProduct >= 0) {
-						shoppingCartService.add(cartItem);
+						shoppingCartService.add(IdLogged.getId(), productId, numProduct);
 					}else {
 						mav = new ModelAndView("redirect:/store/"+productId+"?cart="+cartItems.getNumProduct()+"&&err="+productEntity.getQuantity_in_stock()+"&&num="+numProduct);
 					}
 				}else {
 					if(productEntity.getQuantity_in_stock()-numProduct >= 0) {
-						shoppingCartService.add(cartItem);
+						shoppingCartService.add(IdLogged.getId(), productId, numProduct);
 					}else {
 						mav = new ModelAndView("redirect:/store/"+productId+"?err="+productEntity.getQuantity_in_stock()+"&&num="+numProduct);
 					}
 				}
 			}
 			
-			/* set the cookie value  from shopping cart list */
-			Collection<CartItem> carts = shoppingCartService.getAllItems();
-			if(carts != null && !carts.isEmpty()) {
-				for (CartItem item : carts) {
-					txt += "_"+item.getProductId()+":"+item.getNumProduct();
+			if(IdLogged.getId() == 0) {
+				/* set the cookie value  from shopping cart list */
+				Collection<CartItemDto> carts = shoppingCartService.getAllItems();
+				if(carts != null && !carts.isEmpty()) {
+					for (CartItemDto item : carts) {
+						txt += "_"+item.getProductId()+":"+item.getNumProduct();
+					}
+					txt = txt.substring(1);
 				}
-				txt = txt.substring(1);
+				cookieService.add("cart", txt, 1);
 			}
-			addCookieCart(response, txt);
+			
 			
 		} catch (Exception e) {
 			logger.error("Message erro --> {}: ", e);
@@ -157,39 +133,34 @@ public class CartController {
 			ProductDto productEntity = productService.findById(productId).get();
 			
 			if(productEntity != null) {
-				CartItem cartItem = new CartItem(
-						productId, 
-						productEntity.getName(), 
-						productEntity.getPrice(), 
-						productEntity.getDiscount(), 
-						productEntity.getQuantity_in_stock(),
-						productEntity.getThumbnail(), 1, 
-						1*(productEntity.getPrice()-(productEntity.getPrice()*productEntity.getDiscount()/100)));
-				CartItem cartItems = shoppingCartService.findCartItem(productId);
+				CartItemDto cartItems = shoppingCartService.findCartItem(productId);
 				if(cartItems != null) {
 					if(productEntity.getQuantity_in_stock()-cartItems.getNumProduct()-1 >= 0) {
-						shoppingCartService.add(cartItem);
+						shoppingCartService.add(IdLogged.getId(), productId, 1);
 					}else {
 						mav = new ModelAndView("redirect:/store"+"?cart="+cartItems.getNumProduct()+"&&err="+productEntity.getQuantity_in_stock());
 					}
 				}else {
 					if(productEntity.getQuantity_in_stock()-1 >= 0) {
-						shoppingCartService.add(cartItem);
+						shoppingCartService.add(IdLogged.getId(), productId, 1);
 					}else {
 						mav = new ModelAndView("redirect:/store"+"?err="+0);
 					}
 				}
 			}
 			
-			/* set the cookie value  from shopping cart list */
-			Collection<CartItem> carts = shoppingCartService.getAllItems();
-			if(carts != null && !carts.isEmpty()) {
-				for (CartItem item : carts) {
-					txt += "_"+item.getProductId()+":"+item.getNumProduct();
+			if(IdLogged.getId() == 0) {
+				/* set the cookie value  from shopping cart list */
+				Collection<CartItemDto> carts = shoppingCartService.getAllItems();
+				if(carts != null && !carts.isEmpty()) {
+					for (CartItemDto item : carts) {
+						txt += "_"+item.getProductId()+":"+item.getNumProduct();
+					}
+					txt = txt.substring(1);
 				}
-				txt = txt.substring(1);
+				cookieService.add("cart", txt, 1);
 			}
-			addCookieCart(response, txt);
+			
 			
 		} catch (Exception e) {
 			logger.error("Message erro --> {}: ", e);
@@ -211,34 +182,37 @@ public class CartController {
 		try {
 			
 			/* increase or decrease the number of cartItems in shopping cart list */
-			CartItem cartItem = shoppingCartService.findCartItem(productId);
+			CartItemDto cartItem = shoppingCartService.findCartItem(productId);
 			if(cartItem != null) {
 				if(numProduct == -1) {
 					if(cartItem.getNumProduct() <= 1) {
-						shoppingCartService.remove(productId);
+						shoppingCartService.remove(IdLogged.getId(), productId);
 					}else {
-						shoppingCartService.update(productId, cartItem.getNumProduct()-1);
+						shoppingCartService.update(IdLogged.getId(), productId, numProduct);
 					}
 				}
 				if(numProduct == 1) {
 					ProductDto productEntity = productService.findById(productId).get();
 					if(productEntity != null && productEntity.getQuantity_in_stock()-cartItem.getNumProduct()-1 >= 0) {
-						shoppingCartService.update(productId, cartItem.getNumProduct()+1);
+						shoppingCartService.update(IdLogged.getId() ,productId, numProduct);
 					}else {
 						message = "?err="+productEntity.getQuantity_in_stock();
 					}
 				}
 			}
 			
-			/* set the cookie value  from shopping cart list */
-			Collection<CartItem> carts = shoppingCartService.getAllItems();
-			if(carts != null && !carts.isEmpty()) {
-				for (CartItem item : carts) {
-					txt += "_"+item.getProductId()+":"+item.getNumProduct();
+			if(IdLogged.getId() == 0) {
+				/* set the cookie value  from shopping cart list */
+				Collection<CartItemDto> carts = shoppingCartService.getAllItems();
+				if(carts != null && !carts.isEmpty()) {
+					for (CartItemDto item : carts) {
+						txt += "_"+item.getProductId()+":"+item.getNumProduct();
+					}
+					txt = txt.substring(1);
 				}
-				txt = txt.substring(1);
+				cookieService.add("cart", txt, 1);
 			}
-			addCookieCart(response, txt);
+			
 			
 		} catch (Exception e) {
 			logger.error("Message erro --> {}: ", e);
@@ -259,20 +233,23 @@ public class CartController {
 		try {
 			
 			/* delete one cartItem in shopping cart list */
-			CartItem cartItem = shoppingCartService.findCartItem(productId);
+			CartItemDto cartItem = shoppingCartService.findCartItem(productId);
 			if(cartItem != null) {
-				shoppingCartService.remove(productId);
+				shoppingCartService.remove(IdLogged.getId(), productId);
 			}
 			
-			/* set the cookie value  from shopping cart list */
-			Collection<CartItem> carts = shoppingCartService.getAllItems();
-			if(carts != null && !carts.isEmpty()) {
-				for (CartItem item : carts) {
-					txt += "_"+item.getProductId()+":"+item.getNumProduct();
+			if(IdLogged.getId() == 0) {
+				/* set the cookie value  from shopping cart list */
+				Collection<CartItemDto> carts = shoppingCartService.getAllItems();
+				if(carts != null && !carts.isEmpty()) {
+					for (CartItemDto item : carts) {
+						txt += "_"+item.getProductId()+":"+item.getNumProduct();
+					}
+					txt = txt.substring(1);
 				}
-				txt = txt.substring(1);
+				cookieService.add("cart", txt, 1);
 			}
-			addCookieCart(response, txt);
+		
 			
 		} catch (Exception e) {
 			logger.error("Message erro --> {}: ", e);
@@ -287,8 +264,8 @@ public class CartController {
 		try {
 			
 			/* delete all cookie with name 'cart' and shopping cart list */
-			deleteCookieCart(response);
-			shoppingCartService.clear();
+			cookieService.remove("cart");
+			shoppingCartService.clear(IdLogged.getId());
 			
 		} catch (Exception e) {
 			logger.error("Message erro --> {}: ", e);

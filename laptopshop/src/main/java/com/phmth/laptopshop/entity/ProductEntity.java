@@ -78,6 +78,10 @@ public class ProductEntity {
 	@JsonIgnore
 	private List<OrderDetailEntity> order_details;
 	
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<CartItemEntity> cartItems;
+	
 	public boolean isEmpty()  {
 	    for (java.lang.reflect.Field field : this.getClass().getDeclaredFields()) {
 	        try {

@@ -11,9 +11,11 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItem {
+public class CartItemDto {
 
+	private Long id;
 	private Long productId;
+	private Long userId;
 	private String name;
 	private Integer price;
 	private Integer discount;

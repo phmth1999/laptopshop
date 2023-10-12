@@ -4,19 +4,19 @@
 <section class="search">
 	<div class="container">
 		<form th:action="@{/admin/product}" method="post" th:object="${formSearchProduct}">
-			<h5 class="px-3 mb-4">Form search product</h5>
+			<h5 class="px-3 mb-4">[[#{form_product_search}]]</h5>
 			<div class="row">
 				<div class="col-6 left px-4">
 					<div class="form-group d-flex justify-content-between">
-						<label for="" class="col-form-label">Name:</label> 
+						<label for="" class="col-form-label">[[#{name}]]:</label> 
 						<input type="text" th:field="*{name}" class="form-control">
 					</div>
 					<div class="form-group d-flex justify-content-between">
-						<label for="" class="col-form-label">Price:</label> 
+						<label for="" class="col-form-label">[[#{price}]]:</label> 
 						<input type="number" th:field="*{price}" class="form-control">
 					</div>
 					<div class="form-group d-flex justify-content-between">
-						<label for="" class="col-form-label">Category:</label> 
+						<label for="" class="col-form-label">[[#{category}]]:</label> 
 						<select class="form-control form-select" th:field="*{categoryName}">
 							<option selected="selected" value=""></option>
 							<th:block th:each="item : ${category}">
@@ -27,15 +27,15 @@
 				</div>
 				<div class="col-6 right px-4">
 					<div class="form-group d-flex justify-content-between">
-						<label for="inputPassword6" class="col-form-label">Quantity:</label>
+						<label for="inputPassword6" class="col-form-label">[[#{quantity}]]:</label>
 						<input type="number" th:field="*{quantity}" class="form-control">
 					</div>
 					<div class="form-group d-flex justify-content-between">
-						<label for="inputPassword6" class="col-form-label">Discount:</label>
+						<label for="inputPassword6" class="col-form-label">[[#{discount}]]:</label>
 						<input type="number" th:field="*{discount}" class="form-control">
 					</div>
 					<div class="form-group d-flex justify-content-between">
-						<label for="" class="col-form-label">Brand:</label> 
+						<label for="" class="col-form-label">[[#{brand}]]:</label> 
 						<select class="form-control form-select" th:field="*{brandName}">
 							<option selected="selected" value=""></option>
 							<th:block th:each="item : ${brand}">
@@ -45,7 +45,7 @@
 					</div>
 				</div>
 				<div class="d-flex justify-content-center pr-4 mb-3">
-					<button class="btn btn-primary px-4" type="submit">Search</button>
+					<button class="btn btn-primary px-4" type="submit">[[#{search}]]</button>
 				</div>
 			</div>
 		</form>

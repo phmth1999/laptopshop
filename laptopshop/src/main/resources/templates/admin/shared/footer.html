@@ -3,9 +3,9 @@
 
 	<!-- Footer -->
 	<footer class="main-footer text-center">
-		<strong>Copyright &copy; <strong th:text="${#dates.year(#dates.createNow())}"></strong> 
+		<strong>[[#{copyright}]] &copy; <strong th:text="${#dates.year(#dates.createNow())}"></strong> 
 			<a th:href="@{/home}">PMT</a>.
-		</strong> All rights reserved.
+		</strong> [[#{all_rights_reserved}]].
 	</footer>
 	<!-- Footer End -->
 

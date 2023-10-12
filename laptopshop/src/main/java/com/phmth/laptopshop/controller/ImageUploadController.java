@@ -4,8 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -15,13 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
+@Log4j2
 public class ImageUploadController {
 	
-	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(ImageUploadController.class);
-
 	@Value("${upload.path.image.product}")
 	private String pathUploadImageProduct;
 	
@@ -51,7 +48,7 @@ public class ImageUploadController {
 				}else if(type.equals("banner")) {
 					realPath = request.getServletContext().getRealPath(pathUploadImageBanner);
 				}
-			
+				
 				Path path = Paths.get(realPath, photo);
 				byte[] buffer = Files.readAllBytes(path);
 				ByteArrayResource byteArrayResource = new ByteArrayResource(buffer);

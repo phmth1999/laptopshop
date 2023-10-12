@@ -119,9 +119,9 @@ public class UserService implements IUserService {
 					predicates.add(criteriaBuilder.equal(root.get("authType"), formSearchUser.getAuthType()));
 				}
 
-				if (formSearchUser.getRole() != null && formSearchUser.getRole().longValue() > 0) {
+				if (formSearchUser.getRole() != null && !formSearchUser.getRole().isEmpty()) {
 					predicates.add(criteriaBuilder.equal(root.get("role"),
-							roleRepository.findById(formSearchUser.getRole()).get()));
+							roleRepository.findByName(formSearchUser.getRole())));
 				}
 
 				return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
@@ -326,7 +326,7 @@ public class UserService implements IUserService {
 		oldUserEntity.get().setAddress(formEditUser.getAddress());
 		oldUserEntity.get().setStateUser(formEditUser.getStateUser());
 		oldUserEntity.get().setAuthType(formEditUser.getAuthType());
-		oldUserEntity.get().setRole(roleRepository.findById(formEditUser.getRole()).get());
+		oldUserEntity.get().setRole(roleRepository.findByName(formEditUser.getRole()));
 		oldUserEntity.get().setImg(formEditUser.getImg());
 		oldUserEntity.get().setUpdate_at(new Date());
 		

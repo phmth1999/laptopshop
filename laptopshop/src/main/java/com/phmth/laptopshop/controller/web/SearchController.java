@@ -1,5 +1,6 @@
 package com.phmth.laptopshop.controller.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,7 +26,9 @@ public class SearchController {
 	@GetMapping
 	public List<ProductDto> search(@RequestParam("term") String term){
 		List<ProductDto> listSearch = productService.findByNameSearch(term);
-		return listSearch;
+		List<ProductDto> listSearch1 = new ArrayList<>();
+		listSearch1.add(new ProductDto());
+		return listSearch==null?listSearch1:listSearch;
 	}
 	
 }

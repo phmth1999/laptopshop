@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/web/layout">
 <head>
-	<title>Trang giỏ hàng</title>
+	<title>[[#{cart_page}]]</title>
 </head>
 <body>
 
@@ -11,8 +11,8 @@
 	
 		<div class="breadcrumbs d-flex flex-row align-items-center col-12 container  mt-2">
 			<ul class="m-0">
-				<li><a th:href="@{/home}">Trang chủ</a></li>
-				<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Giỏ hàng</a></li>
+				<li><a th:href="@{/home}">[[#{home}]]</a></li>
+				<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{cart}]]</a></li>
 			</ul>
 		</div>
 		
@@ -27,12 +27,12 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Ảnh</th>
-										<th>Tên sản phẩm</th>
-										<th>Giá</th>
-										<th>Số lượng</th>
-										<th>Giảm giá</th>
-										<th>Tổng giá</th>
+										<th>[[#{image}]]</th>
+										<th>[[#{product_name}]]</th>
+										<th>[[#{price}]]</th>
+										<th>[[#{quantity}]]</th>
+										<th>[[#{discount}]]</th>
+										<th>[[#{total_price}]]</th>
 										<th></th>
 									</tr>
 								</thead>
@@ -58,7 +58,7 @@
 									</th:block>
 									<th:block th:unless="${listCart}">
 										<tr>
-											<td colspan="12"><h5 class="text-start p-4">Không có bản ghi nào!!!</h5></td>
+											<td colspan="12"><h5 class="text-start p-4">[[#{there_are_no_records}]]!</h5></td>
 										</tr>
 									</th:block>
 								</tbody>
@@ -68,12 +68,12 @@
 							<div class="col-lg-4"></div>
 							<div class="col-lg-4 offset-lg-4">
 								<div class="proceed-checkout">
-									<a th:href='@{/cart/clear-all-cart}' class="proceed-btn mb-3">Clear All</a>
+									<a th:href='@{/cart/clear-all-cart}' class="proceed-btn mb-3">[[#{clear_all}]]</a>
 									<ul>
-										<li class="subtotal">Tổng số lượng <span th:if="${listCart}">[[${subCart}]]</span></li>
-										<li class="cart-total">Tổng tiền <span th:if="${listCart}">[[${#numbers.formatInteger(totalMoney,3,'POINT')}]]đ</span></li>
+										<li class="subtotal">[[#{total_quantity}]] <span th:if="${listCart}">[[${subCart}]]</span></li>
+										<li class="cart-total">[[#{total_money}]] <span th:if="${listCart}">[[${#numbers.formatInteger(totalMoney,3,'POINT')}]]đ</span></li>
 									</ul>
-									<a th:href='@{/order}' class="proceed-btn">PROCEED TO ORDER</a>
+									<a th:href='@{/order}' class="proceed-btn">[[#{proceed_to_order}]]</a>
 								</div>
 							</div>
 						</div>

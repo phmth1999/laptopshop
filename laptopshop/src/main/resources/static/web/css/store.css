@@ -21,7 +21,8 @@
 }
 .product-show-option .select-option p{
 	margin: auto 0;
-	padding-right: 10px;
+	width: 150px;
+	text-align: center;
 }
 
 .select-option select  {

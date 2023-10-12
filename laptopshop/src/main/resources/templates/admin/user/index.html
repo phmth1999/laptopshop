@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="/admin/layout">
 <head>
-<title>Admin User Page</title>
+<title>[[#{user_admin_page}]]</title>
 </head>
 <body>
 
@@ -13,10 +13,10 @@
 				<a class="nav-link" data-widget="pushmenu" href="#" role="button"> <i class="fas fa-bars"></i></a>
 			</li>
 			<li class="nav-item d-none d-sm-inline-block">
-				<a th:href='@{/admin/home}' class="nav-link">Home</a>
+				<a th:href='@{/admin/home}' class="nav-link">[[#{home}]]</a>
 			</li>
 			<li class="nav-item d-none d-sm-inline-block">
-				<a th:href='@{/admin/user}' class="nav-link">User</a>
+				<a th:href='@{/admin/user}' class="nav-link">[[#{user}]]</a>
 			</li>
 		</ul>
 	</div>
@@ -27,12 +27,12 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1>Manage user</h1>
+						<h1>[[#{user_management}]]</h1>
 					</div>
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a th:href='@{/admin/home}'>Home</a></li>
-							<li class="breadcrumb-item active">User</li>
+							<li class="breadcrumb-item"><a th:href='@{/admin/home}'>[[#{home}]]</a></li>
+							<li class="breadcrumb-item active">[[#{user}]]</li>
 						</ol>
 					</div>
 				</div>
@@ -42,27 +42,27 @@
 		<section class="search">
 			<div class="container">
 				<form th:action="@{/admin/user}"  method="post" th:object="${formSearchUser}">
-					<h5 class="px-3 mb-4">Form search user</h5>
+					<h5 class="px-3 mb-4">[[#{form_user_search}]]</h5>
 					<div class="row">
 						<div class="col-6 left px-4">
 							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">Fullname:</label>
+								<label for="inputPassword6" class="col-form-label">[[#{full_name}]]:</label>
 								<input type="text" th:field="*{fullname}" class="form-control" />
 							</div>
 							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">Sex:</label>
+								<label for="inputPassword6" class="col-form-label">[[#{sex}]]:</label>
 								<select class="form-control form-select" th:field="*{sex}">
 									<option selected="selected" value=""></option>
-									<option value="MALE">MALE</option>
-									<option value="FEMALE">FEMALE</option>
+									<option value="MALE">[[#{male}]]</option>
+									<option value="FEMALE">[[#{female}]]</option>
 								</select>
 							</div>
 							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">Birthday:</label>
+								<label for="inputPassword6" class="col-form-label">[[#{birthday}]]:</label>
 								<input type="text" th:field="*{birthday}" class="form-control" />
 							</div>
 							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">Address:</label>
+								<label for="inputPassword6" class="col-form-label">[[#{address}]]:</label>
 								<input type="text" th:field="*{address}" class="form-control" />
 							</div>
 						</div>
@@ -72,7 +72,7 @@
 								<input type="text" th:field="*{email}" class="form-control" />
 							</div>
 							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">State user:</label>
+								<label for="inputPassword6" class="col-form-label">[[#{status}]]:</label>
 								<select class="form-control form-select" th:field="*{stateUser}">
 									<option selected="selected" value=""></option>
 									<option value="PENDING">PENDING</option>
@@ -82,7 +82,7 @@
 								</select>
 							</div>
 							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">AuthType:</label>
+								<label for="inputPassword6" class="col-form-label">[[#{auth_type}]]:</label>
 								<select class="form-control form-select" th:field="*{authType}">
 									<option selected="selected" value=""></option>
 									<option value="DATABASE">DATABASE</option>
@@ -91,16 +91,16 @@
 								</select>
 							</div>
 							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">Role:</label>
+								<label for="inputPassword6" class="col-form-label">[[#{role}]]:</label>
 								<select class="form-control form-select" th:field="*{role}">
 									<option selected="selected" value="0"></option>
-									<option value="1">ROLE_ADMIN</option>
-									<option value="2">ROLE_USER</option>
+									<option value="ROLE_ADMIN">ROLE_ADMIN</option>
+									<option value="ROLE_USER">ROLE_USER</option>
 								</select>
 							</div>
 						</div>
 						<div class="d-flex justify-content-center pr-4 mb-3">
-							<button class="btn btn-primary px-4" type="submit">Search</button>
+							<button class="btn btn-primary px-4" type="submit">[[#{search}]]</button>
 						</div>
 					</div>
 				</form>
@@ -112,26 +112,26 @@
 			<!-- Default box -->
 			<div class="card">
 				<div class="card-header">
-					<h3 class="card-title">List of user</h3>
+					<h3 class="card-title">[[#{list_of_user}]]</h3>
 					<div class="card-tools">
-						<a data-bs-toggle="modal" data-bs-target="#add" class="btn btn-primary">Add new</a>
+						<a data-bs-toggle="modal" data-bs-target="#add" class="btn btn-primary">[[#{add_new}]]</a>
 					</div>
 				</div>
 				<div class="card-body">
 					<table class="user-table text-center">
 						<thead>
 							<tr>
-								<th>STT</th>
-								<th>Img</th>
-								<th>Fullname</th>
+								<th>No.</th>
+								<th>[[#{image}]]</th>
+								<th>[[#{full_name}]]</th>
 								<th>Email</th>
-								<th>Sex</th>
-								<th>Birthday</th>
-								<th>Address</th>
-								<th>State User</th>
-								<th>Auth Type</th>
-								<th>Role</th>
-								<th>Action</th>
+								<th>[[#{sex}]]</th>
+								<th>[[#{birthday}]]</th>
+								<th>[[#{address}]]</th>
+								<th>[[#{status}]]</th>
+								<th>[[#{auth_type}]]</th>
+								<th>[[#{role}]]</th>
+								<th>[[#{actions}]]</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -149,16 +149,16 @@
 										<td class="td9"><h6>[[${item.authType}]]</h6></td>
 										<td class="td10"><h6>[[${item.role}]]</h6></td>
 										<td class="td11">
-											<a th:onclick="'editUser('+${item.id}+')'" data-bs-toggle="modal" data-bs-target="#edit" class="btn btn-sm btn-primary">Edit</a> 
-											<a th:onclick="'clickClockUser('+${item.id}+')'" class="btn btn-sm btn-danger">Clock</a>
-											<a th:onclick="'clickUnClockUser('+${item.id}+')'" class="btn btn-sm btn-danger">unClock</a>
+											<a th:onclick="'editUser('+${item.id}+')'" data-bs-toggle="modal" data-bs-target="#edit" class="btn btn-sm btn-primary">[[#{update}]]</a> 
+											<a th:onclick="'clickClockUser('+${item.id}+')'" class="btn btn-sm btn-danger">[[#{clock}]]</a>
+											<a th:onclick="'clickUnClockUser('+${item.id}+')'" class="btn btn-sm btn-danger">[[#{unclock}]]</a>
 										</td>
 									</tr>
 								</th:block>
 							</th:block>
 							<th:block th:unless="${user}">
 								<tr>
-									<td colspan="4">Không có bản ghi nào!!!</td>
+									<td colspan="4">[[#{there_are_no_records}]]!</td>
 								</tr>
 							</th:block>
 						</tbody>
@@ -188,13 +188,13 @@
 				<div class="modal-content">
 					<form th:action="@{/admin/user/add}" method="post" th:object="${formAddUser}">
 						<div class="modal-header">
-							<h4 class="modal-title">Add new user</h4>
+							<h4 class="modal-title">[[#{add_new_user}]]</h4>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 						</div>
 						<div class="modal-body">
 							<div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
 								<div class="form-group">
-									<label for="">Fullname</label> 
+									<label for="">[[#{full_name}]]</label> 
 									<input type="text" th:field="*{fullname}" class="form-control" required="required" />
 								</div>
 								<div class="form-group">
@@ -202,22 +202,22 @@
 									<input type="text" th:field="*{email}" class="form-control" required="required" />
 								</div>
 								<div class="form-group">
-									<label for="">Password</label> 
+									<label for="">[[#{password}]]</label> 
 									<input autocomplete="" type="password" th:field="*{password}" class="form-control" required="required" />
 								</div>
 								<div class="form-group">
-									<label for="">Role</label> 
+									<label for="">[[#{role}]]</label> 
 									<select class="form-control form-select" th:field="*{role}" required="required">
 										<option hidden="" value="0"></option>
-										<option value="1">ROLE_ADMIN</option>
-										<option value="2">ROLE_USER</option>
+										<option value="ROLE_ADMIN">ROLE_ADMIN</option>
+										<option value="ROLE_USER">ROLE_USER</option>
 									</select>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-							<button type="submit" class="btn btn-primary">Add</button>
+							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">[[#{close}]]</button>
+							<button type="submit" class="btn btn-primary">[[#{add}]]</button>
 						</div>
 					</form>
 				</div>
@@ -228,7 +228,7 @@
 				<div class="modal-content">
 					<form id="formEditUser" th:action="@{/admin/user/edit}" method="post" th:object="${formEditUser}" enctype="multipart/form-data">
 						<div class="modal-header">
-							<h4 class="modal-title">Edit new user</h4>
+							<h4 class="modal-title">[[#{edit_new_user}]]</h4>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 						</div>
 						<div class="modal-body">
@@ -238,26 +238,26 @@
 									<input type="text" id="idEdit" th:field="*{id}" class="form-control" readonly="readonly"/>
 								</div>
 								<div class="form-group">
-									<label for="">Fullname</label> 
+									<label for="">[[#{full_name}]]</label> 
 									<input type="text" id="fullnameEdit" th:field="*{fullname}" class="form-control" required="required" />
 								</div>
 								<div class="form-group">
-									<label for="">Sex</label> 
+									<label for="">[[#{sex}]]</label> 
 									<select class="form-control form-select" id="sexEdit" th:field="*{sex}" >
-										<option value="MALE">MALE</option>
-										<option value="FEMALE">FEMALE</option>
+										<option value="MALE">[[#{male}]]</option>
+										<option value="FEMALE">[[#{female}]]</option>
 									</select>
 								</div>
 								<div class="form-group">
-									<label for="">Birthday</label> 
+									<label for="">[[#{birthday}]]</label> 
 									<input type="text" class="form-control" id="birthdayEdit" th:field="*{birthday}" />
 								</div>
 								<div class="form-group">
-									<label for="">Address</label> 
+									<label for="">[[#{address}]]</label> 
 									<input type="text" class="form-control" id="addressEdit" th:field="*{address}" />
 								</div>
 								<div class="form-group">
-									<label for="">State user</label> 
+									<label for="">[[#{status}]]</label> 
 									<select class="form-control form-select" id="stateUserEdit" th:field="*{stateUser}" required="required">
 										<option value="PENDING">PENDING</option>
 										<option value="ACTIVED">ACTIVED</option>
@@ -266,7 +266,7 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label for="">AuthType</label> 
+									<label for="">[[#{auth_type}]]</label> 
 									<select class="form-control form-select" id="authTypeEdit" th:field="*{authType}" required="required">
 										<option value="DATABASE">DATABASE</option>
 										<option value="GOOGLE">GOOGLE</option>
@@ -274,14 +274,14 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label for="">Role</label> 
+									<label for="">[[#{role}]]</label> 
 										<select class="form-control form-select" id="roleEdit" th:field="*{role}" required="required">
-										<option value="1">ROLE_ADMIN</option>
-										<option value="2">ROLE_USER</option>
+										<option value="ROLE_ADMIN">ROLE_ADMIN</option>
+										<option value="ROLE_USER">ROLE_USER</option>
 									</select>
 								</div>
 								<div class="form-group">
-									<label for="">Img</label> 
+									<label for="">[[#{image}]]</label> 
 									<input hidden="" type="text" th:field="*{img}" id="imgEdit" /> 
 									<input class="form-control" onchange="chooseFile(this, 'edit')" type="file" id="fileImage" name="fileImage" />
 								</div>
@@ -291,8 +291,8 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-							<button type="button" th:onclick="clickEditUser()" class="btn btn-primary">Edit</button>
+							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">[[#{close}]]</button>
+							<button type="button" th:onclick="clickEditUser()" class="btn btn-primary">[[#{update}]]</button>
 						</div>
 					</form>
 				</div>
@@ -357,7 +357,7 @@
 							$('#addressEdit').val(res.address);
 							$('#stateUserEdit').val(res.stateUser)
 							$('#authTypeEdit').val(res.authType);
-							$('#roleEdit').val(res.role.id);
+							$('#roleEdit').val(res.role);
 							$('#imgEdit').val(res.img);
 							$(".imgEdit").attr("src",'/'+firstPath+'/'+"images/user/"+res.img);
 						}
@@ -389,7 +389,7 @@
 							html += `<td class="td7"><h6>${res.data.address}</h6></td>`;
 							html += `<td class="td8"><h6>${res.data.stateUser}</h6></td>`;
 							html += `<td class="td9"><h6>${res.data.authType}</h6></td>`;
-							html += `<td class="td10"><h6>${res.data.role.name}</h6></td>`;
+							html += `<td class="td10"><h6>${res.data.role}</h6></td>`;
 							html += `<td class="td11">`;
 							html += `<a onclick="editUser(${res.data.id})" data-bs-toggle="modal" data-bs-target="#edit" class="btn btn-sm btn-primary mr-1">Edit</a>`;
 							html += `<a data-bs-toggle="modal" data-bs-target='#clock${res.data.id}' class="btn btn-sm btn-danger mr-1">Clock</a>`;

@@ -21,16 +21,34 @@
 	color: white;
 }
 .form-search{
-	width: 65%;
+	width: 55%;
+	position: relative;
 }
-#search-btn {
-	color: white;
-	border: 1px solid white;
+.text-search{
+	border-radius: 0;
+	width: 100%;
+}
+.text-search:focus{
+	border: 1px solid #ced4da;
 }
 
-#search-btn:hover {
-	background-color: #1c1c50;
+.btn-search{
+	border: 1px solid #ced4da;
+	width: 50px;
+	border-radius: 0;
+	position: absolute;
+	top: 0;
+	height: 100%;
+	right: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
+.btn-search i{
+	color: #1c1c50;
+}
+
+
 .product-search{
 	position: fixed;
 	top: 60px;

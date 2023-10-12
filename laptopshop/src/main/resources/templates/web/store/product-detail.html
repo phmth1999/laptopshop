@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/web/layout">
 <head>
-	<title>Product Detail Page</title>
+	<title>[[#{product_detail_page}]]</title>
 </head>
 <body>
 
@@ -14,9 +14,9 @@
 				<div class="row">
 					<div class="breadcrumbs d-flex flex-row align-items-center col-12">
 						<ul>
-							<li><a th:href="@{/home}">Home</a></li>
-							<li><a th:href="@{/store}"><i class="fa fa-angle-right" aria-hidden="true"></i>Store</a></li>
-							<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Product</a></li>
+							<li><a th:href="@{/home}">[[#{home}]]</a></li>
+							<li><a th:href="@{/store}"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{store}]]</a></li>
+							<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{product}]]</a></li>
 						</ul>
 					</div>
 					<div class="col-md-5 order-2 order-md-1">
@@ -47,7 +47,7 @@
 									<input th:if="${param.num}" class="id-1" id="quanty" type="text" th:value="${param.num}" name="numProduct"> 
 									<span onclick="incFunction(1)" class="inc qtybtn ">+</span>
 								</div>
-								<a><button class="primary-btn pd-cart" type="submit">Add To Cart</button></a>
+								<a><button class="primary-btn pd-cart" type="submit">[[#{add_to_cart}]]</button></a>
 							</div>
 							<div th:if="${param.err}">
 			                	<div th:unless="${param.cart}" class="alert alert-danger">[[${param.err}]] products left in stock</div>

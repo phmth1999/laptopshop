@@ -19,4 +19,6 @@ public interface ICategoryRepository extends JpaRepository<CategoryEntity, Long>
 
 	boolean existsByName(String name);
 
+	Optional<CategoryEntity> findFirst5ById(long id);
+
 }

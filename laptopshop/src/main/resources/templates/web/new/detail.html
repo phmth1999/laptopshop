@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/web/layout">
 <head>
-	<title>Trang chi tiết tin tức</title>
+	<title>[[#{news_detail_page}]]</title>
 </head>
 <body>
 
@@ -13,8 +13,8 @@
 			<div class="container">
 				<div class="breadcrumbs d-flex flex-row align-items-center col-12 mt-3 ">
 					<ul>
-						<li><a th:href="@{/home}">Trang chủ</a></li>
-						<li><a onclick="submitFormNew()"><i class="fa fa-angle-right" aria-hidden="true"></i>Tin tức</a></li>
+						<li><a th:href="@{/home}">[[#{home}]]</a></li>
+						<li><a onclick="submitFormNew()"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{news}]]</a></li>
 						<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>[(${newItem.title})]</a></li>
 					</ul>
 				</div>

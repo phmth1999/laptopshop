@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/web/layout">
 <head>
-	<title>Store Page</title>
+	<title>[[#{store_page}]]</title>
 </head>
 <body>
 
@@ -15,8 +15,8 @@
 					<div>
 						<div class="breadcrumbs d-flex flex-row align-items-center col-12">
 							<ul>
-								<li><a th:href="@{/home}">Home</a></li>
-								<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Store</a></li>
+								<li><a th:href="@{/home}">[[#{home}]]</a></li>
+								<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{store}]]</a></li>
 							</ul>
 						</div>
 						<form method="post" th:action="@{/store}" th:object="${formFilterProduct}" id="formStore">
@@ -28,18 +28,18 @@
 								<div class="row">
 									<div class="col-md-3 col-6 p-1">
 										<div class="select-option">
-											<p>Sort: </p>
+											<p>[[#{sort}]]: </p>
 											<select class="sort" onchange="SubmitForm()" th:field="*{sort}">
-												<option value='low-high'>Low to High Price</option>
-												<option value='high-low'>High to Low Price</option>
-												<option value='a-z'>Name: A - Z</option>
-												<option value='z-a'>Name: Z - A</option>
+												<option value='low-high'>[[#{low_to_high_price}]]</option>
+												<option value='high-low'>[[#{high_to_low_price}]]</option>
+												<option value='a-z'>[[#{name_a_z}]]</option>
+												<option value='z-a'>[[#{name_z_a}]]</option>
 											</select>
 										</div>
 									</div>
 									<div class="col-md-3 col-6 p-1">
 										<div class="select-option">
-											<p>Category: </p>
+											<p>[[#{category}]]: </p>
 											<select class="category"  onchange="SubmitForm()" th:field="*{cateogryName}">
 												<option value='all'>ALL</option>
 												<th:block th:each="item : ${category}">
@@ -50,7 +50,7 @@
 									</div>
 									<div class="col-md-3 col-6 p-1">
 										<div class="select-option">
-											<p>Brand: </p>
+											<p>[[#{brand}]]: </p>
 											<select class="brand" onchange="SubmitForm()" th:field="*{brandName}">
 												<option value='all'>ALL</option>
 												<th:block th:each="item : ${brand}">
@@ -61,7 +61,7 @@
 									</div>
 									<div class="col-md-3 col-6 p-1">
 										<div class="select-option">
-											<p>Price: </p>
+											<p>[[#{price}]]: </p>
 											<select class="price" onchange="SubmitForm()" th:field="*{price}">
 												<option value='all'>ALL</option>
 												<option value='1-5'>1 - 5 million</option>
@@ -83,7 +83,7 @@
 														<li class="w-icon active">
 															<a th:href="@{/cart/add-cart/{id}(id=${item.id})}"><i class="fa-solid fa-cart-shopping"></i></a>
 														</li>
-														<li class="quick-view"><a th:href="@{/store/{id}(id=${item.id})}">+ Quick View</a></li>
+														<li class="quick-view"><a th:href="@{/store/{id}(id=${item.id})}">+ [[#{quick_view}]]</a></li>
 													</ul>
 												</div>
 												<div class="pi-text">
@@ -98,11 +98,11 @@
 									</th:block>
 									<th:block th:unless="${listProduct}">
 										<div class="col-lg-3 col-sm-6 col-6">
-											Not found products
+											[[#{not_found_products}]]!
 										</div>
 									</th:block>
 									<th:block th:if="${listProduct}">
-										<ul class="pagination mt-4" id="pagination"></ul>
+										<ul class=" mt-4 " id="pagination"></ul>
 										<input hidden=""  id="page"  name="page" th:value="${currentPage}"/>
 									</th:block>
 								</div>

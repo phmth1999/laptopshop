@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phmth.laptopshop.dto.CartItem;
+import com.phmth.laptopshop.dto.CartItemDto;
 import com.phmth.laptopshop.dto.OrderDetailDto;
 import com.phmth.laptopshop.dto.OrderDto;
 import com.phmth.laptopshop.dto.request.OrderInfoRequest;
@@ -208,7 +208,7 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
-	public OrderDto Order(Collection<CartItem> carts, OrderInfoRequest formOrderInfo) {
+	public OrderDto Order(Collection<CartItemDto> carts, OrderInfoRequest formOrderInfo) {
 		// If the input is null, throw exception
 		if (formOrderInfo == null || carts == null) {
 			throw new OrderException("The input is null!");
@@ -245,7 +245,7 @@ public class OrderService implements IOrderService {
 		}
 
 		// Save order details
-		for (CartItem cartItem : carts) {
+		for (CartItemDto cartItem : carts) {
 			OrderDetailEntity orderDetailEntity = new OrderDetailEntity();
 			orderDetailEntity.setOrder(orderRepository.findById(order.getId()).get());
 			orderDetailEntity.setProduct(productRepository.findById(cartItem.getProductId()).get());

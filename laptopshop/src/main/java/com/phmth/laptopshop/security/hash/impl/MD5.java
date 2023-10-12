@@ -1,20 +1,20 @@
-package com.phmth.laptopshop.utils.hash.impl;
+package com.phmth.laptopshop.security.hash.impl;
 
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.KeySpec;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.phmth.laptopshop.utils.hash.IHashing;
+import com.phmth.laptopshop.security.hash.IHashing;
 
 @Component
-@Qualifier("pbkdf2")
-public class PBKDF2 implements IHashing {
+@Qualifier("md5")
+/*
+ * Simplest one – 128-bit hash
+ **/
+public class MD5 implements IHashing {
 
 	@Override
 	public byte[] generatedSalt() throws NoSuchAlgorithmException {
@@ -28,10 +28,11 @@ public class PBKDF2 implements IHashing {
 	public String hashText(String text, byte[] salt) {
 		String generatedtext = null;
 		try {
-			KeySpec spec = new PBEKeySpec(text.toCharArray(), salt, 65536, 128);
-			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(text.getBytes());
+			md.update(salt);
 
-			byte[] byteData = factory.generateSecret(spec).getEncoded();
+			byte[] byteData = md.digest();
 
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < byteData.length; i++) {
@@ -40,7 +41,7 @@ public class PBKDF2 implements IHashing {
 			generatedtext = sb.toString();
 
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			generatedtext = "";
 		}
 		return generatedtext;
 	}

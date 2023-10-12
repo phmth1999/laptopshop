@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="/admin/layout">
 <head>
-<title>Trang quản lý tin tức</title>
+<title>[[#{news_admin_page}]]</title>
 </head>
 <body>
 
@@ -13,10 +13,10 @@
 				<a class="nav-link" data-widget="pushmenu" href="#" role="button"> <i class="fas fa-bars"></i></a>
 			</li>
 			<li class="nav-item d-none d-sm-inline-block">
-				<a th:href='@{/admin/home}' class="nav-link">Trang chủ</a>
+				<a th:href='@{/admin/home}' class="nav-link">[[#{home}]]</a>
 			</li>
 			<li class="nav-item d-none d-sm-inline-block">
-				<a th:href='@{/admin/new}' class="nav-link">Tin tức</a>
+				<a th:href='@{/admin/new}' class="nav-link">[[#{news}]]</a>
 			</li>
 		</ul>
 	</div>
@@ -27,12 +27,12 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1>Quản lý tin tức</h1>
+						<h1>[[#{news_management}]]</h1>
 					</div>
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a th:href='@{/admin/home}'>Trang chủ</a></li>
-							<li class="breadcrumb-item active">Tin tức</li>
+							<li class="breadcrumb-item"><a th:href='@{/admin/home}'>[[#{home}]]</a></li>
+							<li class="breadcrumb-item active">[[#{news}]]</li>
 						</ol>
 					</div>
 				</div>
@@ -42,16 +42,16 @@
 		<section class="search">
 			<div class="container">
 				<form th:action="@{/admin/category}" method="post">
-					<h5 class="px-3 mb-4">Form tìm kiếm</h5>
+					<h5 class="px-3 mb-4">[[#{form_news_search}]]</h5>
 					<div class="row">
 						<div class="col-6 left pl-4">
 							<div class="form-group d-flex justify-content-between">
-								<label for="inputPassword6" class="col-form-label">Name:</label>
-								<input type="text" name="name" th:value="${name}" class="form-control">
+								<label for="inputPassword6" class="col-form-label">[[#{name}]]:</label>
+								<input th:placeholder="#{enter_the_news_name_you_want_to_search_for}" type="text" name="name" th:value="${name}" class="form-control">
 							</div>
 						</div>
 						<div class="col-6 right pl-4">
-							<button class="btn btn-primary px-4" type="submit">Tìm kiếm</button>
+							<button class="btn btn-primary px-4" type="submit">[[#{search}]]</button>
 						</div>
 					</div>
 				</form>
@@ -63,9 +63,9 @@
 			<!-- Default box -->
 			<div class="card">
 				<div class="card-header">
-					<h3 class="card-title">Danh sách tin tức</h3>
+					<h3 class="card-title">[[#{list_of_news}]]</h3>
 					<div class="card-tools">
-						<a data-bs-toggle="modal" data-bs-target="#add" class="btn btn-primary">Thêm mới</a>
+						<a data-bs-toggle="modal" data-bs-target="#add" class="btn btn-primary">[[#{add_new}]]</a>
 					</div>
 				</div>
 				<div class="card-body">
@@ -73,9 +73,9 @@
 						<thead>
 							<tr>
 								<th>No.</th>
-								<th>Tên bài viết</th>
-								<th>Mô tả ngắn</th>
-								<th>Thao tác</th>
+								<th>[[#{title}]]</th>
+								<th>[[#{short_description}]]</th>
+								<th>[[#{actions}]]</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -86,15 +86,15 @@
 										<td class="td2" th:text="${item.title}"></td>
 										<td class="td2" th:text="${item.shortDescription}"></td>
 										<td class="td3">
-											<a th:onclick="'editNew('+${item.id}+')'" data-bs-toggle="modal" data-bs-target='#edit' class="btn btn-sm btn-primary">Edit</a> 
-											<a th:onclick="'clickDeleteNew('+${item.id}+')'" class="btn btn-sm btn-danger">Delete</a>
+											<a th:onclick="'editNew('+${item.id}+')'" data-bs-toggle="modal" data-bs-target='#edit' class="btn btn-sm btn-primary">[[#{update}]]</a> 
+											<a th:onclick="'clickDeleteNew('+${item.id}+')'" class="btn btn-sm btn-danger">[[#{delete}]]</a>
 										</td>
 									</tr>
 								</th:block>
 							</th:block>
 							<th:block th:unless="${news}">
 								<tr>
-									<td colspan="4">Không có bản ghi nào!!!</td>
+									<td colspan="4">[[#{there_are_no_records}]]!</td>
 								</tr>
 							</th:block>
 						</tbody>
@@ -115,13 +115,13 @@
 				<div class="modal-content">
 					<form th:action="@{/admin/new/add}" method="post" th:object="${newDto}">
 						<div class="modal-header">
-							<h4 class="modal-title">Thêm mới tin tức</h4>
+							<h4 class="modal-title">[[#{add_new_news}]]</h4>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 						</div>
 						<div class="modal-body">
 							<div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
 								<div class="form-group">
-									<label for="">Thể loại</label> 
+									<label for="">[[#{category}]]</label> 
 									<select class="form-control form-select" required="required" th:field="*{categoryName}">
 										<th:block th:each="item : ${category}">
 											<option th:value="${item.name}">[[${item.name}]]</option>
@@ -129,29 +129,29 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label for="">Tiêu đề</label> 
+									<label for="">[[#{title}]]</label> 
 									<input type="text" th:field="*{title}" class="form-control" required="required" />
 									<div class="text-danger"></div>
 								</div>
 								<div class="form-group">
-									<label for="">Hình đại diện</label> 
+									<label for="">[[#{image}]]</label> 
 									<input type="text" th:field="*{thumbnail}" class="form-control" required="required" />
 									<div class="text-danger"></div>
 								</div>
 								<div class="form-group">
-									<label for="">Mô tả ngắn</label> 
+									<label for="">[[#{short_description}]]</label> 
 									<textarea class="form-control" th:field="*{shortDescription}" required="required"></textarea>
 									<div class="text-danger"></div>
 								</div>
 								<div class="form-group">
-									<label for="">Nội dung</label> 
+									<label for="">[[#{content}]]</label> 
 									<textarea class="form-control" id="contentAdd" th:field="*{content}"></textarea>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Hủy</button>
-							<button type="submit" class="btn btn-primary">Thêm</button>
+							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">[[#{close}]]</button>
+							<button type="submit" class="btn btn-primary">[[#{add}]]</button>
 						</div>
 					</form>
 				</div>
@@ -162,7 +162,7 @@
 				<div class="modal-content">
 					<form th:action="@{/admin/new/edit}" method="post" th:object="${newDto}">
 						<div class="modal-header">
-							<h4 class="modal-title">Thêm mới tin tức</h4>
+							<h4 class="modal-title">[[#{update_news}]]</h4>
 							<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 						</div>
 						<div class="modal-body">
@@ -173,7 +173,7 @@
 									<div class="text-danger"></div>
 								</div>
 								<div class="form-group">
-									<label for="">Thể loại</label> 
+									<label for="">[[#{category}]]</label> 
 									<select class="form-control form-select" required="required" th:field="*{categoryName}" id="categoryEdit">
 										<th:block th:each="item : ${category}">
 											<option th:value="${item.name}">[[${item.name}]]</option>
@@ -181,28 +181,28 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label for="">Tiêu đề</label> 
+									<label for="">[[#{title}]]</label> 
 									<input type="text" th:field="*{title}" class="form-control" required="required" id="titleEdit"/>
 									<div class="text-danger"></div>
 								</div>
 								<div class="form-group">
-									<label for="">Hình đại diện</label> 
+									<label for="">[[#{image}]]</label> 
 									<input type="text" th:field="*{thumbnail}" class="form-control" required="required" id="thumbnailEdit"/>
 									<div class="text-danger"></div>
 								</div>
 								<div class="form-group">
-									<label for="">Mô tả ngắn</label> 
+									<label for="">[[#{short_description}]]</label> 
 									<textarea class="form-control" th:field="*{shortDescription}" required="required" id="shortDescriptionEdit"></textarea>
 								</div>
 								<div class="form-group">
-									<label for="">Nội dung</label> 
+									<label for="">[[#{content}]]</label> 
 									<textarea class="form-control" id="contentEdit" th:field="*{content}"></textarea>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Hủy</button>
-							<button type="submit" class="btn btn-primary">Cập nhật</button>
+							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">[[#{close}]]</button>
+							<button type="submit" class="btn btn-primary">[[#{update}]]</button>
 						</div>
 					</form>
 				</div>

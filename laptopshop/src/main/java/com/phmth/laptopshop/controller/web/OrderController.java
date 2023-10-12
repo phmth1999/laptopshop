@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.phmth.laptopshop.dto.CartItem;
+import com.phmth.laptopshop.dto.CartItemDto;
 import com.phmth.laptopshop.dto.OrderDto;
 import com.phmth.laptopshop.dto.request.OrderInfoRequest;
 import com.phmth.laptopshop.service.IOrderDetailService;
@@ -23,7 +23,6 @@ import com.phmth.laptopshop.service.IShoppingCartService;
 import com.phmth.laptopshop.service.IUserService;
 import com.phmth.laptopshop.utils.IdLogged;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -43,20 +42,6 @@ public class OrderController {
 	
 	@Autowired
 	private IOrderService orderService;
-	
-	private void deleteCookieCart(HttpServletResponse response) {
-		try {
-			
-			Cookie cookie = new Cookie("cart", ""); 
-			cookie.setHttpOnly(true);
-			cookie.setMaxAge(0); 
-			cookie.setPath("/");
-			response.addCookie(cookie);
-			
-		} catch (Exception e) {
-			logger.error("Message erro --> {}: ", e);
-		}
-	}
 	
 	@GetMapping
 	public ModelAndView orderPage() {
@@ -100,12 +85,11 @@ public class OrderController {
 			formOrderInfo.setAddress_delivery(address);
 			formOrderInfo.setPayment(typePayment);
 			
-			Collection<CartItem> carts = shoppingCartService.getAllItems();
+			Collection<CartItemDto> carts = shoppingCartService.getAllItems();
 			
 			OrderDto orderEntity = orderService.Order(carts, formOrderInfo);
 			if(orderEntity != null) {
-				shoppingCartService.clear();
-				deleteCookieCart(response);
+				shoppingCartService.clear(IdLogged.getId());
 				
 				if(typePayment.equals("TRANSFER")) {
 					mav = new ModelAndView("redirect:/checkout/vnpay?codeOrder="+orderEntity.getCodeOrder()+"&bankCode="+bankCode);

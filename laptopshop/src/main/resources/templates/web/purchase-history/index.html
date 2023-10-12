@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="/web/layout">
+<html lang="en" 
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="/web/layout">
 <head>
-<title>Trang lịch sử mua hàng</title>
+
+<title>[[#{purchase_history_page}]]</title>
+
 </head>
 <body>
 
@@ -11,28 +14,28 @@
 	
 		<section class="breadcrumbs d-flex flex-row align-items-center col-12 container p-0 mt-2">
 			<ul class="m-0">
-				<li><a th:href="@{/home}">Trang chủ</a></li>
-				<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Lịch sử mua hàng</a></li>
+				<li><a th:href="@{/home}">[[#{home}]]</a></li>
+				<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>[[#{purchase_history}]]</a></li>
 			</ul>
 		</section>
 		
 		<section class="purchase-history p-0">
 			<div class="container">
 				<div class="row">
-					<h3 class="text-center mb-4">Danh sách đơn hàng</h3>
+					<h3 class="text-center mb-4">[[#{list_of_orders}]]</h3>
 				</div>
 				<div class="row">
 					<table>
 						<thead>
 							<tr>
 								<th>No.</th>
-								<th>Tên người đặt</th>
-								<th>Ngày đặt</th>
-								<th>Tổng tiền</th>
-								<th>Hình thức thanh toán</th>
-								<th>Thanh toán</th>
-								<th>Trạng thái</th>
-								<th>Action</th>
+								<th>[[#{full_name}]]</th>
+								<th>[[#{order_date}]]</th>
+								<th>[[#{total_money}]]</th>
+								<th>[[#{payments}]]</th>
+								<th>[[#{pay}]]</th>
+								<th>[[#{status}]]</th>
+								<th>[[#{actions}]]</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -51,7 +54,7 @@
 									<div class="modal-dialog">
 										<div class="modal-content">
 											<div class="modal-header">
-												<h4 class="modal-title">Chi tiết đơn hàng</h4>
+												<h4 class="modal-title">[[#{order_details}]]</h4>
 												<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 											</div>
 											<div class="modal-body p-0">
@@ -61,51 +64,51 @@
 															<div class="row">
 																<div class="col-lg-6">
 																	<div class="information-detail">
-																		<h4>Thông tin đơn hàng</h4>
+																		<h4>[[#{order_information}]]</h4>
 																		<div class="col-12 mb-2 border info-user p-3">
 																			<div class="col-lg-12 d-flex align-items-center">
-																				<label>Mã đơn hàng: </label><label>#[[${item.codeOrder}]]</label>
+																				<label>[[#{code_orders}]]: </label><label>#[[${item.codeOrder}]]</label>
 																			</div>
 																			<div class="col-lg-12 d-flex align-items-center">
-																				<label>Họ và tên : </label><label>[[${item.name}]]</label>
+																				<label>[[#{full_name}]] : </label><label>[[${item.name}]]</label>
 																			</div>
 																			<div class="col-lg-12 d-flex align-items-center">
 																				<label>Email : </label><label>[[${item.email}]]</label>
 																			</div>
 																			<div class="col-lg-12 d-flex align-items-center">
-																				<label>SĐT : </label><label>[[${item.phone}]]</label>
+																				<label>[[#{phone}]] : </label><label>[[${item.phone}]]</label>
 																			</div>
 																			<div class="col-lg-12 d-flex align-items-center">
-																				<label>Địa chỉ nhận hàng : </label><label>[[${item.address_delivery}]]</label>
+																				<label>[[#{delivery_address}]] : </label><label>[[${item.address_delivery}]]</label>
 																			</div>
 																			<div class="col-lg-12 d-flex align-items-center">
-																				<label>Ngày đặt: </label><label>[[${#dates.format(item.created_at,'dd-MM-yyyy')}]]</label>
+																				<label>[[#{order_date}]]: </label><label>[[${#dates.format(item.created_at,'dd-MM-yyyy')}]]</label>
 																			</div>
 																			<div class="col-lg-12 d-flex align-items-center">
-																				<label>Số lượng : </label><label>[[${item.num}]]</label>
+																				<label>[[#{quantity}]] : </label><label>[[${item.num}]]</label>
 																			</div>
 																			<div class="col-lg-12 d-flex align-items-center">
-																				<label>Tổng tiền : </label><label>[[${#numbers.formatInteger(item.total_money,3,'POINT')}]]đ</label>
+																				<label>[[#{total_money}]] : </label><label>[[${#numbers.formatInteger(item.total_money,3,'POINT')}]]đ</label>
 																			</div>
 																			<div class="col-lg-12 d-flex align-items-center">
-																				<label>Hình thức thanh toán : </label><label>[[${item.payment}]]</label>
+																				<label>[[#{payments}]] : </label><label>[[${item.payment}]]</label>
 																			</div>
 																		</div>
 																	</div>
 																</div>
 																<div class="col-lg-6">
 																	<div class="place-order">
-																		<h4>Thông tin sản phẩm</h4>
+																		<h4>[[#{product_information}]]</h4>
 																		<div class="order-total">
 																			<ul class="order-table p-0">
-																				<li><span>Sản phẩm</span><span>Số lượng</span><span>Giá</span></li>
+																				<li><span>[[#{product}]]</span><span>[[#{quantity}]]</span><span>[[#{price}]]</span></li>
 																				<th:block th:each="items : *{item.orderdetail}">
 																					<li class="fw-normal"><span><img th:src="@{/images/product/{img}(img=${items.product.thumbnail})}" width="50px" height="50px" /> - [[${items.product.name}]]</span> <span>[[*{items.num}]]</span><span>[[${#numbers.formatInteger(items.totalPrice,3,'POINT')}]]đ</span></li>
 																				</th:block>
-																				<li class="total-price">Tổng số lượng <p>[[${item.num}]]</p></li>
-																				<li class="total-price">Tổng giá <p>[[${#numbers.formatInteger(item.total_money,3,'POINT')}]]đ</p></li>
+																				<li class="total-price">[[#{total_quantity}]] <p>[[${item.num}]]</p></li>
+																				<li class="total-price">[[#{total_price}]] <p>[[${#numbers.formatInteger(item.total_money,3,'POINT')}]]đ</p></li>
 																			</ul>
-																			<div th:id="cancelOrderBtn_+${item.id}" th:if="${item.stateOrder != 'CANCELLED' || item.stateOrder != 'RECEIVED'}"  class="order-btn"><a th:onclick="'clickCancelOrder('+${item.id}+')'"><button type="button" class="site-btn place-btn">Hủy đơn hàng</button></a></div>
+																			<div th:id="cancelOrderBtn_+${item.id}" th:if="${item.stateOrder != 'CANCELLED' || item.stateOrder != 'RECEIVED'}"  class="order-btn"><a th:onclick="'clickCancelOrder('+${item.id}+')'"><button type="button" class="site-btn place-btn">[[#{cancel_order}]]</button></a></div>
 																		</div>
 																	</div>
 																</div>
@@ -116,7 +119,7 @@
 											</div>
 											<!-- Modal footer -->
 											<div class="modal-footer">
-												<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+												<button type="button" class="btn btn-danger" data-bs-dismiss="modal">[[#{close}]]</button>
 											</div>
 										</div>
 									</div>
@@ -124,7 +127,7 @@
 							</th:block>
 							<th:block th:unless="${order}">
 								<tr>
-									<td colspan="12"><h5 class="text-start p-4">Không có bản ghi nào!!!</h5></td>
+									<td colspan="12"><h5 class="text-start p-4">[[#{there_are_no_records}]]!</h5></td>
 								</tr>
 							</th:block>
 						</tbody>
